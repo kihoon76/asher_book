@@ -19,7 +19,7 @@
 		<jackson.mapper-version>1.9.13</jackson.mapper-version>
 		<hibernate.validator-version>5.4.0.Final</hibernate.validator-version>
 		<spring.security-version>4.2.2.RELEASE</spring.security-version>
-		<spring.websocket-version>5.0.9.RELEASE</spring.websocket-version>
+		<spring.websocket-version>4.2.2.RELEASE</spring.websocket-version>
 		<cglib-version>3.2.4</cglib-version>
 		<commons.lang-version>3.4</commons.lang-version>
 		<jstl-version>1.2</jstl-version>
