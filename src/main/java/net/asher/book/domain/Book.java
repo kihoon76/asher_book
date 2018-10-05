@@ -7,6 +7,9 @@ public class Book {
 
 	private int bookNum;
 	private String bookName;
+	private String rentalPossible;
+	private String rentalMan;
+	
 	public int getBookNum() {
 		return bookNum;
 	}
@@ -18,6 +21,18 @@ public class Book {
 	}
 	public void setBookName(String bookName) {
 		this.bookName = bookName;
+	}
+	public String getRentalPossible() {
+		return rentalPossible;
+	}
+	public void setRentalPossible(String rentalPossible) {
+		this.rentalPossible = rentalPossible;
+	}
+	public String getRentalMan() {
+		return rentalMan;
+	}
+	public void setRentalMan(String rentalMan) {
+		this.rentalMan = rentalMan;
 	}
 	
 	

@@ -4,8 +4,19 @@
 	
 	<select id="selectBookList" resultType="Book">
 		select num as bookNum, 
-			   name as bookName
-		  from books
-		 where isExist = 'Y'
+			   tb1.name as bookName,
+			   case when tb2.returned = 'N' then 'N'
+			        else 'Y'
+			   end as rentalPossible,
+			   tb2.name as rentalMan
+		  from books tb1
+		  left outer join (
+		  	select t1.*, t2.name 
+		  	  from rental_history t1
+		  	  inner join members t2 on t1.member_idx=t2.idx
+		  	 where returned = 'N'
+		  ) tb2 on tb1.num = tb2.book_num
+		 where isExist = 'Y' 
+		 order by tb1.num asc
 	</select>
 </mapper>

@@ -23,4 +23,53 @@
 		  from members_authorities
 		 where members_idx = #{idx}
 	</select>
+	
+	<select id="selectRentalHistory" parameterType="map" resultType="RentalHistory">
+		select idx as idx,
+			   member_idx as memberIdx,
+			   book_num as bookNum,
+			   rental_date as rentalDate,
+			   return_date as returnDate,
+			   returned as returned,
+			   tb2.name as bookName
+		  from rental_history tb1
+		  inner join books tb2 on tb1.book_num = tb2.num
+		  <where>
+		  <if test="memberIdx != null">
+		  	member_idx = #{memberIdx}
+		  </if>
+		  <if test="">
+		  	and returned = #{returned} 
+		  </if>
+		  </where>
+	</select>
+	
+	<select id="selectMyNotReturedBooks" parameterType="string" resultType="RentalHistory">
+		select t1.idx as idx,
+			   t1.member_idx as memberIdx,
+			   t3.name as memberName,
+			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
+			   t2.num as bookNum,
+			   t2.name as bookName
+		  from rental_history t1
+		  inner join books t2 on t1.book_num = t2.num
+		  inner join members t3 on t1.member_idx = t3.idx
+		  where t1.returned = 'N'
+		    and member_idx = #{idx}
+	</select>
+	
+	<select id="selectUserRentalBookByNum" parameterType="string" resultType="RentalHistory">
+		select t1.idx as idx,
+			   t1.member_idx as memberIdx,
+			   t3.name as memberName,
+			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
+			   t2.num as bookNum,
+			   t2.name as bookName
+		  from rental_history t1
+		  inner join books t2 on t1.book_num = t2.num
+		  inner join members t3 on t1.member_idx = t3.idx
+		  where t1.returned = 'N'
+		    and book_num = #{bookNum}
+		  limit 1
+	</select>
 </mapper>

@@ -58,6 +58,7 @@ public class Account {
 	public void setIdx(String idx) {
 		this.idx = idx;
 	}
+	
 	@Override
 	public boolean equals(Object o) {
 		 if (o instanceof Account) {
