@@ -6,6 +6,6 @@ import net.asher.book.domain.Book;
 
 public interface BookDao {
 
-	List<Book> selectBookList();
+	List<Book> selectBookList(String memberIdx);
 
 }

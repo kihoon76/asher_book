@@ -2,16 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mappers.bookMapper">
 	
-	<select id="selectBookList" resultType="Book">
+	<select id="selectBookList"  parameterType="string"  resultType="Book">
 		select num as bookNum, 
 			   tb1.name as bookName,
-			   case when tb2.returned = 'N' then 'N'
+			   case when tb2.returned = 'N' then tb2.status
 			        else 'Y'
 			   end as rentalPossible,
-			   tb2.name as rentalMan
+			   tb2.name as rentalMan,
+			   tb2.idx as rentalManIdx,
+			   tb2.mine as mine
 		  from books tb1
 		  left outer join (
-		  	select t1.*, t2.name 
+		  	select t1.*, t2.name, case when t1.member_idx = #{memberIdx} then 'Y' else 'N' end as mine
 		  	  from rental_history t1
 		  	  inner join members t2 on t1.member_idx=t2.idx
 		  	 where returned = 'N'

@@ -1,10 +1,10 @@
-var Common = { socket: null };
+var Common = { socket: null, popupClose: function() {} };
 
 $(document).on('pageinit', function () {
 	
 	$('body>[data-role="panel"]').panel();
 	
-	function openPopup(type) {
+	function openPopup(type, afterFn) {
 		if(type == 'alert') {
 			$('#btnPopupBookRental').hide();
 			$('#btnPopupDelegate').text('확인');
@@ -14,6 +14,7 @@ $(document).on('pageinit', function () {
 			$('#btnPopupDelegate').text('취소');
 		}
 
+		Common.popupClose = afterFn;
 		$('#popupDialog').popup({history: false}).popup('open');
 	}
 	
@@ -23,6 +24,7 @@ $(document).on('pageinit', function () {
 	
 	function makePopup(header, content, datas) {
 		var $dvPopupContent = $('#dvPopupContent');
+		//$('#popupHeader').html(header || '<span style="padding: 10px 10px 10px 10px; font-size:1.5em;">알림</span>');
 		$('#popupHeader').html(header || '');
 		$dvPopupContent.html(content || '');
 		if(datas) {
@@ -33,7 +35,7 @@ $(document).on('pageinit', function () {
 	}
 	
 	function makeErrMsg(errMsg) {
-		makePopup('알림', errMsg);
+		makePopup('', errMsg);
 		openPopup('alert');
 	}
 	
@@ -45,7 +47,7 @@ $(document).on('pageinit', function () {
 			contentType: cfg.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
 			beforeSend: function() {
 				$.mobile.loading('show', {
-				    theme: "a"
+				    theme: 'a'
 				});
 			},
 			complete: function(jqXHR, textStatus) {
@@ -64,6 +66,9 @@ $(document).on('pageinit', function () {
 					case '601': 
 						msg = '[' + jqXHR.data[0].memberName + ']님에게 대여중입니다.<br/>' + '대여일자 [' + jqXHR.data[0].rentalDate + ']';
 						break;
+					case '602': 
+						msg = '[' + jqXHR.data[0].memberName + ']님이 대여신청중입니다.<br/>' + '신청일자 [' + jqXHR.data[0].rentalDate + ']';
+						break;
 					default: 
 						msg = '오류발생';
 						break;
@@ -72,6 +77,12 @@ $(document).on('pageinit', function () {
 					setTimeout(function() {
 						makeErrMsg(msg);
 					}, 500);
+				}
+				else {
+					//성공 이후 final로 실행할 함수
+					if(jqXHR.runFinal) {
+						setTimeout(jqXHR.runFinal, 500);
+					}
 				}
 			},
 			success: function(data, textStatus, jqXHR) {
@@ -94,20 +105,43 @@ $(document).on('pageinit', function () {
 	.on('click', 'a.IMG_POPUP', function() {
 		var $this = $(this);
 		var $img = $this.find('img');
-		makePopup('<span style="padding: 10px 10px 10px 10px; font-size:1.5em;">대여</span>', + $img.data('num') + '.' + '[' + $img.data('name') + ']를 대여하시겠습니까?', [{key: 'bookNum', value: $img.data('num')}]);
-		openPopup();
+		var possible = $img.data('possible');
+		var msg = '';
+		if('R' == possible) {
+			msg = '[' + $img.data('name') + ']는 ' + $img.data('rentalMan') + '님이 대여요청중 입니다.';
+			makePopup('', msg);
+			openPopup('alert');
+		}
+		else if('A' == possible) {
+			msg = '[' + $img.data('name') + ']는 ' + $img.data('rentalMan') + '님이 대여중 입니다.';
+			makePopup('', msg);
+			openPopup('alert');
+		}
+		else {
+			makePopup('', + $img.data('num') + '.' + '[' + $img.data('name') + ']를 대여신청 하시겠습니까?', [{key: 'bookNum', value: $img.data('num')}]);
+			openPopup();
+		}
+		
+		
 	});
 	
 	$(document).on('click', '#btnPopupBookRental', function() {
 		
 		Common.ajax({
-			url: '/user/rental',
+			url: '/user/apply/rental',
 			method: 'POST',
 			dataType: 'json',
 			data: {bookNum: $('#dvPopupContent').data('bookNum')},
 			success: function(data, textStatus, jqXHR) {
-				console.log('pp')
-			}
+				jqXHR.runFinal = function() {
+					makePopup('', '대여신청 되었습니다.');
+					openPopup('alert', function() {
+						//window.location.reload();
+					});
+				}
+				
+				
+			},
 		});
 		
 		
@@ -135,11 +169,28 @@ $(document).on('pageshow', function (event, ui) {
     if($('#dvRentalHistory').get(0)) {
     	Common.socket = new SockJS('/rental_book/list');
 		
+    	Common.socket.onopen = function(event) {
+    		console.log(event)
+    	}
+    	
     	Common.socket.onmessage = function(event) {
+    		try {
+    			var data = $.parseJSON(event.data);
+    			var selector = '#book' + data.bookNum + 'Rental';
+    			if(data.type == 'R') {
+    				//대여신청
+    				$(selector).toggleClass('apply');
+    				$(selector).text('신청');
+    				$(selector + 'Man').text(data.memberName);
+    				$(selector + 'Image').data('possible', 'R');
+    				$(selector + 'Image').data('rentalMan', data.memberName);
+    				
+    			}
+    		}
+    		catch(e) {}
 			
 		}
     }
-   
 });
 
 $(document).on('pageremove', function (event, ui) {
@@ -149,10 +200,22 @@ $(document).on('pageremove', function (event, ui) {
     }
 });
 
+$(window).unload(function() {
+	console.log('uiui')
+	if(Common.socket != null) {
+   	 Common.socket.close();
+   }
+});
 
-//$(document).on('popupcreate popupinit popupafteropen popupafterclose", "[data-role=popup]", function (e) {
-//    console.log(e.target.id + " -> " + e.type);
-//});
+
+$(document).on('popupafterclose', "[data-role=popup]", function (e) {
+	if(Common.popupClose) {
+		Common.popupClose();
+		Common.popupClose = null;
+	}
+	
+    console.log(e.target.id + " -> " + e.type);
+});
 
 //$(document).on("panelbeforeopen", "div[data-role='panel']", function(e,ui) {
 //    $.mobile.activeClickedLink = null;

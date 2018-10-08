@@ -26,7 +26,7 @@
 	
 	<select id="selectRentalHistory" parameterType="map" resultType="RentalHistory">
 		select idx as idx,
-			   member_idx as memberIdx,
+			   member_idx as rentalManIdx,
 			   book_num as bookNum,
 			   rental_date as rentalDate,
 			   return_date as returnDate,
@@ -46,8 +46,8 @@
 	
 	<select id="selectMyNotReturedBooks" parameterType="string" resultType="RentalHistory">
 		select t1.idx as idx,
-			   t1.member_idx as memberIdx,
-			   t3.name as memberName,
+			   t1.member_idx as rentalManIdx,
+			   t3.name as rentalMan,
 			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
 			   t2.num as bookNum,
 			   t2.name as bookName
@@ -56,15 +56,17 @@
 		  inner join members t3 on t1.member_idx = t3.idx
 		  where t1.returned = 'N'
 		    and member_idx = #{idx}
+		    and t1.status = 'A'
 	</select>
 	
 	<select id="selectUserRentalBookByNum" parameterType="string" resultType="RentalHistory">
 		select t1.idx as idx,
-			   t1.member_idx as memberIdx,
-			   t3.name as memberName,
+			   t1.member_idx as rentalManIdx,
+			   t3.name as rentalMan,
 			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
 			   t2.num as bookNum,
-			   t2.name as bookName
+			   t2.name as bookName,
+			   t1.status as status
 		  from rental_history t1
 		  inner join books t2 on t1.book_num = t2.num
 		  inner join members t3 on t1.member_idx = t3.idx
@@ -72,4 +74,9 @@
 		    and book_num = #{bookNum}
 		  limit 1
 	</select>
+	
+	<insert id="insertApplyRental" parameterType="map">
+		insert into rental_history(member_idx, book_num, rental_date, return_date, status, returned)
+		values (#{memberIdx}, #{bookNum}, now(), date_add(now(), interval 7 day), 'R', 'N')
+	</insert>
 </mapper>

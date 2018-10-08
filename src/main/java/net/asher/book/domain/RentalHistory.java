@@ -6,23 +6,16 @@ import org.apache.ibatis.type.Alias;
 public class RentalHistory extends Book {
 
 	private String idx;
-	private String memberIdx;
-	private String memberName;
 	private String rentalDate;
-	private String returnDate;
+	private String returnDate;		//default rentalDate + 7 day
 	private String returned;
+	private String status;			//R : 대여신청  A: 승인
 	
 	public String getIdx() {
 		return idx;
 	}
 	public void setIdx(String idx) {
 		this.idx = idx;
-	}
-	public String getMemberIdx() {
-		return memberIdx;
-	}
-	public void setMemberIdx(String memberIdx) {
-		this.memberIdx = memberIdx;
 	}
 	public String getRentalDate() {
 		return rentalDate;
@@ -42,10 +35,11 @@ public class RentalHistory extends Book {
 	public void setReturned(String returned) {
 		this.returned = returned;
 	}
-	public String getMemberName() {
-		return memberName;
+	public String getStatus() {
+		return status;
 	}
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
+	public void setStatus(String status) {
+		this.status = status;
 	}
+	
 }

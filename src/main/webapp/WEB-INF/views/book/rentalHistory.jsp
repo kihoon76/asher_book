@@ -24,9 +24,12 @@
 	<div class="column">
 		<div>
 			<a href="#" class="IMG_POPUP" data-rel="popup" data-position-to="window" data-transition="pop" data-ajax="false">
-				<img style="width: 100%; height: 130px;" src="/resources/img/book<%=list.get(i).getBookNum() %>.jpg" 
+				<img id="book<%=list.get(i).getBookNum()%>RentalImage" style="width: 100%; height: 130px;" src="/resources/img/book<%=list.get(i).getBookNum() %>.jpg" 
 				data-name="<%=list.get(i).getBookName()%>"
-				data-num="<%=list.get(i).getBookNum() %>">
+				data-num="<%=list.get(i).getBookNum() %>"
+				data-possible="<%=list.get(i).getRentalPossible()%>"
+				data-rental-man="<%=list.get(i).getRentalMan()%>"
+				data-rental-man-idx="<%=list.get(i).getRentalManIdx()%>">
 			</a>
 		</div>
 		<div>
@@ -34,14 +37,19 @@
 				<tr>
 					<td><%=list.get(i).getBookNum()%></td>
 					<%
-						if("N".equals(list.get(i).getRentalPossible())) {
+						if("A".equals(list.get(i).getRentalPossible())) {
 					%>
-					<td style="background: red; color: #fff;">불가</td>
+					<td id="book<%=list.get(i).getBookNum()%>Rental" class="norental">불가</td>
+					<%		
+						}
+						else if("R".equals(list.get(i).getRentalPossible())) {
+					%>
+					<td id="book<%=list.get(i).getBookNum()%>Rental" class="apply">신청</td>
 					<%		
 						}
 						else {
 					%>
-					<td>가능</td>
+					<td id="book<%=list.get(i).getBookNum()%>Rental">가능</td>
 					<%		
 						}
 					%>
@@ -50,12 +58,12 @@
 					<%
 						if(list.get(i).getRentalMan() != null) {
 					%>
-					<td colspan="2"><%=list.get(i).getRentalMan() %></td>
+					<td id="book<%=list.get(i).getBookNum()%>RentalMan" colspan="2"><%=list.get(i).getRentalMan() %></td>
 					<%		
 						}
 						else {
 					%>
-					<td colspan="2">&nbsp;</td>
+					<td id="book<%=list.get(i).getBookNum()%>RentalMan" colspan="2">&nbsp;</td>
 					<%		
 						}
 					%>

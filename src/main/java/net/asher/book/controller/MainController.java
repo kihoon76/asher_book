@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.service.BookService;
+import net.asher.book.util.SessionUtil;
 
 @RequestMapping("/")
 @Controller
@@ -48,7 +49,8 @@ public class MainController {
 	
 	@GetMapping("main")
 	public String main(ModelMap mm) {
-		mm.addAttribute("bookList", bookService.getBookList());
+		String memberIdx = SessionUtil.getSessionUserIdx();
+		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
 		return "main";
 	}
 	

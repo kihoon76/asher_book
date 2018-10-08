@@ -9,6 +9,8 @@ public class Book {
 	private String bookName;
 	private String rentalPossible;
 	private String rentalMan;
+	private String rentalManIdx;
+	private String mine;
 	
 	public int getBookNum() {
 		return bookNum;
@@ -34,6 +36,17 @@ public class Book {
 	public void setRentalMan(String rentalMan) {
 		this.rentalMan = rentalMan;
 	}
-	
+	public String getRentalManIdx() {
+		return rentalManIdx;
+	}
+	public void setRentalManIdx(String rentalManIdx) {
+		this.rentalManIdx = rentalManIdx;
+	}
+	public String getMine() {
+		return mine;
+	}
+	public void setMine(String mine) {
+		this.mine = mine;
+	}
 	
 }

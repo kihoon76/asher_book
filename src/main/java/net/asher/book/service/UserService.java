@@ -1,6 +1,7 @@
 package net.asher.book.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -26,6 +27,10 @@ public class UserService {
 
 	public RentalHistory getUserRentalBookByNum(String bookNum) {
 		return userDao.selectUserRentalBookByNum(bookNum);
+	}
+
+	public void doApplyRental(Map<String, String> param) {
+		userDao.insertApplyRental(param);
 	}
 
 }

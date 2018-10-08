@@ -11,6 +11,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import net.asher.book.util.SessionUtil;
+
 @Component
 public class AsherWebSocketHandler extends TextWebSocketHandler {
 
@@ -43,6 +45,7 @@ public class AsherWebSocketHandler extends TextWebSocketHandler {
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println(session.getId() + " connected....");
+		//session.sendMessage(new TextMessage(session.getId()));
 		connectedUsers.add(session);
 	}
 

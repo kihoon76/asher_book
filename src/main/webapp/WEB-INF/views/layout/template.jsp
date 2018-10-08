@@ -35,7 +35,7 @@
 			<div id="popupHeader" data-role="header" data-theme="a"></div>
 			<div role="main" class="ui-content">
 				<div id="dvPopupContent"></div>
-				<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupBookRental" rel="external">대여</a>
+				<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupBookRental" rel="external">대여신청</a>
 				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupDelegate">취소</a>
 			</div>
 		</div>
@@ -49,7 +49,8 @@
 		<ul data-role="listview" data-theme="d">
         	<li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
         	<li data-role="list-divider">Menu</li>
-        	<li ><a href="/book/rental_history">대여현황</a></li>
+        	<li><a href="/book/rental_history">대여현황</a></li>
+        	<li><a href="/book/rental_manage">대여관리</a></li>
         </ul>
 
         <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b" <c:if test="${not empty selectedBook}">data-collapsed="false"</c:if>>

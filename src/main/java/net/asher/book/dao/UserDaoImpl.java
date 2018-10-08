@@ -1,6 +1,7 @@
 package net.asher.book.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -30,6 +31,11 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public RentalHistory selectUserRentalBookByNum(String bookNum) {
 		return mySqlSession.selectOne(namespace + ".selectUserRentalBookByNum", bookNum);
+	}
+
+	@Override
+	public int insertApplyRental(Map<String, String> param) {
+		return mySqlSession.insert(namespace + ".insertApplyRental", param);
 	}
 	
 

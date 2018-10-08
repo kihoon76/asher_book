@@ -12,6 +12,7 @@ public class Account {
 	private String password;
 	private String phone;
 	private String email;
+	private String websocketId;
 	
 	private List<Authority> authorities;
 	
@@ -59,6 +60,13 @@ public class Account {
 		this.idx = idx;
 	}
 	
+	
+	public String getWebsocketId() {
+		return websocketId;
+	}
+	public void setWebsocketId(String websocketId) {
+		this.websocketId = websocketId;
+	}
 	@Override
 	public boolean equals(Object o) {
 		 if (o instanceof Account) {

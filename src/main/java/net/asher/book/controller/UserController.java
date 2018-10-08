@@ -1,6 +1,8 @@
 package net.asher.book.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -11,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.RentalHistory;
 import net.asher.book.service.UserService;
 import net.asher.book.util.SessionUtil;
+import net.asher.book.websocket.AsherWebSocketHandler;
 
 @RequestMapping("/user")
 @Controller
@@ -23,7 +28,10 @@ public class UserController {
 	@Resource(name="userService")
 	UserService userService;
 	
-	@PostMapping("rental")
+	@Resource(name="asherWebSocketHandler")
+	AsherWebSocketHandler asherWebSocketHandler;
+	
+	@PostMapping("apply/rental")
 	@ResponseBody
 	public AjaxVO<RentalHistory> rentalBook(@RequestParam("bookNum") String bookNum) {
 		
@@ -39,11 +47,31 @@ public class UserController {
 				RentalHistory r = userService.getUserRentalBookByNum(bookNum); 
 				
 				if(r == null) {
+					Map<String, String> param = new HashMap<>();
+					param.put("memberIdx", memberIdx);
+					param.put("bookNum", bookNum);
+					
+					userService.doApplyRental(param); //rental 신청
 					vo.setSuccess(true);
+					
+					Map<String, String> webMsg = new HashMap<>();
+					webMsg.put("bookNum", bookNum);
+					webMsg.put("memberName", SessionUtil.getSessionAccount().getUserName());
+					webMsg.put("type", "R");
+					asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
+					
 				}
 				else {
 					vo.setSuccess(false);
-					vo.setErrCode("601");
+					if("A".equals(r.getStatus())) {
+						//대여중
+						vo.setErrCode("601");
+					}
+					else {
+						//대여신청중
+						vo.setErrCode("602");
+					}
+					
 					vo.addObject(r);
 				}
 			}

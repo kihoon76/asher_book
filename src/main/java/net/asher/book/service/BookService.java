@@ -15,8 +15,8 @@ public class BookService {
 	@Resource(name="bookDao")
 	BookDao bookDao;
 	
-	public List<Book> getBookList() {
-		return bookDao.selectBookList();
+	public List<Book> getBookList(String memberIdx) {
+		return bookDao.selectBookList(memberIdx);
 	}
 
 }
