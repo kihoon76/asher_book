@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import net.asher.book.domain.Book;
+import net.asher.book.domain.RentalHistory;
 
 @Repository("bookDao")
 public class BookDaoImpl implements BookDao {
@@ -21,4 +22,5 @@ public class BookDaoImpl implements BookDao {
 	public List<Book> selectBookList(String memberIdx) {
 		return mySqlSession.selectList(namespace + ".selectBookList", memberIdx);
 	}
+
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import net.asher.book.dao.BookDao;
 import net.asher.book.domain.Book;
+import net.asher.book.domain.RentalHistory;
 
 @Service("bookService")
 public class BookService {
@@ -18,5 +19,4 @@ public class BookService {
 	public List<Book> getBookList(String memberIdx) {
 		return bookDao.selectBookList(memberIdx);
 	}
-
 }

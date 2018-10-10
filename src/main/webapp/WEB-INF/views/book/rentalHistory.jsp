@@ -39,7 +39,7 @@
 					<%
 						if("A".equals(list.get(i).getRentalPossible())) {
 					%>
-					<td id="book<%=list.get(i).getBookNum()%>Rental" class="norental">불가</td>
+					<td id="book<%=list.get(i).getBookNum()%>Rental" class="norental">대여</td>
 					<%		
 						}
 						else if("R".equals(list.get(i).getRentalPossible())) {

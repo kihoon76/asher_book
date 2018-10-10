@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.service.BookService;
+import net.asher.book.service.UserService;
 import net.asher.book.util.SessionUtil;
 
 @RequestMapping("/")
@@ -22,6 +24,9 @@ public class MainController {
 
 	@Resource(name="bookService")
 	BookService bookService;
+	
+	@Resource(name="userService")
+	UserService userService;
 	
 	@GetMapping("signin/{errCode}")
 	public String signinForm(@PathVariable(name="errCode", required=false) String errCode, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -50,7 +55,10 @@ public class MainController {
 	@GetMapping("main")
 	public String main(ModelMap mm) {
 		String memberIdx = SessionUtil.getSessionUserIdx();
+		Account account = SessionUtil.getSessionAccount();
+		
 		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
+		mm.addAttribute("memberName", account.getUserName());
 		return "main";
 	}
 	

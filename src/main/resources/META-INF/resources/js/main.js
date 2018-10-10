@@ -6,12 +6,23 @@ $(document).on('pageinit', function () {
 	
 	function openPopup(type, afterFn) {
 		if(type == 'alert') {
-			$('#btnPopupBookRental').hide();
-			$('#btnPopupDelegate').text('확인');
+			$('#btnPopupOk').hide();
+			$('#btnPopupDel').hide();
+			$('#btnPopupCancel').text('확인');
 		}
-		else {
-			$('#btnPopupBookRental').show();
-			$('#btnPopupDelegate').text('취소');
+		else if(type == 'rental_manage') {
+			$('#btnPopupDel').data('category', 'rental_manage').text('삭제')
+			$('#btnPopupOk').data('category', 'rental_manage').text('허용');
+			$('#btnPopupCancel').text('취소');
+			
+			$('#btnPopupOk').show();
+			$('#btnPopupDel').show();
+		}
+		else if(type == 'rental_apply') {
+			$('#btnPopupDel').hide();
+			$('#btnPopupOk').data('category', 'rental_apply').text('대여신청');
+			$('#btnPopupCancel').text('취소');
+			$('#btnPopupOk').show();
 		}
 
 		Common.popupClose = afterFn;
@@ -119,32 +130,105 @@ $(document).on('pageinit', function () {
 		}
 		else {
 			makePopup('', + $img.data('num') + '.' + '[' + $img.data('name') + ']를 대여신청 하시겠습니까?', [{key: 'bookNum', value: $img.data('num')}]);
-			openPopup();
+			openPopup('rental_apply');
 		}
 		
 		
 	});
 	
-	$(document).on('click', '#btnPopupBookRental', function() {
+	$(document)
+	.off('click', 'a.RENTAL_SELECT')
+	.on('click', 'a.RENTAL_SELECT', function() {
+		var $this = $(this);
+		var status = $this.data('status');
+		var cate = '';
 		
-		Common.ajax({
-			url: '/user/apply/rental',
-			method: 'POST',
-			dataType: 'json',
-			data: {bookNum: $('#dvPopupContent').data('bookNum')},
-			success: function(data, textStatus, jqXHR) {
-				jqXHR.runFinal = function() {
-					makePopup('', '대여신청 되었습니다.');
-					openPopup('alert', function() {
-						//window.location.reload();
-					});
-				}
-				
-				
-			},
-		});
+		var msg = '';
+		if(status == 'R') {
+			msg = $this.data('rentalMan') + '님의 [' + $this.data('bookName') + '] 대여신청을 처리하시겠습니까?';
+			cate = 'rental_manage';
+		}
+		else if(status == 'A') {  //도서반납
+			msg = $this.data('rentalMan') + '님의 [' + $this.data('bookName') + ']를 반납하시겠습니까?';
+			cate = 'rental_manage_return';
+		}
+		
+		makePopup('', msg, [
+		  {key: 'rentalIdx', value: $this.data('rentalIdx')},
+		  {key: 'rentalManIdx', value: $this.data('rentalManIdx')},
+		  {key: 'bookNum', value: $this.data('bookNum')},
+		  {key: 'memberName', value: $this.data('rentalMan')}
+		  
+		]);
+		openPopup(cate);
+//		if('R' == possible) {
+//			msg = '[' + $img.data('name') + ']는 ' + $img.data('rentalMan') + '님이 대여요청중 입니다.';
+//			makePopup('', msg);
+//			openPopup('alert');
+//		}
+//		else if('A' == possible) {
+//			msg = '[' + $img.data('name') + ']는 ' + $img.data('rentalMan') + '님이 대여중 입니다.';
+//			makePopup('', msg);
+//			openPopup('alert');
+//		}
+//		else {
+//			makePopup('', + $img.data('num') + '.' + '[' + $img.data('name') + ']를 대여신청 하시겠습니까?', [{key: 'bookNum', value: $img.data('num')}]);
+//			openPopup();
+//		}
 		
 		
+	});
+	
+	$(document).on('click', '#btnPopupOk', function() {
+		var $this = $(this);
+		var cate = $(this).data('category');
+		var $dvPopupContent = $('#dvPopupContent');
+		
+		switch(cate) {
+		case 'rental_apply' :
+			Common.ajax({
+				url: '/user/apply/rental',
+				method: 'POST',
+				dataType: 'json',
+				data: {bookNum: $dvPopupContent.data('bookNum')},
+				success: function(data, textStatus, jqXHR) {
+					jqXHR.runFinal = function() {
+						makePopup('', '대여신청 되었습니다.');
+						openPopup('alert', function() {
+							//window.location.reload();
+						});
+					}
+					
+					
+				},
+			});
+			break;
+		case 'rental_manage': 
+			Common.ajax({
+				url: '/admin/accept/rental/apply',
+				method: 'POST',
+				dataType: 'json',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					rentalIdx: $dvPopupContent.data('rentalIdx'),
+					rentalManIdx: $dvPopupContent.data('rentalManIdx'),
+					bookNum: $dvPopupContent.data('bookNum'),
+					memberName: $dvPopupContent.data('rentalMan')
+				}),
+				success: function(data, textStatus, jqXHR) {
+					jqXHR.runFinal = function() {
+						
+						makePopup('', '대여되었습니다.');
+						openPopup('alert', function() {
+							window.location.reload();
+						});
+					}
+					
+					
+				},
+			});
+			break;
+		}
 	});
 	//$popupDialog.open();
 	$('[data-role=panel] a').on('click', function () {
@@ -185,6 +269,14 @@ $(document).on('pageshow', function (event, ui) {
     				$(selector + 'Image').data('possible', 'R');
     				$(selector + 'Image').data('rentalMan', data.memberName);
     				
+    			}
+    			else if(data.type == 'A') {
+    				$(selector).removeClass('apply');
+    				$(selector).addClass('norental');
+    				$(selector).text('대여');
+    				$(selector + 'Man').text(data.memberName);
+    				$(selector + 'Image').data('possible', 'A');
+    				$(selector + 'Image').data('rentalMan', data.memberName);
     			}
     		}
     		catch(e) {}

@@ -79,4 +79,30 @@
 		insert into rental_history(member_idx, book_num, rental_date, return_date, status, returned)
 		values (#{memberIdx}, #{bookNum}, now(), date_add(now(), interval 7 day), 'R', 'N')
 	</insert>
+	
+	<select id="selectRentalApplyList" resultType="RentalHistory">
+		select t1.idx as idx,
+			   t1.member_idx as rentalManIdx,
+			   t3.name as rentalMan,
+			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
+			   DATE_FORMAT(return_date, '%Y-%m-%d') as returnDate,
+			   t2.num as bookNum,
+			   t2.name as bookName,
+			   t1.status as status
+		  from rental_history t1
+		  inner join books t2 on t1.book_num = t2.num
+		  inner join members t3 on t1.member_idx = t3.idx
+		  where t1.returned = 'N'
+		  order by rentalManIdx
+	</select>
+	
+	<update id="updateRentalApply" parameterType="map">
+		update rental_history
+		   set status = 'A',
+		   	   rental_date = now(),
+		   	   return_date = date_add(now(), interval 7 day)
+		 where idx = #{rentalIdx}
+		   and member_idx = #{rentalManIdx}
+		   and book_num = #{bookNum}
+	</update>
 </mapper>

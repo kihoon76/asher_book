@@ -84,14 +84,18 @@
 		</init-param>
 	</filter>
 	
+	<!-- 
+		Spring security tags in sitemesh decorator
+		I guess you need to place Sitemesh filter after the Spring Security filter in the filter chain, 
+		that is order their <filter-mapping>s in web.xml accordingly.
+	 -->
 	<filter-mapping>
-		<filter-name>sitemesh</filter-name>
+		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	
 	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	

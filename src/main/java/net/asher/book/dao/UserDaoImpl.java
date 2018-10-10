@@ -39,4 +39,19 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 
+	@Override
+	public List<RentalHistory> selectRentalList(String type) {
+		if("R".equals(type)) {
+			return mySqlSession.selectList(namespace + ".selectRentalApplyList");
+		}
+		else {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public int updateRentalApply(Map<String, String> param) {
+		return mySqlSession.update(namespace + ".updateRentalApply", param);
+	}
 }

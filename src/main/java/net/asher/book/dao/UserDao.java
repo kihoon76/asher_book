@@ -16,4 +16,8 @@ public interface UserDao {
 
 	int insertApplyRental(Map<String, String> param);
 
+	List<RentalHistory> selectRentalList(String type);
+
+	int updateRentalApply(Map<String, String> param);
+
 }

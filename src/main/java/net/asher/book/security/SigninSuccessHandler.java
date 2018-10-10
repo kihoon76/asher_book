@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -44,9 +45,9 @@ public class SigninSuccessHandler extends SavedRequestAwareAuthenticationSuccess
 			response.addCookie(cookie);*/
 			
 			Account user = (Account)authentication.getPrincipal();
-//			
-//			ObjectMapper om = new ObjectMapper();
-//			System.err.println(om.writeValueAsString(user.getAuthorities()));
+			
+			ObjectMapper om = new ObjectMapper();
+			System.err.println(om.writeValueAsString(user.getAuthorities()));
 			
 			//만기일 1주일전 체크
 //			List<Map<String, String>> list = new ArrayList<>();

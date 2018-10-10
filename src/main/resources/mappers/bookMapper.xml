@@ -21,4 +21,5 @@
 		 where isExist = 'Y' 
 		 order by tb1.num asc
 	</select>
+	
 </mapper>
