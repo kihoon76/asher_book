@@ -19,5 +19,9 @@ public interface UserDao {
 	List<RentalHistory> selectRentalList(String type);
 
 	int updateRentalApply(Map<String, String> param);
+	
+	public List<RentalHistory> selectMyRentalHistories(String memberIdx);
+
+	int updateReturnRental(Map<String, String> param);
 
 }

@@ -10,16 +10,22 @@
 			<td>대여일</td>
 			<td>반납예정일</td>
 		</tr>
+		<c:choose>
+		<c:when test="${not empty myRentalList}">
+		<c:forEach var="list" items="${myRentalList}">
 		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
+			<td>${list.bookNum}.${list.bookName}</td>
+			<td>${list.rentalDate}</td>
+			<td>${list.returnDate}</td>
 		</tr>
+		</c:forEach>
+		</c:when>
+		<c:otherwise>
 		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
+			<td colspan="3" style="text-align: center;">대여중인 도서가 없습니다.</td>
 		</tr>
+		</c:otherwise>
+		</c:choose>
 	</table>
 	<div style="padding-top: 5px;"> 대여내역 </div>
 	<table>
@@ -27,77 +33,25 @@
 			<td>도서명</td>
 			<td>대여일</td>
 			<td>반납일</td>
+			<td>연체</td>
 		</tr>
+		<c:choose>
+		<c:when test="${not empty myRentalHistoryList}">
+		<c:forEach var="history" items="${myRentalHistoryList}">
 		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
+			<td>${history.bookNum}.${history.bookName}</td>
+			<td>${history.rentalDate}</td>
+			<td>${history.returnDate}</td>
+			<td>${history.returnExpired}</td>
 		</tr>
+		</c:forEach>
+		</c:when>
+		<c:otherwise>
 		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
+			<td colspan="4" style="text-align: center;">대여내역이 없습니다.</td>
 		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
-		<tr>
-			<td>도서명</td>
-			<td>대여일</td>
-			<td>반납일</td>
-		</tr>
+		</c:otherwise>
+		</c:choose>
 	</table>
 </div>
 </content>

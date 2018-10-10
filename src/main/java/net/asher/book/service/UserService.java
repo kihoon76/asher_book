@@ -53,5 +53,23 @@ public class UserService {
 		
 		throw new Exception();
 	}
+	
+	public List<RentalHistory> getMyRentalHistories(String memberIdx) {
+		return userDao.selectMyRentalHistories(memberIdx);
+	}
+
+	@Transactional(isolation=Isolation.DEFAULT, 
+			   propagation=Propagation.REQUIRED, 
+			   rollbackFor=Exception.class,
+			   timeout=10)//timeout 초단위
+	public int returnRental(Map<String, String> param) throws Exception {
+		int r = userDao.updateReturnRental(param);
+		
+		if(r == 1) {
+			return r;
+		}
+		
+		throw new Exception();
+	}
 
 }

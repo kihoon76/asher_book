@@ -56,4 +56,29 @@ public class AdminController {
 		
 	}
 	
+	@PostMapping("return/rental")
+	@ResponseBody
+	public AjaxVO returnRental(@RequestBody Map<String, String> param) {
+		
+		AjaxVO vo = new AjaxVO<>();
+		
+		try {
+			userService.returnRental(param);
+			
+			//성공하면 websocket으로 결과 보낸다.
+			Map<String, String> webMsg = new HashMap<>();
+			webMsg.put("bookNum", param.get("bookNum"));
+			webMsg.put("type", "T");
+			asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
+			vo.setSuccess(true);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+	
+		return vo;
+		
+	}
+	
 }

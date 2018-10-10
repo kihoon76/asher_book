@@ -1,6 +1,7 @@
 package net.asher.book.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
+import net.asher.book.domain.RentalHistory;
 import net.asher.book.service.BookService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.SessionUtil;
@@ -54,11 +56,24 @@ public class MainController {
 	
 	@GetMapping("main")
 	public String main(ModelMap mm) {
-		String memberIdx = SessionUtil.getSessionUserIdx();
 		Account account = SessionUtil.getSessionAccount();
 		
-		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
+		mm.addAttribute("bookList", bookService.getBookList(account.getIdx()));
 		mm.addAttribute("memberName", account.getUserName());
+		mm.addAttribute("footbar", "home");
+		
+		List<RentalHistory> myRentalList = userService.getMyNotReturedBooks(account.getIdx());
+		List<RentalHistory> myRentalHistoryList = userService.getMyRentalHistories(account.getIdx());
+		
+		
+		if(myRentalList != null && myRentalList.size() > 0) {
+			mm.addAttribute("myRentalList", myRentalList);
+		}
+		
+		if(myRentalHistoryList != null && myRentalHistoryList.size() > 0) {
+			mm.addAttribute("myRentalHistoryList", myRentalHistoryList);
+		}
+		
 		return "main";
 	}
 	

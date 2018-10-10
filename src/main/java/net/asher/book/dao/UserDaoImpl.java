@@ -54,4 +54,14 @@ public class UserDaoImpl implements UserDao {
 	public int updateRentalApply(Map<String, String> param) {
 		return mySqlSession.update(namespace + ".updateRentalApply", param);
 	}
+	
+	@Override
+	public List<RentalHistory> selectMyRentalHistories(String memberIdx) {
+		return mySqlSession.selectList(namespace + ".selectMyRentalHistories", memberIdx);
+	}
+
+	@Override
+	public int updateReturnRental(Map<String, String> param) {
+		return mySqlSession.update(namespace + ".updateReturnRental", param);
+	}
 }

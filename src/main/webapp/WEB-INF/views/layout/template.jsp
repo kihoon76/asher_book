@@ -36,13 +36,19 @@
 			<div role="main" class="ui-content">
 				<div id="dvPopupContent"></div>
 				<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupOk" rel="external"></a>
-				<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupDel" rel="external" style="display:none;"></a>
+				<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupEtc" rel="external" style="display:none;"></a>
 				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupCancel"></a>
 			</div>
 		</div>
     </div>
     <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
-         <h1>Footer</h1>
+         <div data-role="navbar">
+         	<ul>
+         		<li><a href="/main" data-icon="home" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
+         		<li><a href="/" data-icon="home">홈</a></li>
+         		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
+         	</ul>
+         </div>
     </div>
     
     <!-- leftpanel3  -->
