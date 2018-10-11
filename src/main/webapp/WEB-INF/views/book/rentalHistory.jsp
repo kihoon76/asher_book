@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c"	uri="http://java.sun.com/jsp/jstl/core" %>
 <content tag="main">
-<div id="dvRentalHistory" style="width: 100%">
+<div id="dvRentalHistory" style="width: 100%" data-member-idx="<c:out value='${memberIdx}' />">
 	<%
 		List<Book> list = (List<Book>)request.getAttribute("bookList");
 		int listCnt = list.size();
@@ -29,7 +29,8 @@
 				data-num="<%=list.get(i).getBookNum() %>"
 				data-possible="<%=list.get(i).getRentalPossible()%>"
 				data-rental-man="<%=list.get(i).getRentalMan()%>"
-				data-rental-man-idx="<%=list.get(i).getRentalManIdx()%>">
+				data-rental-man-idx="<%=list.get(i).getRentalManIdx()%>"
+				data-mine="<%=list.get(i).getMine()%>">
 			</a>
 		</div>
 		<div>
@@ -44,7 +45,7 @@
 						}
 						else if("R".equals(list.get(i).getRentalPossible())) {
 					%>
-					<td id="book<%=list.get(i).getBookNum()%>Rental" class="apply">신청</td>
+					<td id="book<%=list.get(i).getBookNum()%>Rental" <%if("Y".equals(list.get(i).getMine())) { %> class="apply_mine" <%} else {%>class="apply"<%} %>>신청</td>
 					<%		
 						}
 						else {

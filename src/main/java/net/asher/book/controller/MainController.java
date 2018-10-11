@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.ReturnHistory;
 import net.asher.book.service.BookService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.SessionUtil;
@@ -63,7 +64,7 @@ public class MainController {
 		mm.addAttribute("footbar", "home");
 		
 		List<RentalHistory> myRentalList = userService.getMyNotReturedBooks(account.getIdx());
-		List<RentalHistory> myRentalHistoryList = userService.getMyRentalHistories(account.getIdx());
+		List<ReturnHistory> myRentalHistoryList = userService.getMyRentalHistories(account.getIdx());
 		
 		
 		if(myRentalList != null && myRentalList.size() > 0) {

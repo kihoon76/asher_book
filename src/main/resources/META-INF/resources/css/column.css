@@ -19,3 +19,4 @@ table tr:last-child td {border-bottom: none;}
 .book-title {font-size:.8em; padding: 5px 5px 5px 5px;}
 .norental {background: red; color: #fff;}
 .apply {background: blue; color: #fff;}
+.apply_mine{background: green; color: #fff;}

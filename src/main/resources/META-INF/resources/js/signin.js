@@ -1,5 +1,24 @@
 $(document).ready(function() {
+	$('#pw').on('keyup', function(e) {
+		if(e.keyCode == 13) {
+			$('#btnLogin').trigger('click');
+		}
+	});
+	
 	$('#btnLogin').on('click', function() {
+		var $id = $('#id');
+		var $pw = $('#pw');
+		
+		if($.trim($id.val()) == '') {
+			$id.focus();
+			return;
+		}
+		
+		if($.trim($pw.val()) == '') {
+			$pw.focus();
+			return;
+		}
+		
 		$.ajax('login', {
 			method: 'POST',
 			dataType: 'text',

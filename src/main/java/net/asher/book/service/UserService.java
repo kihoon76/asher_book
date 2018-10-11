@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.asher.book.dao.UserDao;
 import net.asher.book.domain.Account;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.ReturnHistory;
 
 @Service("userService")
 public class UserService {
@@ -45,6 +46,7 @@ public class UserService {
 			   rollbackFor=Exception.class,
 			   timeout=10)//timeout 초단위
 	public int acceptRentalApply(Map<String, String> param) throws Exception {
+		
 		int r = userDao.updateRentalApply(param);
 		
 		if(r == 1) {
@@ -54,7 +56,7 @@ public class UserService {
 		throw new Exception();
 	}
 	
-	public List<RentalHistory> getMyRentalHistories(String memberIdx) {
+	public List<ReturnHistory> getMyRentalHistories(String memberIdx) {
 		return userDao.selectMyRentalHistories(memberIdx);
 	}
 
@@ -63,13 +65,33 @@ public class UserService {
 			   rollbackFor=Exception.class,
 			   timeout=10)//timeout 초단위
 	public int returnRental(Map<String, String> param) throws Exception {
-		int r = userDao.updateReturnRental(param);
+		
+		int delRowCnt = userDao.selectMyApplyBook(param);
+		
+		if(delRowCnt != 1) throw new Exception();
+		
+		int r = userDao.insertReturnRental(param);
 		
 		if(r == 1) {
-			return r;
+			r = userDao.deleteMyApplyBook(param);
+			
+			if(r == 1) return r;
+			throw new Exception();
 		}
 		
 		throw new Exception();
+	}
+
+	public int isPossibleApplyCancel(Map<String, String> param) {
+		return userDao.selectMyApplyBook(param);
+	}
+
+	public boolean cancelMyApply(Map<String, String> param) {
+		int r = userDao.deleteMyApplyBook(param);
+		
+		if(r == 1) return true;
+		
+		return false;
 	}
 
 }

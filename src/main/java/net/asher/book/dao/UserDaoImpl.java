@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.ReturnHistory;
 
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
@@ -56,12 +57,27 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	public List<RentalHistory> selectMyRentalHistories(String memberIdx) {
+	public List<ReturnHistory> selectMyRentalHistories(String memberIdx) {
 		return mySqlSession.selectList(namespace + ".selectMyRentalHistories", memberIdx);
 	}
 
 	@Override
 	public int updateReturnRental(Map<String, String> param) {
 		return mySqlSession.update(namespace + ".updateReturnRental", param);
+	}
+
+	@Override
+	public int selectMyApplyBook(Map<String, String> param) {
+		return mySqlSession.selectOne(namespace + ".selectMyApplyBook", param);
+	}
+
+	@Override
+	public int deleteMyApplyBook(Map<String, String> param) {
+		return mySqlSession.delete(namespace + ".deleteMyApplyBook", param);
+	}
+
+	@Override
+	public int insertReturnRental(Map<String, String> param) {
+		return mySqlSession.insert(namespace + ".insertReturnRental", param);
 	}
 }

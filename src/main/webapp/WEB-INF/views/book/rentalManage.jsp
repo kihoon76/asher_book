@@ -25,7 +25,7 @@
 <%
 			for(int x=0; x<listCnt; x++) {
 %>
-	<li id="rmHis<%=item.get(x).getIdx()%>">
+	<li id="rmHis<%=item.get(x).getBookNum()%>">
 		<a href="#" data-ajax="false">
 			<h2><%=item.get(x).getBookNum() %>.<%=item.get(x).getBookName() %></h2>
 			<%if("R".equals(item.get(x).getStatus())) { %>
@@ -37,7 +37,6 @@
 			<p class="ui-li-aside"><strong><%if("R".equals(item.get(x).getStatus())) {%><span style="color: blue;">대여신청중</span><%} else { %> <span style="color: red;">대여중</span><%} %></strong></p>
 		</a>
 		<a href="#" class="RENTAL_SELECT" data-rel="popup" data-position-to="window" data-transition="pop" data-ajax="false"
-		   data-rental-idx="<%=item.get(x).getIdx() %>"
 		   data-rental-man-idx="<%=item.get(x).getRentalManIdx() %>"
 		   data-rental-man="<%=item.get(x).getRentalMan() %>"
 		   data-book-name="<%=item.get(x).getBookName() %>"

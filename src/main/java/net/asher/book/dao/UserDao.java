@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.ReturnHistory;
 
 public interface UserDao {
 
@@ -20,8 +21,14 @@ public interface UserDao {
 
 	int updateRentalApply(Map<String, String> param);
 	
-	public List<RentalHistory> selectMyRentalHistories(String memberIdx);
+	public List<ReturnHistory> selectMyRentalHistories(String memberIdx);
 
 	int updateReturnRental(Map<String, String> param);
+
+	int selectMyApplyBook(Map<String, String> param);
+
+	int deleteMyApplyBook(Map<String, String> param);
+
+	int insertReturnRental(Map<String, String> param);
 
 }

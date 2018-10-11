@@ -25,12 +25,10 @@
 	</select>
 	
 	<select id="selectRentalHistory" parameterType="map" resultType="RentalHistory">
-		select idx as idx,
-			   member_idx as rentalManIdx,
+		select member_idx as rentalManIdx,
 			   book_num as bookNum,
 			   rental_date as rentalDate,
 			   return_date as returnDate,
-			   returned as returned,
 			   tb2.name as bookName
 		  from rental_history tb1
 		  inner join books tb2 on tb1.book_num = tb2.num
@@ -38,15 +36,11 @@
 		  <if test="memberIdx != null">
 		  	member_idx = #{memberIdx}
 		  </if>
-		  <if test="">
-		  	and returned = #{returned} 
-		  </if>
 		  </where>
 	</select>
 	
 	<select id="selectMyNotReturedBooks" parameterType="string" resultType="RentalHistory">
-		select t1.idx as idx,
-			   t1.member_idx as rentalManIdx,
+		select t1.member_idx as rentalManIdx,
 			   t3.name as rentalMan,
 			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
 			   DATE_FORMAT(return_date, '%Y-%m-%d') as returnDate,
@@ -55,30 +49,27 @@
 		  from rental_history t1
 		  inner join books t2 on t1.book_num = t2.num
 		  inner join members t3 on t1.member_idx = t3.idx
-		  where t1.returned = 'N'
-		    and member_idx = #{idx}
+		  where member_idx = #{idx}
 		    and t1.status = 'A'
 	</select>
 	
-	<select id="selectMyRentalHistories" parameterType="string" resultType="RentalHistory">
+	<select id="selectMyRentalHistories" parameterType="string" resultType="ReturnHistory">
 		select t1.idx as idx,
 			   t1.member_idx as rentalManIdx,
 			   t3.name as rentalMan,
 			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
-			   DATE_FORMAT(real_return_date, '%Y-%m-%d') as returnDate,
+			   DATE_FORMAT(return_date, '%Y-%m-%d') as returnDate,
 			   t2.num as bookNum,
 			   t2.name as bookName,
 			   t1.return_expired as returnExpired
-		  from rental_history t1
+		  from return_history t1
 		  inner join books t2 on t1.book_num = t2.num
 		  inner join members t3 on t1.member_idx = t3.idx
-		  where t1.returned = 'Y'
-		    and member_idx = #{idx}
+		  where member_idx = #{idx}
 	</select>
 	
 	<select id="selectUserRentalBookByNum" parameterType="string" resultType="RentalHistory">
-		select t1.idx as idx,
-			   t1.member_idx as rentalManIdx,
+		select t1.member_idx as rentalManIdx,
 			   t3.name as rentalMan,
 			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
 			   t2.num as bookNum,
@@ -87,19 +78,16 @@
 		  from rental_history t1
 		  inner join books t2 on t1.book_num = t2.num
 		  inner join members t3 on t1.member_idx = t3.idx
-		  where t1.returned = 'N'
-		    and book_num = #{bookNum}
-		  limit 1
+		  where book_num = #{bookNum}
 	</select>
 	
 	<insert id="insertApplyRental" parameterType="map">
-		insert into rental_history(member_idx, book_num, rental_date, return_date, status, returned)
-		values (#{memberIdx}, #{bookNum}, now(), date_add(now(), interval 7 day), 'R', 'N')
+		insert into rental_history(member_idx, book_num, rental_date, return_date, status)
+		values (#{memberIdx}, #{bookNum}, now(), date_add(now(), interval 7 day), 'R')
 	</insert>
 	
 	<select id="selectRentalApplyList" resultType="RentalHistory">
-		select t1.idx as idx,
-			   t1.member_idx as rentalManIdx,
+		select t1.member_idx as rentalManIdx,
 			   t3.name as rentalMan,
 			   DATE_FORMAT(rental_date, '%Y-%m-%d') as rentalDate,
 			   DATE_FORMAT(return_date, '%Y-%m-%d') as returnDate,
@@ -109,7 +97,6 @@
 		  from rental_history t1
 		  inner join books t2 on t1.book_num = t2.num
 		  inner join members t3 on t1.member_idx = t3.idx
-		  where t1.returned = 'N'
 		  order by rentalManIdx
 	</select>
 	
@@ -118,20 +105,36 @@
 		   set status = 'A',
 		   	   rental_date = now(),
 		   	   return_date = date_add(now(), interval 7 day)
-		 where idx = #{rentalIdx}
-		   and member_idx = #{rentalManIdx}
+		 where member_idx = #{rentalManIdx}
 		   and book_num = #{bookNum}
 	</update>
 	
-	<update id="updateReturnRental" parameterType="map">
-		update rental_history
-		   set returned = 'Y',
-		   	   real_return_date = now(),
-		   	   return_expired = case when datediff(now(), return_date) > 0 then 'Y'
-		   	                         else 'N'
-		   	                    end
-		 where idx = #{rentalIdx}
-		   and member_idx = #{rentalManIdx}
-		   and book_num = #{bookNum}
-	</update>
+	<insert id="insertReturnRental" parameterType="map">
+		insert into return_history(book_num, member_idx, rental_date, return_date, return_expired)
+		select book_num, 
+			   member_idx,
+			   rental_date, 
+			   now(),
+			   case when datediff(now(), return_date) > 0 then 'Y'
+		   	        else 'N'
+		   	   end
+		  from rental_history
+		 where book_num =#{bookNum}
+		   and member_idx = #{memberIdx}
+	</insert>
+	
+	<select id="selectMyApplyBook" parameterType="map" resultType="int">
+		select count(book_Num)
+		  from rental_history
+		 where book_num = #{bookNum}
+		   and member_idx = #{memberIdx}
+	</select>
+	
+	<delete id="deleteMyApplyBook" parameterType="map">
+		delete from rental_history
+		 where book_num = #{bookNum}
+		   and member_idx = #{memberIdx}
+	</delete>
+	
+	
 </mapper>

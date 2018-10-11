@@ -5,18 +5,15 @@
 	<select id="selectBookList"  parameterType="string"  resultType="Book">
 		select num as bookNum, 
 			   tb1.name as bookName,
-			   case when tb2.returned = 'N' then tb2.status
-			        else 'Y'
-			   end as rentalPossible,
+			   ifnull(tb2.status, 'Y') as rentalPossible,
 			   tb2.name as rentalMan,
 			   tb2.idx as rentalManIdx,
 			   tb2.mine as mine
 		  from books tb1
 		  left outer join (
-		  	select t1.*, t2.name, case when t1.member_idx = #{memberIdx} then 'Y' else 'N' end as mine
+		  	select t1.*, t2.name, t2.idx, case when t1.member_idx = #{memberIdx} then 'Y' else 'N' end as mine
 		  	  from rental_history t1
 		  	  inner join members t2 on t1.member_idx=t2.idx
-		  	 where returned = 'N'
 		  ) tb2 on tb1.num = tb2.book_num
 		 where isExist = 'Y' 
 		 order by tb1.num asc

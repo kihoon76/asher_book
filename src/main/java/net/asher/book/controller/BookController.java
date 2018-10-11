@@ -52,6 +52,7 @@ public class BookController {
 		
 		List<Book> list = getBookList(memberIdx);
 		mm.addAttribute("bookList", list);
+		mm.addAttribute("memberIdx", memberIdx);
 		return "book/rentalHistory";
 	}
 	

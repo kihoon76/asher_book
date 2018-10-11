@@ -1,7 +1,8 @@
 var Common = { socket: null, popupClose: function() {} };
 
-$(document).on('pageinit', function () {
-	
+$(document)
+.off('pageinit')
+.on('pageinit', function () {
 	$('body>[data-role="panel"]').panel();
 	
 	function openPopup(type, afterFn) {
@@ -13,7 +14,7 @@ $(document).on('pageinit', function () {
 		else if(type == 'rental_manage') {
 			$('#btnPopupEtc').data('category', 'rental_manage').text('삭제')
 			$('#btnPopupOk').data('category', 'rental_manage').text('승인');
-			$('#btnPopupCancel').text('취소');
+			$('#btnPopupCancel').text('닫기');
 			
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').show();
@@ -21,16 +22,22 @@ $(document).on('pageinit', function () {
 		else if(type == 'rental_apply') {
 			$('#btnPopupEtc').hide();
 			$('#btnPopupOk').data('category', 'rental_apply').text('대여신청');
-			$('#btnPopupCancel').text('취소');
+			$('#btnPopupCancel').text('닫기');
 			$('#btnPopupOk').show();
 		}
 		else if(type == 'rental_manage_return') {
 			$('#btnPopupEtc').data('category', 'rental_manage_return').text('연장')
 			$('#btnPopupOk').data('category', 'rental_manage_return').text('반납');
-			$('#btnPopupCancel').text('취소');
+			$('#btnPopupCancel').text('닫기');
 			
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').show();
+		}
+		else if(type == 'apply_cancel') {
+			$('#btnPopupEtc').hide();
+			$('#btnPopupOk').show();
+			$('#btnPopupOk').data('category', 'apply_cancel').text('신청취소');
+			$('#btnPopupCancel').text('닫기');
 		}
 
 		Common.popupClose = afterFn;
@@ -83,13 +90,16 @@ $(document).on('pageinit', function () {
 						msg = '미반납된 도서가 있습니다<br/>[' + jqXHR.data[0].bookName + ']';
 						break;
 					case '601': 
-						msg = '[' + jqXHR.data[0].memberName + ']님에게 대여중입니다.<br/>' + '대여일자 [' + jqXHR.data[0].rentalDate + ']';
+						msg = '[' + jqXHR.data[0].rentalMan + ']님에게 대여중입니다.<br/>' + '대여일자 [' + jqXHR.data[0].rentalDate + ']';
 						break;
 					case '602': 
-						msg = '[' + jqXHR.data[0].memberName + ']님이 대여신청중입니다.<br/>' + '신청일자 [' + jqXHR.data[0].rentalDate + ']';
+						msg = '[' + jqXHR.data[0].rentalMan + ']님이 대여요청중입니다.<br/>' + '신청일자 [' + jqXHR.data[0].rentalDate + ']';
+						break;
+					case '603': 
+						msg = '대여신청 취소를 하실수 없습니다.';
 						break;
 					default: 
-						msg = '오류발생';
+						msg = '오류가 발생했습니다.';
 						break;
 					}
 					
@@ -103,6 +113,7 @@ $(document).on('pageinit', function () {
 						setTimeout(jqXHR.runFinal, 500);
 					}
 				}
+				
 			},
 			success: function(data, textStatus, jqXHR) {
 				if(data.success) {
@@ -127,9 +138,16 @@ $(document).on('pageinit', function () {
 		var possible = $img.data('possible');
 		var msg = '';
 		if('R' == possible) {
-			msg = '[' + $img.data('name') + ']는 ' + $img.data('rentalMan') + '님이 대여요청중 입니다.';
-			makePopup('', msg);
-			openPopup('alert');
+			if('Y' == $img.data('mine')) {
+				msg = '[' + $img.data('name') + '] 대여신청을 취소하시겠습니까? ';
+				makePopup('', msg, [{key: 'bookNum', value: $img.data('num')}]);
+				openPopup('apply_cancel');
+			}
+			else {
+				msg = '[' + $img.data('name') + ']는 ' + $img.data('rentalMan') + '님이 대여요청중 입니다.';
+				makePopup('', msg);
+				openPopup('alert');
+			}
 		}
 		else if('A' == possible) {
 			msg = '[' + $img.data('name') + ']는 ' + $img.data('rentalMan') + '님이 대여중 입니다.';
@@ -162,7 +180,6 @@ $(document).on('pageinit', function () {
 		}
 		
 		makePopup('', msg, [
-		  {key: 'rentalIdx', value: $this.data('rentalIdx')},
 		  {key: 'rentalManIdx', value: $this.data('rentalManIdx')},
 		  {key: 'bookNum', value: $this.data('bookNum')},
 		  {key: 'memberName', value: $this.data('rentalMan')}
@@ -187,7 +204,9 @@ $(document).on('pageinit', function () {
 		
 	});
 	
-	$(document).on('click', '#btnPopupOk', function() {
+	$(document)
+	.off('click', '#btnPopupOk')
+	.on('click', '#btnPopupOk', function() {
 		var $this = $(this);
 		var cate = $(this).data('category');
 		var $dvPopupContent = $('#dvPopupContent');
@@ -218,7 +237,6 @@ $(document).on('pageinit', function () {
 				dataType: 'json',
 				contentType: 'application/json',
 				data: JSON.stringify({
-					rentalIdx: $dvPopupContent.data('rentalIdx'),
 					rentalManIdx: $dvPopupContent.data('rentalManIdx'),
 					bookNum: $dvPopupContent.data('bookNum'),
 					memberName: $dvPopupContent.data('rentalMan')
@@ -243,8 +261,7 @@ $(document).on('pageinit', function () {
 				dataType: 'json',
 				contentType: 'application/json',
 				data: JSON.stringify({
-					rentalIdx: $dvPopupContent.data('rentalIdx'),
-					rentalManIdx: $dvPopupContent.data('rentalManIdx'),
+					memberIdx: $dvPopupContent.data('rentalManIdx'),
 					bookNum: $dvPopupContent.data('bookNum'),
 					memberName: $dvPopupContent.data('rentalMan')
 				}),
@@ -259,10 +276,28 @@ $(document).on('pageinit', function () {
 				},
 			});
 			break;
+		case 'apply_cancel' :  //신청취소
+			Common.ajax({
+				url: '/user/cancel/apply',
+				method: 'POST',
+				dataType: 'json',
+				data: {bookNum: $dvPopupContent.data('bookNum')},
+				success: function(data, textStatus, jqXHR) {
+					jqXHR.runFinal = function() {
+						makePopup('', '신청취소되었습니다.');
+						openPopup('alert', function() {
+							//window.location.reload();
+						});
+					}
+				},
+			});
+			break;
 		}
 	});
 	
-	$(document).on('click', '#btnPopupEtc', function() {
+	$(document)
+	.off('click', '#btnPopupEtc')
+	.on('click', '#btnPopupEtc', function() {
 		var $this = $(this);
 		var cate = $(this).data('category');
 		var $dvPopupContent = $('#dvPopupContent');
@@ -278,7 +313,9 @@ $(document).on('pageinit', function () {
 	
 	
 	//$popupDialog.open();
-	$('[data-role=panel] a').on('click', function () {
+	$('[data-role=panel] a')
+	.off('click')
+	.on('click', function () {
 		var $this = $(this);
 		console.log($this)
 		
@@ -307,6 +344,8 @@ $(document).on('pageshow', function (event, ui) {
     
     ///book/rental_history
     if($('#dvRentalHistory').get(0)) {
+    	var myMemberIdx = $('#dvRentalHistory').data('memberIdx');
+    	console.log(myMemberIdx);
     	Common.socket = new SockJS('/rental_book/list');
 		
     	Common.socket.onopen = function(event) {
@@ -319,7 +358,15 @@ $(document).on('pageshow', function (event, ui) {
     			var selector = '#book' + data.bookNum + 'Rental';
     			if(data.type == 'R') {
     				//대여신청
-    				$(selector).addClass('apply');
+    				if(data.memberIdx == myMemberIdx) {
+    					$(selector).addClass('apply_mine');
+    					$(selector + 'Image').data('mine', 'Y');
+    				}
+    				else {
+    					$(selector).addClass('apply');
+    					$(selector + 'Image').data('mine', 'N');
+    				}
+    				
     				$(selector).text('신청');
     				$(selector + 'Man').text(data.memberName);
     				$(selector + 'Image').data('possible', 'R');
@@ -327,7 +374,7 @@ $(document).on('pageshow', function (event, ui) {
     				
     			}
     			else if(data.type == 'A') {
-    				$(selector).removeClass('apply');
+    				$(selector).removeClass('apply apply_mine');
     				$(selector).addClass('norental');
     				$(selector).text('대여');
     				$(selector + 'Man').text(data.memberName);
@@ -336,6 +383,13 @@ $(document).on('pageshow', function (event, ui) {
     			}
     			else if(data.type == 'T') { //반납
     				$(selector).removeClass('norental');
+    				$(selector).text('가능');
+    				$(selector + 'Man').html('&nbsp;');
+    				$(selector + 'Image').data('possible', 'Y');
+    				$(selector + 'Image').data('rentalMan', null);
+    			}
+    			else if(data.type == 'D') {//대여신청 취소
+    				$(selector).removeClass('apply_mine apply');
     				$(selector).text('가능');
     				$(selector + 'Man').html('&nbsp;');
     				$(selector + 'Image').data('possible', 'Y');
