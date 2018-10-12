@@ -8,6 +8,7 @@ public class ReturnHistory extends Book {
 	private String idx;
 	private String rentalDate;
 	private String returnDate;
+	private String realReturnDate;
 	private String returnExpired;	//Y: 연체, N: 납기일내 반납
 	public String getIdx() {
 		return idx;
@@ -32,5 +33,11 @@ public class ReturnHistory extends Book {
 	}
 	public void setReturnExpired(String returnExpired) {
 		this.returnExpired = returnExpired;
+	}
+	public String getRealReturnDate() {
+		return realReturnDate;
+	}
+	public void setRealReturnDate(String realReturnDate) {
+		this.realReturnDate = realReturnDate;
 	}
 }

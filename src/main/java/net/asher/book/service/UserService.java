@@ -94,4 +94,9 @@ public class UserService {
 		return false;
 	}
 
+	public void extendReturn(String bookNum) {
+		userDao.updateReturnDate(bookNum);
+		
+	}
+
 }

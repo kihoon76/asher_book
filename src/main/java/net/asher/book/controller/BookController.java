@@ -42,6 +42,7 @@ public class BookController {
 		mm.addAttribute("bookList", getBookList(memberIdx));
 		mm.addAttribute("selectedBook", bookNum);
 		mm.addAttribute("bookNum", bookNum);
+		mm.addAttribute("bookInfo", bookService.getBookDetail(bookNum));
 		return "book/bookTemplate";
 		
 	}

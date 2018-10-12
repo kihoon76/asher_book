@@ -1,4 +1,19 @@
-var Common = { socket: null, popupClose: function() {} };
+var Common = { 
+	socket: null,
+	popupClose: function() {},
+	getFullHeight: function() {
+		var screen = $.mobile.getScreenHeight();
+    	var header = $(".ui-header").hasClass("ui-header-fixed") ? $(".ui-header").outerHeight()  - 1 : $(".ui-header").outerHeight();
+    	var footer = $(".ui-footer").hasClass("ui-footer-fixed") ? $(".ui-footer").outerHeight() - 1 : $(".ui-footer").outerHeight();
+
+    	/* content div has padding of 1em = 16px (32px top+bottom). This step
+    	   can be skipped by subtracting 32px from content var directly. */
+    	var contentCurrent = $('.ui-content').outerHeight() - $('.ui-content').height();
+    	var content = screen - header - footer - contentCurrent;
+    	
+    	return content;
+	} 
+};
 
 $(document)
 .off('pageinit')
@@ -306,7 +321,21 @@ $(document)
 		switch(cate) {
 		case 'rental_manage' :
 			break;
-		case 'rental_manage_return' :
+		case 'rental_manage_return' : //반납기간 연장
+			Common.ajax({
+				url: '/admin/extension/return',
+				method: 'POST',
+				dataType: 'json',
+				data: {bookNum: $dvPopupContent.data('bookNum')},
+				success: function(data, textStatus, jqXHR) {
+					jqXHR.runFinal = function() {
+						makePopup('', '7일 연장되었습니다.');
+						openPopup('alert', function() {
+							window.location.reload();
+						});
+					}
+				},
+			});
 			break;
 		}
 	});
@@ -399,6 +428,15 @@ $(document).on('pageshow', function (event, ui) {
     		catch(e) {}
 			
 		}
+    }
+    else if($('#dvSiteInfo').get(0)) {
+    	
+    	$('#dvSiteInfo').height(Common.getFullHeight());
+    	var swiper = new Swiper('.swiper-container', {
+    	      pagination: {
+    	        el: '.swiper-pagination',
+    	      },
+    	    });
     }
 });
 

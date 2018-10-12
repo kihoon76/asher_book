@@ -7,10 +7,13 @@ public class Book {
 
 	private int bookNum;
 	private String bookName;
+	private String bookEngName;
 	private String rentalPossible;
 	private String rentalMan;
 	private String rentalManIdx;
 	private String mine;
+	private String bookContents;
+	private String bookLink;
 	
 	public int getBookNum() {
 		return bookNum;
@@ -47,6 +50,24 @@ public class Book {
 	}
 	public void setMine(String mine) {
 		this.mine = mine;
+	}
+	public String getBookEngName() {
+		return bookEngName;
+	}
+	public void setBookEngName(String bookEngName) {
+		this.bookEngName = bookEngName;
+	}
+	public String getBookContents() {
+		return bookContents;
+	}
+	public void setBookContents(String bookContents) {
+		this.bookContents = bookContents;
+	}
+	public String getBookLink() {
+		return bookLink;
+	}
+	public void setBookLink(String bookLink) {
+		this.bookLink = bookLink;
 	}
 	
 }

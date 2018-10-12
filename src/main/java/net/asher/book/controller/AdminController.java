@@ -81,4 +81,23 @@ public class AdminController {
 		
 	}
 	
+	@PostMapping("extension/return")
+	@ResponseBody
+	public AjaxVO extendReturn(@RequestParam("bookNum") String bookNum) {
+		
+		AjaxVO vo = new AjaxVO<>();
+		
+		try {
+			userService.extendReturn(bookNum);
+			vo.setSuccess(true);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+	
+		return vo;
+		
+	}
+	
 }

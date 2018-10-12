@@ -12,14 +12,17 @@
 <html>
 <head>
 	<title>Home</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimun-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="/resources/jqmobile/jquery.mobile-1.4.5.min.css" />
+	<link rel="stylesheet" href="/resources/swiper-4.4.1/css/swiper.min.css" />
 <!-- 	<link rel="stylesheet" href="/resources/css/jqm-demos.css" /> -->
 	<link rel="stylesheet" href="/resources/css/default.css" />
 	<link rel="stylesheet" href="/resources/css/column.css" />
+	<link rel="stylesheet" href="/resources/css/info.css" />
 	<script type="text/javascript" src="/resources/jquery/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="/resources/jqmobile/jquery.mobile-1.4.5.min.js"></script>
 	<script type="text/javascript" src="/resources/js/sockjs.min.js"></script>
+	<script type="text/javascript" src="/resources/swiper-4.4.1/js/swiper.min.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 </head>
 <body>
@@ -45,7 +48,7 @@
          <div data-role="navbar">
          	<ul>
          		<li><a href="/main" data-icon="home" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
-         		<li><a href="/" data-icon="home">홈</a></li>
+         		<li><a href="/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
          	</ul>
          </div>

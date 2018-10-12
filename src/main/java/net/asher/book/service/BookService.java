@@ -19,4 +19,8 @@ public class BookService {
 	public List<Book> getBookList(String memberIdx) {
 		return bookDao.selectBookList(memberIdx);
 	}
+
+	public Book getBookDetail(String bookNum) {
+		return bookDao.selectBookDetail(bookNum);
+	}
 }

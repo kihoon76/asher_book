@@ -78,6 +78,14 @@ public class MainController {
 		return "main";
 	}
 	
+	@GetMapping("info")
+	public String info(ModelMap mm) {
+		mm.addAttribute("footbar", "info");
+		
+		
+		return "info";
+	}
+	
 	@GetMapping("signin")
 	public String getSigninPage() {
 		return "signin";

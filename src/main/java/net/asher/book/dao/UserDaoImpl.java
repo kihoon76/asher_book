@@ -80,4 +80,10 @@ public class UserDaoImpl implements UserDao {
 	public int insertReturnRental(Map<String, String> param) {
 		return mySqlSession.insert(namespace + ".insertReturnRental", param);
 	}
+
+	@Override
+	public void updateReturnDate(String bookNum) {
+		mySqlSession.update(namespace + ".updateReturnDate", bookNum);
+		
+	}
 }

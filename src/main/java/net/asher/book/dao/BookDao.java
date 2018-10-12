@@ -9,4 +9,6 @@ public interface BookDao {
 
 	List<Book> selectBookList(String memberIdx);
 
+	Book selectBookDetail(String bookNum);
+
 }

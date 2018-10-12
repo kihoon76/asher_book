@@ -110,10 +110,11 @@
 	</update>
 	
 	<insert id="insertReturnRental" parameterType="map">
-		insert into return_history(book_num, member_idx, rental_date, return_date, return_expired)
+		insert into return_history(book_num, member_idx, rental_date, return_date, real_return_date, return_expired)
 		select book_num, 
 			   member_idx,
-			   rental_date, 
+			   rental_date,
+			   return_date, 
 			   now(),
 			   case when datediff(now(), return_date) > 0 then 'Y'
 		   	        else 'N'
@@ -136,5 +137,11 @@
 		   and member_idx = #{memberIdx}
 	</delete>
 	
+	<update id="updateReturnDate" parameterType="string">
+		update rental_history
+		   set return_date = date_add(return_date, interval 7 day)
+		 where book_num = #{bookNum}
+		   and status = 'A'
+	</update>
 	
 </mapper>

@@ -31,4 +31,6 @@ public interface UserDao {
 
 	int insertReturnRental(Map<String, String> param);
 
+	void updateReturnDate(String bookNum);
+
 }
