@@ -33,4 +33,6 @@ public interface UserDao {
 
 	void updateReturnDate(String bookNum);
 
+	List<Map<String, String>> selectExpiredRentals();
+
 }

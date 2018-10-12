@@ -2,16 +2,20 @@ package net.asher.book.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.google.gson.Gson;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
@@ -89,5 +93,18 @@ public class MainController {
 	@GetMapping("signin")
 	public String getSigninPage() {
 		return "signin";
+	}
+	
+	@Scheduled(cron="0 0 9 * * *") //매일  오전 9시
+	public void checkRentalExpire() {
+		//schedule.viewDatabaseConnection();
+		
+		try {
+			List<Map<String, String>> list = userService.getExpiredRentals();
+		} 
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -99,4 +99,8 @@ public class UserService {
 		
 	}
 
+	public List<Map<String, String>> getExpiredRentals() {
+		return userDao.selectExpiredRentals();
+	}
+
 }

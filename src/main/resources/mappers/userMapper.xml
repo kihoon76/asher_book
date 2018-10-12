@@ -144,4 +144,14 @@
 		   and status = 'A'
 	</update>
 	
+	<select id="selectExpiredRentals" resultType="map">
+		select idx, name
+	
+	
+		select book_num, member_idx, rental_date, return_date
+		  from rental_history
+		 where status = 'A'
+		   and datediff(now(), return_date) > 0
+	</select>
+	
 </mapper>

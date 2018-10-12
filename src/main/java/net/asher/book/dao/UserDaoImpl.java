@@ -86,4 +86,9 @@ public class UserDaoImpl implements UserDao {
 		mySqlSession.update(namespace + ".updateReturnDate", bookNum);
 		
 	}
+
+	@Override
+	public List<Map<String, String>> selectExpiredRentals() {
+		return mySqlSession.selectList(namespace + ".selectExpiredRentals");
+	}
 }
