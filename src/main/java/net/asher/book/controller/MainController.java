@@ -110,15 +110,16 @@ public class MainController {
 		//schedule.viewDatabaseConnection();
 		
 		try {
-			List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
+			//List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
 			
-			Map<String, String> m = new HashMap<>();
-			m.put("email", "lovedeer118@gmail.com");
-			m.put("memberName", "남기훈");
-			m.put("bookNum", "1");
-			m.put("bookName", "테스트");
-			m.put("returnDate", "2018-09-09");
-			list.add(m);
+			List<Map<String, String>> list = userService.getExpiredRentals();
+//			Map<String, String> m = new HashMap<>();
+//			m.put("email", "");
+//			m.put("memberName", "남기훈");
+//			m.put("bookNum", "1");
+//			m.put("bookName", "테스트");
+//			m.put("returnDate", "2018-09-09");
+//			list.add(m);
 			
 			if(list != null && list.size() > 0) {
 				for(int r=0; r<list.size(); r++) {
