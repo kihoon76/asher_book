@@ -17,4 +17,5 @@
 	</context:component-scan>
 	
 	<util:properties id="mailCfg" location="classpath:/config/mail.properties" />
+	<util:properties id="smsCfg" location="classpath:/config/sms.properties" />
 </beans>

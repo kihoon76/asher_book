@@ -12,7 +12,7 @@ public class Account {
 	private String password;
 	private String phone;
 	private String email;
-	private String websocketId;
+	private String isAdmin;
 	
 	private List<Authority> authorities;
 	
@@ -59,13 +59,11 @@ public class Account {
 	public void setIdx(String idx) {
 		this.idx = idx;
 	}
-	
-	
-	public String getWebsocketId() {
-		return websocketId;
+	public String getIsAdmin() {
+		return isAdmin;
 	}
-	public void setWebsocketId(String websocketId) {
-		this.websocketId = websocketId;
+	public void setIsAdmin(String isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 	@Override
 	public boolean equals(Object o) {

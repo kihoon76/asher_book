@@ -35,4 +35,8 @@ public interface UserDao {
 
 	List<Map<String, String>> selectExpiredRentals();
 
+	void insertUser(Map<String, String> param);
+
+	List<Account> selectUserList();
+
 }

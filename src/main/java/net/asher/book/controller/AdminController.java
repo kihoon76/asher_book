@@ -1,12 +1,17 @@
 package net.asher.book.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
+import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
+import net.asher.book.domain.RentalHistory;
+import net.asher.book.service.BookService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.SessionUtil;
 import net.asher.book.websocket.AsherWebSocketHandler;
@@ -29,6 +37,12 @@ public class AdminController {
 	
 	@Resource(name="userService")
 	UserService userService;
+	
+	@Resource(name="bookService")
+	BookService bookService;
+	
+	@Autowired 
+	private PasswordEncoder passwordEncoder;
 
 	@PostMapping("accept/rental/apply")
 	@ResponseBody
@@ -96,6 +110,50 @@ public class AdminController {
 			vo.setErrMsg(e.getMessage());
 		}
 	
+		return vo;
+		
+	}
+	
+	@GetMapping("reg/user_form")
+	public String getRegUserForm(ModelMap mm) {
+		String memberIdx = SessionUtil.getSessionUserIdx();
+		
+		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
+		
+		return "admin/regUserForm";
+	}
+	
+	@GetMapping("list/user")
+	public String getUserList(ModelMap mm) {
+		String memberIdx = SessionUtil.getSessionUserIdx();
+		
+		List<Account> userList = userService.getUserList();
+		
+		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
+		mm.addAttribute("userList", userList);
+		
+		return "admin/userList";
+	}
+	
+	@PostMapping("reg/user")
+	@ResponseBody
+	public AjaxVO regUser(@RequestBody Map<String, String> param) {
+		AjaxVO vo = new AjaxVO<>();
+		
+		String phone = param.get("userPhone");
+		phone = phone.replaceAll("-", "");
+		param.put("password", passwordEncoder.encode(phone));
+		
+		try {
+			userService.regUser(param);
+			vo.setSuccess(true);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrCode("604");
+			vo.setErrMsg(e.getMessage());
+		}
+		
 		return vo;
 		
 	}

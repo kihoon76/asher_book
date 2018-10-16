@@ -103,4 +103,12 @@ public class UserService {
 		return userDao.selectExpiredRentals();
 	}
 
+	public void regUser(Map<String, String> param) {
+		 userDao.insertUser(param);
+	}
+
+	public List<Account> getUserList() {
+		return userDao.selectUserList();
+	}
+
 }

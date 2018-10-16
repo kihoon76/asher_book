@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,6 +30,7 @@ import net.asher.book.service.BookService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.HttpHeaderUtil;
 import net.asher.book.util.MailUtil;
+import net.asher.book.util.RestClient;
 import net.asher.book.util.SessionUtil;
 
 @RequestMapping("/")
@@ -43,6 +45,15 @@ public class MainController {
 	
 	@Resource(name="mailUtil")
 	MailUtil mailUtil;
+	
+	@Value("#{smsCfg['key']}")
+	String smsKey;
+	
+	@Value("#{smsCfg['userId']}")
+	String smsUserId;
+	
+	@Value("#{smsCfg['sender']}")
+	String smsSender;
 	
 	@GetMapping("signin/{errCode}")
 	public String signinForm(@PathVariable(name="errCode", required=false) String errCode, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -69,7 +80,7 @@ public class MainController {
 	}
 	
 	@GetMapping("main")
-	public String main(ModelMap mm/*, HttpServletRequest request*/) {
+	public String main(ModelMap mm, HttpServletRequest request) {
 		Account account = SessionUtil.getSessionAccount();
 		
 		mm.addAttribute("bookList", bookService.getBookList(account.getIdx()));
@@ -88,7 +99,7 @@ public class MainController {
 			mm.addAttribute("myRentalHistoryList", myRentalHistoryList);
 		}
 		
-		//checkRentalExpire(request);
+		checkRentalExpire(request);
 		return "main";
 	}
 	
@@ -110,25 +121,37 @@ public class MainController {
 		//schedule.viewDatabaseConnection();
 		
 		try {
-			//List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
+			List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
 			
-			List<Map<String, String>> list = userService.getExpiredRentals();
-//			Map<String, String> m = new HashMap<>();
-//			m.put("email", "");
-//			m.put("memberName", "남기훈");
-//			m.put("bookNum", "1");
-//			m.put("bookName", "테스트");
-//			m.put("returnDate", "2018-09-09");
-//			list.add(m);
+			//List<Map<String, String>> list = userService.getExpiredRentals();
+			Map<String, String> m = new HashMap<>();
+			m.put("email", "lovedeer118@gmail.com");
+			m.put("memberName", "남기훈");
+			m.put("bookNum", "1");
+			m.put("bookName", "테스트");
+			m.put("returnDate", "2018-09-09");
+			list.add(m);
 			
 			if(list != null && list.size() > 0) {
 				for(int r=0; r<list.size(); r++) {
 					Email email = new Email(HttpHeaderUtil.getUrlRoot(request));
 					Account account = new Account();
 					account.setEmail(list.get(r).get("email"));
+					account.setPhone("01032780212");
+					account.setUserName("남기훈");
 					email.setAccount(account);
 					email.setContent("<p>[" + list.get(r).get("memberName")+ "]님이 대여하신 책 <span style=\"color:#ff0000; font-weight:bolder;\">" + list.get(r).get("bookNum") + "." + list.get(r).get("bookName") + "</span> 의 반납일자는 " + list.get(r).get("returnDate") + "입니다.</p>");
 					mailUtil.sendMail(email);
+					
+					RestClient rc = new RestClient(smsKey, smsUserId, smsSender);
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("receiver", account.getPhone().replaceAll("-", ""));
+					map.put("destination", account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
+					map.put("msg", "test");
+					map.put("title", "test");
+					map.put("testmode_yn", "Y");
+					String rr = rc.post("/send/", map);
+					System.out.println(rr);
 				}
 	
 			}

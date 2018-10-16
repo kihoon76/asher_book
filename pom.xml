@@ -231,6 +231,7 @@
 		    <version>${javax.mail-version}</version>
 		</dependency>
 		
+		
 		<!-- validate -->
 		<dependency>
 		    <groupId>org.hibernate</groupId>

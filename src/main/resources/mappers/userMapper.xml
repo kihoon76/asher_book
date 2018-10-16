@@ -157,4 +157,23 @@
 		   and datediff(now(), t1.return_date) > 0
 	</select>
 	
+	<insert id="insertUser" parameterType="map">
+		insert into members(id, name, pw, phone, email)
+		values(LOWER(#{userId}), #{userName}, #{password}, #{userPhone}, #{userEmail})
+	</insert>
+	
+	<select id="selectUserList" resultType="Account">
+		select idx as idx,
+			   id as id,
+			   name as userName,
+			   phone as phone,
+			   email as email,
+			   case when t2.auth_name = 'ROLE_ADMIN' then 'Y'
+			        else 'N'
+			   end as isAdmin
+		  from members t1
+		  left outer join members_authorities t2 on t1.idx = t2.members_idx
+		   and t2.auth_name = 'ROLE_ADMIN'
+		 order by name asc 
+	</select>
 </mapper>

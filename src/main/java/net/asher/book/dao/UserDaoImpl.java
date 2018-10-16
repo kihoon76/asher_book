@@ -91,4 +91,15 @@ public class UserDaoImpl implements UserDao {
 	public List<Map<String, String>> selectExpiredRentals() {
 		return mySqlSession.selectList(namespace + ".selectExpiredRentals");
 	}
+
+	@Override
+	public void insertUser(Map<String, String> param) {
+		mySqlSession.insert(namespace + ".insertUser", param);
+		
+	}
+
+	@Override
+	public List<Account> selectUserList() {
+		return mySqlSession.selectList(namespace + ".selectUserList");
+	}
 }

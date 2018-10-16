@@ -74,6 +74,17 @@
 				</c:forEach>
               </ul>
         </div><!-- /collapsible -->
+        
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+        <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b" <c:if test="${not empty selectedBook}">data-collapsed="false"</c:if>>
+              <h3>회원관리</h3>
+              <ul data-role="listview">
+              	<li><a href="/admin/reg/user_form" class="ui-btn ui-btn-icon-right ui-icon-carat-r">회원등록</a></li>
+              	<li><a href="/admin/list/user" class="ui-btn ui-btn-icon-right ui-icon-carat-r">회원목록</a></li>
+              </ul>
+        </div><!-- /collapsible -->
+        </sec:authorize>
+        
 	</div><!-- /leftpanel3 -->
 	
 	

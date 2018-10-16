@@ -113,6 +113,9 @@ $(document)
 					case '603': 
 						msg = '대여신청 취소를 하실수 없습니다.';
 						break;
+					case '604': 
+						msg = '사용자 등록에 실패했습니다.';
+						break;
 					default: 
 						msg = '오류가 발생했습니다.';
 						break;
@@ -362,6 +365,78 @@ $(document)
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
 				window.location.href = '/signin';
+			},
+		});
+	});
+	
+	$(document)
+	.off('click', '#btnRegUser')
+	.on('click', '#btnRegUser', function() {
+		var $userId = $('#userId'),
+			$userName = $('#userName'),
+			$userPhone = $('#userPhone'),
+			$userEmail = $('#userEmail');
+		
+		var userId = $.trim($userId.val());
+		if(userId == '') {
+			$userId.focus();
+			return;
+		}
+		
+		var userName = $.trim($userName.val());
+		if(userName == '') {
+			$userName.focus();
+			return;
+		}
+		
+		var userPhone = $.trim($userPhone.val());
+		
+		if(userPhone == '') {
+			$userPhone.focus();
+			return;
+		}
+		
+		if(!/^\d{3}-\d{3,4}-\d{4}$/gm.test(userPhone)) {
+			$userPhone.val('');
+			$userPhone.focus();
+			return;
+		}
+		
+		var userEmail = $.trim($userEmail.val());
+		
+		if(userEmail == '') {
+			$userEmail.focus();
+			return;
+		}
+		
+		if(!/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i.test(userEmail)) {
+			$userEmail.val('');
+			$userEmail.focus();
+			return;
+		}
+		
+		
+		Common.ajax({
+			url: '/admin/reg/user',
+			method: 'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				userId: userId,
+				userName: userName,
+				userPhone: userPhone,
+				userEmail: userEmail
+			}),
+			success: function(data, textStatus, jqXHR) {
+				jqXHR.runFinal = function() {
+					makePopup('', '사용자가 등록되었습니다.');
+					openPopup('alert', function() {
+						$userId.val('');
+						$userName.val('');
+						$userPhone.val('');
+						$userEmail.val('');
+					});
+				}
 			},
 		});
 	});
