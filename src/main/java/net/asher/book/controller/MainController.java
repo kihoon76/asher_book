@@ -105,7 +105,7 @@ public class MainController {
 		return "signin";
 	}
 	
-	//@Scheduled(cron="0 0 9 * * *") //매일  오전 9시
+	@Scheduled(cron="0 0 9 * * *") //매일  오전 9시
 	public void checkRentalExpire(HttpServletRequest request) {
 		//schedule.viewDatabaseConnection();
 		
