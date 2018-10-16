@@ -2,7 +2,7 @@ package net.asher.book.domain;
 
 public class Email {
 
-	private String subject = "Hotplace25에서 알려드립니다.";
+	private String subject = "아셀교회에서 알려드립니다.";
 	private Account account;
 	private String accountId;
 	private String content = "";
@@ -50,7 +50,7 @@ public class Email {
 		sb.append("<table style=\"width:500px;\">");
 		sb.append("<tbody>");
 		sb.append("<tr style=\"background-color:#333336\">");
-		sb.append("<td><img src=\"" + url + "resources/img/gnb_logo.png\" /></td>");
+		sb.append("<td><img src=\"" + url + "resources/img/logo.jpg\" /></td>");
 		sb.append("</tr>");
 		sb.append("<tr>");
 		sb.append("<td>" + content + "</td>");

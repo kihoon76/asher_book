@@ -1,10 +1,13 @@
 package net.asher.book.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,10 +22,13 @@ import com.google.gson.Gson;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
+import net.asher.book.domain.Email;
 import net.asher.book.domain.RentalHistory;
 import net.asher.book.domain.ReturnHistory;
 import net.asher.book.service.BookService;
 import net.asher.book.service.UserService;
+import net.asher.book.util.HttpHeaderUtil;
+import net.asher.book.util.MailUtil;
 import net.asher.book.util.SessionUtil;
 
 @RequestMapping("/")
@@ -34,6 +40,9 @@ public class MainController {
 	
 	@Resource(name="userService")
 	UserService userService;
+	
+	@Resource(name="mailUtil")
+	MailUtil mailUtil;
 	
 	@GetMapping("signin/{errCode}")
 	public String signinForm(@PathVariable(name="errCode", required=false) String errCode, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -60,7 +69,7 @@ public class MainController {
 	}
 	
 	@GetMapping("main")
-	public String main(ModelMap mm) {
+	public String main(ModelMap mm, HttpServletRequest request) {
 		Account account = SessionUtil.getSessionAccount();
 		
 		mm.addAttribute("bookList", bookService.getBookList(account.getIdx()));
@@ -79,6 +88,7 @@ public class MainController {
 			mm.addAttribute("myRentalHistoryList", myRentalHistoryList);
 		}
 		
+		checkRentalExpire(request);
 		return "main";
 	}
 	
@@ -95,15 +105,34 @@ public class MainController {
 		return "signin";
 	}
 	
-	@Scheduled(cron="0 0 9 * * *") //매일  오전 9시
-	public void checkRentalExpire() {
+	//@Scheduled(cron="0 0 9 * * *") //매일  오전 9시
+	public void checkRentalExpire(HttpServletRequest request) {
 		//schedule.viewDatabaseConnection();
 		
 		try {
-			List<Map<String, String>> list = userService.getExpiredRentals();
+			List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
+			
+			Map<String, String> m = new HashMap<>();
+			m.put("email", "lovedeer118@gmail.com");
+			m.put("memberName", "남기훈");
+			m.put("bookNum", "1");
+			m.put("bookName", "테스트");
+			m.put("returnDate", "2018-09-09");
+			list.add(m);
+			
+			if(list != null && list.size() > 0) {
+				for(int r=0; r<list.size(); r++) {
+					Email email = new Email(HttpHeaderUtil.getUrlRoot(request));
+					Account account = new Account();
+					account.setEmail(list.get(r).get("email"));
+					email.setAccount(account);
+					email.setContent("<p>[" + list.get(r).get("memberName")+ "]님이 대여하신 책 <span style=\"color:#ff0000; font-weight:bolder;\">" + list.get(r).get("bookNum") + "." + list.get(r).get("bookName") + "</span> 의 반납일자는 " + list.get(r).get("returnDate") + "입니다.</p>");
+					mailUtil.sendMail(email);
+				}
+	
+			}
 		} 
-		catch (IOException e) {
-			// TODO Auto-generated catch block
+		catch (MessagingException e) {
 			e.printStackTrace();
 		}
 	}

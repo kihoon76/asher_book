@@ -45,9 +45,7 @@ public class MailUtil {
 	
 	public void sendMail(Email email) throws AddressException, MessagingException {
 		
-		if(email.getAccount() == null) {
-			email.setAccount(userService.getUserInfo(email.getAccountId()));
-		}
+		if(email.getAccount() == null)  return;
 		
 		String recipient = email.getAccount().getEmail();
 		String subject = email.getSubject();
