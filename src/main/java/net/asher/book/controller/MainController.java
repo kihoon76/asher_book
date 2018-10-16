@@ -69,7 +69,7 @@ public class MainController {
 	}
 	
 	@GetMapping("main")
-	public String main(ModelMap mm, HttpServletRequest request) {
+	public String main(ModelMap mm/*, HttpServletRequest request*/) {
 		Account account = SessionUtil.getSessionAccount();
 		
 		mm.addAttribute("bookList", bookService.getBookList(account.getIdx()));
@@ -88,7 +88,7 @@ public class MainController {
 			mm.addAttribute("myRentalHistoryList", myRentalHistoryList);
 		}
 		
-		checkRentalExpire(request);
+		//checkRentalExpire(request);
 		return "main";
 	}
 	
