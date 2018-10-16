@@ -62,6 +62,7 @@ public class BookController {
 		String memberIdx = SessionUtil.getSessionUserIdx();
 		
 		List<RentalHistory> list = userService.getRentalList("R");
+		mm.addAttribute("bookList", getBookList(memberIdx));
 		
 		if(list != null && list.size() > 0) {
 			Map<String, ArrayList<RentalHistory>> rm = new LinkedHashMap<>();
