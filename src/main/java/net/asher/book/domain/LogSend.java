@@ -10,6 +10,9 @@ public class LogSend {
 	private String rxMsg;
 	private String isErr;
 	private String writeDate;
+	private String type;			//E: email S:sms
+	private String msgId;			//sms일 경우 고유번호
+	
 	public String getTargetIdx() {
 		return targetIdx;
 	}
@@ -40,7 +43,16 @@ public class LogSend {
 	public void setWriteDate(String writeDate) {
 		this.writeDate = writeDate;
 	}
-	
-	
-	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getMsgId() {
+		return msgId;
+	}
+	public void setMsgId(String msgId) {
+		this.msgId = msgId;
+	}
 }

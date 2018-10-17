@@ -357,7 +357,9 @@ $(document)
 		
 	});
 	
-	$('#footerLogout').on('click', function() {
+	$(document)
+	.off('click','#footerLogout')
+	.on('click', '#footerLogout', function() {
 		Common.ajax({
 			url: '/logout',
 			method: 'POST',
@@ -444,7 +446,7 @@ $(document)
 
 $(document).on('pageshow', function (event, ui) {
     // Remove the previous page
-    $(ui.prevPage).remove();
+	$(ui.prevPage).remove();
     
     ///book/rental_history
     if($('#dvRentalHistory').get(0)) {

@@ -3,10 +3,10 @@
 <mapper namespace="mappers.logMapper">
 	
 	<insert id="insertLog" parameterType="map">
-		insert into log_send(target_idx, tx_msg, rx_msg, isErr, write_date)
+		insert into log_send(target_idx, tx_msg, rx_msg, isErr, type, msg_id, write_date)
 		values
 		<foreach collection="list" item="item" separator=" , ">
-			(#{item.targetIdx}, #{item.txMsg}, #{item.rxMsg}, #{item.isErr}, now())
+			(#{item.targetIdx}, #{item.txMsg}, #{item.rxMsg}, #{item.isErr}, #{item.type}, #{item.msgId}, now())
 		</foreach>
 	</insert>
 	

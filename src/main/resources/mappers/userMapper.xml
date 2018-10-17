@@ -145,18 +145,18 @@
 	</update>
 	
 	<select id="selectExpiredRentals" resultType="map">
-		select t1.book_num as bookNum,
+		select concat(t1.book_num) as bookNum,
 			   t2.name as bookName,
 			   t3.name as memberName,
-			   t3.idx as memberIdx, 
+			   concat(t3.idx) as memberIdx, 
 			   t3.email as email,
 			   t3.phone as phone,
-			   t1.return_date as returnDate
+			   DATE_FORMAT(t1.return_date, '%Y-%m-%d') as returnDate
 		  from rental_history t1
 		 inner join books t2 on t1.book_num = t2.num
 		 inner join members t3 on t1.member_idx = t3.idx
 		 where t1.status = 'A'
-		   and datediff(now(), t1.return_date) > 0
+		   and datediff(now(), t1.return_date) = 1
 	</select>
 	
 	<insert id="insertUser" parameterType="map">

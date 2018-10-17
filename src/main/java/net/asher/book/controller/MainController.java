@@ -132,17 +132,8 @@ public class MainController {
 		//schedule.viewDatabaseConnection();
 		
 		try {
-			//List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
 			
 			List<Map<String, String>> list = userService.getExpiredRentals();
-//			Map<String, String> m = new HashMap<>();
-//			m.put("email", "lovedeer118@gmail.com");
-//			m.put("memberName", "남기훈");
-//			m.put("bookNum", "1");
-//			m.put("bookName", "테스트");
-//			m.put("memberIdx", "2");
-//			m.put("returnDate", "2018-09-09");
-//			list.add(m);
 			
 			if(list != null && list.size() > 0) {
 				int cnt = list.size();
@@ -171,6 +162,8 @@ public class MainController {
 							LogSend log = new LogSend();
 							log.setTargetIdx(map.get("memberIdx"));
 							log.setTxMsg(msg);
+							log.setType("E");
+							log.setMsgId("");
 							try {
 								mailUtil.sendMail(email);
 								log.setIsErr("N");
@@ -201,12 +194,15 @@ public class MainController {
 							log2.setTargetIdx(map.get("memberIdx"));
 							log2.setTxMsg(sb.toString());
 							log2.setRxMsg(rcr);
+							log2.setType("S");
 							
 							if("1".equals(rcm.get("result_code"))) {
 								log2.setIsErr("N");
+								log2.setMsgId(rcm.get("msg_id"));
 							}
 							else {
 								log2.setIsErr("Y");
+								log2.setMsgId("");
 							}
 							
 							List<LogSend> logList = new ArrayList<>();
@@ -216,8 +212,6 @@ public class MainController {
 							Map<String, Object> dbParam = new HashMap<>();
 							dbParam.put("list",  logList);
 							logService.writeLog(dbParam);
-							
-							
 						}
 					};
 					

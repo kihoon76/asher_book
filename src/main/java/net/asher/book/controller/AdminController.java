@@ -1,13 +1,17 @@
 package net.asher.book.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,6 +29,7 @@ import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.RentalHistory;
 import net.asher.book.service.BookService;
 import net.asher.book.service.UserService;
+import net.asher.book.util.RestClient;
 import net.asher.book.util.SessionUtil;
 import net.asher.book.websocket.AsherWebSocketHandler;
 
@@ -41,8 +46,17 @@ public class AdminController {
 	@Resource(name="bookService")
 	BookService bookService;
 	
-	@Autowired 
+	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Value("#{smsCfg['key']}")
+	String smsKey;
+	
+	@Value("#{smsCfg['userId']}")
+	String smsUserId;
+	
+	@Value("#{smsCfg['sender']}")
+	String smsSender;
 
 	@PostMapping("accept/rental/apply")
 	@ResponseBody
@@ -156,6 +170,37 @@ public class AdminController {
 		
 		return vo;
 		
+	}
+	
+	@GetMapping("sms/remain")
+	public String remainSms(ModelMap mm) {
+		
+		RestClient rc = new RestClient(smsKey, smsUserId, smsSender);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("key=" + smsKey);
+		sb.append("&user_id=" + smsUserId);
+		
+		String rcr = rc.post("/remain/", sb.toString());
+		Map<String, String> rcm = new Gson().fromJson(rcr, Map.class);
+		
+		ObjectMapper om = new ObjectMapper();
+		try {
+			System.err.println(om.writeValueAsString(rcm));
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		mm.addAttribute("bookList", bookService.getBookList(SessionUtil.getSessionUserIdx()));
+		mm.addAttribute("info", rcm);
+		return "admin/remainSms";
 	}
 	
 }

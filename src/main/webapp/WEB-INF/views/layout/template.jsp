@@ -12,7 +12,13 @@
 <html>
 <head>
 	<title>Home</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimun-scale=1, user-scalable=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0, user-scalable=no" />
+	<!-- 안드로이드 홈화면추가시 상단 주소창 제거 -->
+	<meta name="mobile-web-app-capable" content="yes">
+	<!-- ios홈화면추가시 상단 주소창 제거 -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	
 	<link rel="stylesheet" href="/resources/jqmobile/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" href="/resources/swiper-4.4.1/css/swiper.min.css" />
 <!-- 	<link rel="stylesheet" href="/resources/css/jqm-demos.css" /> -->
@@ -76,11 +82,18 @@
         </div><!-- /collapsible -->
         
         <sec:authorize access="hasRole('ROLE_ADMIN')">
-        <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b" <c:if test="${not empty selectedBook}">data-collapsed="false"</c:if>>
+        <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b">
               <h3>회원관리</h3>
               <ul data-role="listview">
               	<li><a href="/admin/reg/user_form" class="ui-btn ui-btn-icon-right ui-icon-carat-r">회원등록</a></li>
               	<li><a href="/admin/list/user" class="ui-btn ui-btn-icon-right ui-icon-carat-r">회원목록</a></li>
+              </ul>
+        </div><!-- /collapsible -->
+        
+        <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b">
+              <h3>sms관리</h3>
+              <ul data-role="listview">
+              	<li><a href="/admin/sms/remain" class="ui-btn ui-btn-icon-right ui-icon-carat-r">발송가능 건수</a></li>
               </ul>
         </div><!-- /collapsible -->
         </sec:authorize>
