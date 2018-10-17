@@ -1,5 +1,6 @@
 package net.asher.book.util;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
@@ -43,13 +44,11 @@ public class RestClient {
 		return responseEntity.getBody();
 	}
 
-	public String post(String uri, Map<String, String> map) { 
-		map.put("key", key);
-		map.put("user_id", userId);
-		map.put("sender", sender);
+	public String post(String uri, String nameValue) { 
 		
-		String json = new Gson().toJson(map);
-	    HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+		nameValue += "&key=" + key + "&user_id=" + userId + "&sender=" + sender;
+		System.err.println(nameValue);
+	    HttpEntity<String> requestEntity = new HttpEntity<String>(nameValue, headers);
 	    ResponseEntity<String> responseEntity = rest.exchange(server + uri, HttpMethod.POST, requestEntity, String.class);
 	    this.setStatus(responseEntity.getStatusCode());
 	    return responseEntity.getBody();

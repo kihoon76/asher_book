@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -24,9 +30,11 @@ import com.google.gson.Gson;
 import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.Email;
+import net.asher.book.domain.LogSend;
 import net.asher.book.domain.RentalHistory;
 import net.asher.book.domain.ReturnHistory;
 import net.asher.book.service.BookService;
+import net.asher.book.service.LogService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.HttpHeaderUtil;
 import net.asher.book.util.MailUtil;
@@ -42,6 +50,9 @@ public class MainController {
 	
 	@Resource(name="userService")
 	UserService userService;
+	
+	@Resource(name="logService")
+	LogService logService;
 	
 	@Resource(name="mailUtil")
 	MailUtil mailUtil;
@@ -99,7 +110,7 @@ public class MainController {
 			mm.addAttribute("myRentalHistoryList", myRentalHistoryList);
 		}
 		
-		checkRentalExpire(request);
+		//checkRentalExpire(request);
 		return "main";
 	}
 	
@@ -121,42 +132,116 @@ public class MainController {
 		//schedule.viewDatabaseConnection();
 		
 		try {
-			List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
+			//List<Map<String, String>> list = new ArrayList<>();//userService.getExpiredRentals();
 			
-			//List<Map<String, String>> list = userService.getExpiredRentals();
-			Map<String, String> m = new HashMap<>();
-			m.put("email", "lovedeer118@gmail.com");
-			m.put("memberName", "남기훈");
-			m.put("bookNum", "1");
-			m.put("bookName", "테스트");
-			m.put("returnDate", "2018-09-09");
-			list.add(m);
+			List<Map<String, String>> list = userService.getExpiredRentals();
+//			Map<String, String> m = new HashMap<>();
+//			m.put("email", "lovedeer118@gmail.com");
+//			m.put("memberName", "남기훈");
+//			m.put("bookNum", "1");
+//			m.put("bookName", "테스트");
+//			m.put("memberIdx", "2");
+//			m.put("returnDate", "2018-09-09");
+//			list.add(m);
 			
 			if(list != null && list.size() > 0) {
-				for(int r=0; r<list.size(); r++) {
-					Email email = new Email(HttpHeaderUtil.getUrlRoot(request));
-					Account account = new Account();
-					account.setEmail(list.get(r).get("email"));
-					account.setPhone("01032780212");
-					account.setUserName("남기훈");
-					email.setAccount(account);
-					email.setContent("<p>[" + list.get(r).get("memberName")+ "]님이 대여하신 책 <span style=\"color:#ff0000; font-weight:bolder;\">" + list.get(r).get("bookNum") + "." + list.get(r).get("bookName") + "</span> 의 반납일자는 " + list.get(r).get("returnDate") + "입니다.</p>");
-					mailUtil.sendMail(email);
+				int cnt = list.size();
+				ExecutorService excutorService = Executors.newFixedThreadPool(cnt);
+				
+				for(int r=0; r<cnt; r++) {
+					class R implements Runnable {
+						Map<String, String> map;
+						
+						R(Map<String, String> m) {
+							map = m;
+						}
+						
+						@Override
+						public void run() {
+							Email email = new Email(HttpHeaderUtil.getUrlRoot(request));
+							String msg = "<p>[" + map.get("memberName")+ "]님이 대여하신 책 <span style=\"color:#ff0000; font-weight:bolder;\">" + map.get("bookNum") + "." + map.get("bookName") + "</span> 의 반납일자는 " + map.get("returnDate") + "입니다.</p>";
+							Account account = new Account();
+							account.setIdx(map.get("memberIdx"));
+							account.setEmail(map.get("email"));
+							account.setPhone(map.get("phone"));
+							account.setUserName(map.get("memberName"));
+							email.setAccount(account);
+							email.setContent(msg);
+							
+							LogSend log = new LogSend();
+							log.setTargetIdx(map.get("memberIdx"));
+							log.setTxMsg(msg);
+							try {
+								mailUtil.sendMail(email);
+								log.setIsErr("N");
+								log.setRxMsg("");
+							} 
+							catch (AddressException e) {
+								log.setIsErr("Y");
+								log.setRxMsg(e.getMessage());
+							}
+							catch (MessagingException e) {
+								log.setIsErr("Y");
+								log.setRxMsg(e.getMessage());
+							}
+							
+							RestClient rc = new RestClient(smsKey, smsUserId, smsSender);
+							
+							StringBuilder sb = new StringBuilder();
+							sb.append("receiver=" + account.getPhone().replaceAll("-", ""));
+							sb.append("&destination=" + account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
+							sb.append("&msg=대여하신 책 " + map.get("bookNum") + "." + map.get("bookName") + "반납일자는 " + map.get("returnDate") + "입니다.");
+							sb.append("&title=아셀교회");
+							sb.append("&testmode_yn=N");
+							
+							String rcr = rc.post("/send/", sb.toString());
+							Map<String, String> rcm = new Gson().fromJson(rcr, Map.class);
+							
+							LogSend log2 = new LogSend();
+							log2.setTargetIdx(map.get("memberIdx"));
+							log2.setTxMsg(sb.toString());
+							log2.setRxMsg(rcr);
+							
+							if("1".equals(rcm.get("result_code"))) {
+								log2.setIsErr("N");
+							}
+							else {
+								log2.setIsErr("Y");
+							}
+							
+							List<LogSend> logList = new ArrayList<>();
+							logList.add(log);
+							logList.add(log2);
+							
+							Map<String, Object> dbParam = new HashMap<>();
+							dbParam.put("list",  logList);
+							logService.writeLog(dbParam);
+							
+							
+						}
+					};
 					
-					RestClient rc = new RestClient(smsKey, smsUserId, smsSender);
+					excutorService.execute(new R(list.get(r)));
+					
+					/*RestClient rc = new RestClient(smsKey, smsUserId, smsSender);
 					Map<String, String> map = new HashMap<String, String>();
-					map.put("receiver", account.getPhone().replaceAll("-", ""));
-					map.put("destination", account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
-					map.put("msg", "test");
-					map.put("title", "test");
-					map.put("testmode_yn", "Y");
-					String rr = rc.post("/send/", map);
-					System.out.println(rr);
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append("receiver=" + account.getPhone().replaceAll("-", ""));
+					sb.append("&destination=" + account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
+					sb.append("&msg=test");
+					sb.append("&title=test");
+					sb.append("&testmode_yn=Y");
+					
+					String rr = rc.post("/send/", sb.toString());
+					System.out.println(rr);*/
 				}
+				
+				excutorService.shutdown();
 	
 			}
 		} 
-		catch (MessagingException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

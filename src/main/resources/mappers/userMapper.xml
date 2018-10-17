@@ -147,8 +147,10 @@
 	<select id="selectExpiredRentals" resultType="map">
 		select t1.book_num as bookNum,
 			   t2.name as bookName,
-			   t3.name as memberName, 
-			   t3.email as email, 
+			   t3.name as memberName,
+			   t3.idx as memberIdx, 
+			   t3.email as email,
+			   t3.phone as phone,
 			   t1.return_date as returnDate
 		  from rental_history t1
 		 inner join books t2 on t1.book_num = t2.num
