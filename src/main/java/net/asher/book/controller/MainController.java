@@ -239,4 +239,10 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
+	
+	@GetMapping("forbidden")
+	public String viewForbidden() {
+		
+		return "accessError";
+	}
 }

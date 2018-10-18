@@ -15,6 +15,7 @@
 		<sec:intercept-url pattern="/signin/**" access="permitAll"/>
 		<sec:intercept-url pattern="/resources/**" access="permitAll" />
 		<sec:intercept-url pattern="/login" access="permitAll"/>
+		<sec:intercept-url pattern="/forbidden/**" access="permitAll" />
 		<sec:intercept-url pattern="/book/rental_manage" access="hasRole('ROLE_ADMIN')"/>
 		<sec:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
 		<sec:intercept-url pattern="/**" access="hasRole('ROLE_MEMBER')"/>
