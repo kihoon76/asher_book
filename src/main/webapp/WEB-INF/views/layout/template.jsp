@@ -32,6 +32,15 @@
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 </head>
 <body>
+<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width: 400px;" data-transition="none">
+	<div id="popupHeader" data-role="header" data-theme="a"></div>
+	<div role="main" class="ui-content">
+		<div id="dvPopupContent"></div>
+		<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupOk" rel="external"></a>
+		<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupEtc" rel="external" style="display:none;"></a>
+		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupCancel"></a>
+	</div>
+</div>
 <div data-role="page" id="pg1" data-dom-cache="false">
     <div data-role="header" data-position="fixed"  data-tap-toggle="false" data-theme="a">
     	<h1></h1>
@@ -39,16 +48,6 @@
     </div>
     <div id="dvMain" role="main" class="ui-content" data-theme="a">
         <sitemesh:write property="page.main" />
-        
-        <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width: 400px;" data-transition="none">
-			<div id="popupHeader" data-role="header" data-theme="a"></div>
-			<div role="main" class="ui-content">
-				<div id="dvPopupContent"></div>
-				<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupOk" rel="external"></a>
-				<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupEtc" rel="external" style="display:none;"></a>
-				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupCancel"></a>
-			</div>
-		</div>
     </div>
     <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
          <div data-role="navbar">

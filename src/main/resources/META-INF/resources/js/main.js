@@ -56,7 +56,7 @@ $(document)
 		}
 
 		Common.popupClose = afterFn;
-		$('#popupDialog').popup({history: false}).popup('open');
+		$('#popupDialog').popup('open');
 	}
 	
 	function closePopup() {
@@ -322,7 +322,21 @@ $(document)
 		
 		console.log(cate)
 		switch(cate) {
-		case 'rental_manage' :
+		case 'rental_manage' : //관리자 대여신청 취소
+			Common.ajax({
+				url: '/admin/cancel/apply',
+				method: 'POST',
+				dataType: 'json',
+				data: {bookNum: $dvPopupContent.data('bookNum'), memberIdx: $dvPopupContent.data('rentalManIdx')},
+				success: function(data, textStatus, jqXHR) {
+					jqXHR.runFinal = function() {
+						makePopup('', '신청삭제되었습니다.');
+						openPopup('alert', function() {
+							window.location.reload();
+						});
+					}
+				},
+			});
 			break;
 		case 'rental_manage_return' : //반납기간 연장
 			Common.ajax({
@@ -446,8 +460,8 @@ $(document)
 
 $(document).on('pageshow', function (event, ui) {
     // Remove the previous page
-	$(ui.prevPage).remove();
-    
+	//$(ui.prevPage).remove();
+	$('#popupDialog').popup({history: false});
     ///book/rental_history
     if($('#dvRentalHistory').get(0)) {
     	var myMemberIdx = $('#dvRentalHistory').data('memberIdx');

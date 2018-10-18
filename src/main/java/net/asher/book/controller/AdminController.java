@@ -46,6 +46,9 @@ public class AdminController {
 	@Resource(name="bookService")
 	BookService bookService;
 	
+	@Resource(name="userController")
+	UserController userController;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -203,4 +206,12 @@ public class AdminController {
 		return "admin/remainSms";
 	}
 	
+	@PostMapping("cancel/apply")
+	@ResponseBody
+	public AjaxVO cancelApply(
+			@RequestParam("bookNum") String bookNum,
+			@RequestParam("memberIdx") String memberIdx) {
+		
+		return userController.commonCancelApply(bookNum, memberIdx);
+	}
 }

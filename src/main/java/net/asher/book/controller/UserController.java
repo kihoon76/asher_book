@@ -96,12 +96,59 @@ public class UserController {
 	@ResponseBody
 	public AjaxVO cancelApply(@RequestParam("bookNum") String bookNum) {
 		
+		return commonCancelApply(bookNum, null);
+//		AjaxVO vo = new AjaxVO();
+//		
+//		Map<String, String> param = new HashMap<>();
+//		param.put("bookNum", bookNum);
+//		param.put("memberIdx", SessionUtil.getSessionUserIdx());
+//		
+//		try {
+//			int r = userService.isPossibleApplyCancel(param);
+//			
+//			if(r == 1) {
+//				boolean result = userService.cancelMyApply(param);
+//				
+//				if(result) {
+//					vo.setSuccess(true);
+//					
+//					Map<String, String> webMsg = new HashMap<>();
+//					webMsg.put("bookNum", param.get("bookNum"));
+//					webMsg.put("type", "D");
+//					asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
+//				}
+//				else {
+//					vo.setSuccess(false);
+//					vo.setErrCode("603");
+//				}
+//			}
+//			else {
+//				vo.setSuccess(false);
+//				vo.setErrCode("603");
+//			}
+//		}
+//		catch(Exception e) {
+//			vo.setSuccess(false);
+//			vo.setErrMsg(e.getMessage());
+//		}
+//		
+//		return vo;
+		
+	}
+	
+	public AjaxVO commonCancelApply(String bookNum, String memberIdx) {
 		AjaxVO vo = new AjaxVO();
 		
 		Map<String, String> param = new HashMap<>();
 		param.put("bookNum", bookNum);
-		param.put("memberIdx", SessionUtil.getSessionUserIdx());
 		
+		if(memberIdx == null) {
+			param.put("memberIdx", SessionUtil.getSessionUserIdx());
+		}
+		else {
+			param.put("memberIdx", memberIdx);
+		}
+	
 		try {
 			int r = userService.isPossibleApplyCancel(param);
 			
@@ -132,7 +179,6 @@ public class UserController {
 		}
 		
 		return vo;
-		
 	}
 	
 	

@@ -12,11 +12,11 @@
   text-align: center;
 }
 .form .thumbnail {
-  background: #2179cf;
+  background: #fff;
   width: 150px;
   height: 150px;
   margin: 0 auto 30px;
-  padding: 50px 30px;
+  padding: 12px 30px;
   border-top-left-radius: 100%;
   border-top-right-radius: 100%;
   border-bottom-left-radius: 100%;
@@ -25,7 +25,7 @@
 }
 .form .thumbnail img {
   display: block;
-  width: 100%;
+  width: 90%;
 }
 .form input {
   outline: 0;

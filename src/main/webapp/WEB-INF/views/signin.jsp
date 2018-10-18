@@ -28,7 +28,7 @@
 <div data-role="page" id="pg1" data-dom-cache="false" data-theme="a">
     <div data-role="content">
     	<div class="form">
-  			<div class="thumbnail"><img  src=""/></div>
+  			<div class="thumbnail"><img  src="/resources/img/logo.jpg"/></div>
   			<form class="login-form" id="loginFm">
     			<input type="text" placeholder="아이디" id="id" name="id" autocapitalize="off"/>
     			<input type="password" placeholder="비밀번호" id="pw" name="pw"/>
