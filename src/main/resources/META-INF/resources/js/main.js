@@ -390,6 +390,7 @@ $(document)
 			url: '/logout',
 			method: 'POST',
 			dataType: 'json',
+			headers: {'POP': 'Y'},
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
 				window.location.href = '/signin';
