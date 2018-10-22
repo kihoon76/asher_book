@@ -12,7 +12,35 @@
 		</li>
 	</ul>
 	<div><a href="<c:out value='${bookInfo.bookLink}' />" target="_blank">상세정보</a></div>
-	<div style="font-size:.8em;margin-top:5px;">위 도서를 읽으신 분</div>
+	<c:choose>
+	<c:when test="${not empty readMembers}">
+	<span style="font-size:.8em;margin-top:5px; position:relative; top: -10px;">위 도서를 읽으신 분과 나누기</span>
+	<span>
+		<a id="kakao-link-btn" href="#" data-ajax="false">
+			<img src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png"/>
+		</a>
+	</span>
+	<script type="text/javascript">
+	 	Kakao.init('a932718b73c047da4fd29bd762563cd4');
+	    // // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+	    Kakao.Link.createDefaultButton({
+	      container: '#kakao-link-btn',
+	      objectType: 'feed',
+	      content: {
+	        title: '도서 <c:out value="${bookNum}" />.<c:out value="${bookInfo.bookName}" />',
+	        imageUrl: 'http://book.asherchurch.net:48080/resources/img/book<c:out value="${bookNum}" />.jpg',
+	        description: '도서를 읽으신 분과 말씀을 나누기 원합니다.',
+	        link: {
+	          mobileWebUrl: '',
+	        }
+	      },
+	    });
+	</script>
+	</c:when>
+	<c:otherwise>
+	<div style="font-size:.8em;margin-top:5px;">위 도서를 읽으신 분 </div>
+	</c:otherwise>	
+	</c:choose>
 	<table>
 	<c:choose>
 	<c:when test="${not empty readMembers}">

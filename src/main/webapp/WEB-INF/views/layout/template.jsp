@@ -29,6 +29,7 @@
 	<script type="text/javascript" src="/resources/jqmobile/jquery.mobile-1.4.5.min.js"></script>
 	<script type="text/javascript" src="/resources/js/sockjs.min.js"></script>
 	<script type="text/javascript" src="/resources/swiper-4.4.1/js/swiper.min.js"></script>
+	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 </head>
 <body>
