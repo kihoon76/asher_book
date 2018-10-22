@@ -241,7 +241,7 @@ $(document)
 				url: '/user/apply/rental',
 				method: 'POST',
 				dataType: 'json',
-				headers: {'POP': 'Y'},
+				headers: {'CUSTOM': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -260,7 +260,7 @@ $(document)
 				url: '/admin/accept/rental/apply',
 				method: 'POST',
 				dataType: 'json',
-				headers: {'POP': 'Y'},
+				headers: {'CUSTOM': 'Y'},
 				contentType: 'application/json',
 				data: JSON.stringify({
 					rentalManIdx: $dvPopupContent.data('rentalManIdx'),
@@ -285,7 +285,7 @@ $(document)
 				url: '/admin/return/rental',
 				method: 'POST',
 				dataType: 'json',
-				headers: {'POP': 'Y'},
+				headers: {'CUSTOM': 'Y'},
 				contentType: 'application/json',
 				data: JSON.stringify({
 					memberIdx: $dvPopupContent.data('rentalManIdx'),
@@ -308,7 +308,7 @@ $(document)
 				url: '/user/cancel/apply',
 				method: 'POST',
 				dataType: 'json',
-				headers: {'POP': 'Y'},
+				headers: {'CUSTOM': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -337,7 +337,7 @@ $(document)
 				url: '/admin/cancel/apply',
 				method: 'POST',
 				dataType: 'json',
-				headers: {'POP': 'Y'},
+				headers: {'CUSTOM': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum'), memberIdx: $dvPopupContent.data('rentalManIdx')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -354,7 +354,7 @@ $(document)
 				url: '/admin/extension/return',
 				method: 'POST',
 				dataType: 'json',
-				headers: {'POP': 'Y'},
+				headers: {'CUSTOM': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -390,7 +390,7 @@ $(document)
 			url: '/logout',
 			method: 'POST',
 			dataType: 'json',
-			headers: {'POP': 'Y'},
+			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
 				window.location.href = '/signin';
@@ -449,7 +449,7 @@ $(document)
 			url: '/admin/reg/user',
 			method: 'POST',
 			dataType: 'json',
-			headers: {'POP': 'Y'},
+			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',
 			data: JSON.stringify({
 				userId: userId,
