@@ -15,10 +15,10 @@
 	<mvc:annotation-driven />
 	
 	<mvc:interceptors> 
-		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<beans:bean class="net.asher.book.interceptor.DeviceInterceptor" />
-		</mvc:interceptor>
+<!-- 		<mvc:interceptor> -->
+<!-- 			<mvc:mapping path="/**"/> -->
+<!-- 			<beans:bean class="net.asher.book.interceptor.DeviceInterceptor" /> -->
+<!-- 		</mvc:interceptor> -->
         <beans:bean  id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
             <beans:property name="paramName" value="lang" />
         </beans:bean>

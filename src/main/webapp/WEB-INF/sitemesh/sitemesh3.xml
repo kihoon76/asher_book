@@ -5,6 +5,7 @@
     </content-processor>
 
 	<mapping path="/signin" exclude="true" />
+	<mapping path="/signin/*" exclude="true" />
 	<mapping path="/forbidden" exclude="true" />
 	<mapping path="/*" decorator="/WEB-INF/views/layout/template.jsp" />
 </sitemesh>

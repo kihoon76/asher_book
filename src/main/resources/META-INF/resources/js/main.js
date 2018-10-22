@@ -75,9 +75,9 @@ $(document)
 		}
 	}
 	
-	function makeErrMsg(errMsg) {
+	function makeErrMsg(errMsg, fn) {
 		makePopup('', errMsg);
-		openPopup('alert');
+		openPopup('alert', fn);
 	}
 	
 	Common.ajax = function(cfg) {
@@ -86,6 +86,7 @@ $(document)
 			dataType: cfg.dataType || 'json',
 			data: cfg.data || {},
 			contentType: cfg.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
+			headers: cfg.headers || {},
 			beforeSend: function() {
 				$.mobile.loading('show', {
 				    theme: 'a'
@@ -97,9 +98,14 @@ $(document)
 			    
 				if(jqXHR.errCode) {
 					var msg = '';
+					var fn = null;
+					
 					switch(jqXHR.errCode) {
 					case '100': 
 						msg = '세션만료됨';
+						fn = function() {
+							window.location.href = '/signin'
+						};
 						break;
 					case '600': 
 						msg = '미반납된 도서가 있습니다<br/>[' + jqXHR.data[0].bookName + ']';
@@ -122,7 +128,7 @@ $(document)
 					}
 					
 					setTimeout(function() {
-						makeErrMsg(msg);
+						makeErrMsg(msg, fn);
 					}, 500);
 				}
 				else {
@@ -235,6 +241,7 @@ $(document)
 				url: '/user/apply/rental',
 				method: 'POST',
 				dataType: 'json',
+				headers: {'POP': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -253,6 +260,7 @@ $(document)
 				url: '/admin/accept/rental/apply',
 				method: 'POST',
 				dataType: 'json',
+				headers: {'POP': 'Y'},
 				contentType: 'application/json',
 				data: JSON.stringify({
 					rentalManIdx: $dvPopupContent.data('rentalManIdx'),
@@ -277,6 +285,7 @@ $(document)
 				url: '/admin/return/rental',
 				method: 'POST',
 				dataType: 'json',
+				headers: {'POP': 'Y'},
 				contentType: 'application/json',
 				data: JSON.stringify({
 					memberIdx: $dvPopupContent.data('rentalManIdx'),
@@ -299,6 +308,7 @@ $(document)
 				url: '/user/cancel/apply',
 				method: 'POST',
 				dataType: 'json',
+				headers: {'POP': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -327,6 +337,7 @@ $(document)
 				url: '/admin/cancel/apply',
 				method: 'POST',
 				dataType: 'json',
+				headers: {'POP': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum'), memberIdx: $dvPopupContent.data('rentalManIdx')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -343,6 +354,7 @@ $(document)
 				url: '/admin/extension/return',
 				method: 'POST',
 				dataType: 'json',
+				headers: {'POP': 'Y'},
 				data: {bookNum: $dvPopupContent.data('bookNum')},
 				success: function(data, textStatus, jqXHR) {
 					jqXHR.runFinal = function() {
@@ -380,7 +392,7 @@ $(document)
 			dataType: 'json',
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
-				window.location.href = '/signin';
+				//window.location.href = '/signin';
 			},
 		});
 	});
@@ -436,6 +448,7 @@ $(document)
 			url: '/admin/reg/user',
 			method: 'POST',
 			dataType: 'json',
+			headers: {'POP': 'Y'},
 			contentType: 'application/json',
 			data: JSON.stringify({
 				userId: userId,

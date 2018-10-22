@@ -71,6 +71,7 @@ public class MainController {
 		
 		//ajax call 처리
 		if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+			boolean isPop = "Y".equals(request.getHeader("POP")) ? true : false;
 			AjaxVO ajax = new AjaxVO();
 			if("200".equals(errCode)) {
 				ajax.setSuccess(true);
@@ -82,7 +83,8 @@ public class MainController {
 			ajax.setErrCode(errCode);
 			request.setAttribute("result", ajax);
 			
-			return "authresult";
+			//return "authresult";
+			return isPop ? "authresult" : "errorPage";
 		}
 		
 		response.sendRedirect("/signin");
