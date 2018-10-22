@@ -392,7 +392,7 @@ $(document)
 			dataType: 'json',
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
-				//window.location.href = '/signin';
+				window.location.href = '/signin';
 			},
 		});
 	});
