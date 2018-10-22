@@ -29,4 +29,12 @@
 		 where num = #{bookNum}
 	</select>
 	
+	<select id="selectReadMemberList" parameterType="string" resultType="Account">
+		select distinct t2.idx, t2.id, t2.name as userName
+		  from return_history t1
+		 inner join members t2 on t1.member_idx = t2.idx
+		 where t1.book_num = #{bookNum}
+		 order by t2.name asc
+	</select>
+	
 </mapper>

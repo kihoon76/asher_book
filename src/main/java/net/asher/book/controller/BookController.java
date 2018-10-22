@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
+import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.Book;
 import net.asher.book.domain.RentalHistory;
@@ -43,6 +44,7 @@ public class BookController {
 		mm.addAttribute("selectedBook", bookNum);
 		mm.addAttribute("bookNum", bookNum);
 		mm.addAttribute("bookInfo", bookService.getBookDetail(bookNum));
+		mm.addAttribute("readMembers", bookService.getReadMemberList(bookNum));
 		return "book/bookTemplate";
 		
 	}

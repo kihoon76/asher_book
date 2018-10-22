@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import net.asher.book.dao.BookDao;
+import net.asher.book.domain.Account;
 import net.asher.book.domain.Book;
 import net.asher.book.domain.RentalHistory;
 
@@ -22,5 +23,9 @@ public class BookService {
 
 	public Book getBookDetail(String bookNum) {
 		return bookDao.selectBookDetail(bookNum);
+	}
+
+	public List<Account> getReadMemberList(String bookNum) {
+		return bookDao.selectReadMemberList(bookNum);
 	}
 }

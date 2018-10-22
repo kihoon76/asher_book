@@ -12,5 +12,23 @@
 		</li>
 	</ul>
 	<div><a href="<c:out value='${bookInfo.bookLink}' />" target="_blank">상세정보</a></div>
+	<div style="font-size:.8em;margin-top:5px;">위 도서를 읽으신 분</div>
+	<table>
+	<c:choose>
+	<c:when test="${not empty readMembers}">
+	<c:forEach items="${readMembers}" var="members">
+	<tr>
+		<td>${members.userName}</td>
+		<td>${members.id}</td>
+	</tr>
+	</c:forEach>
+	</c:when>
+	<c:otherwise>
+		<tr>
+			<td colspan="2">읽으신 성도님이 없습니다.</td>
+		</tr>
+	</c:otherwise>	
+	</c:choose>
+	</table>
 </div>
 </content>

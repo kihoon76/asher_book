@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import net.asher.book.domain.Account;
 import net.asher.book.domain.Book;
 import net.asher.book.domain.RentalHistory;
 
@@ -26,6 +27,11 @@ public class BookDaoImpl implements BookDao {
 	@Override
 	public Book selectBookDetail(String bookNum) {
 		return mySqlSession.selectOne(namespace + ".selectBookDetail", bookNum);
+	}
+
+	@Override
+	public List<Account> selectReadMemberList(String bookNum) {
+		return mySqlSession.selectList(namespace + ".selectReadMemberList", bookNum);
 	}
 
 }
