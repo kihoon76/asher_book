@@ -12,6 +12,12 @@ var Common = {
     	var content = screen - header - footer - contentCurrent;
     	
     	return content - 32;
+	},
+	kakakoInit: function() {
+		try{
+			Kakao.init('a932718b73c047da4fd29bd762563cd4');
+		}
+		catch(e) {}
 	} 
 };
 
@@ -20,6 +26,7 @@ $(document)
 .on('pageinit', function () {
 	$('body>[data-role="panel"]').panel();
 	
+	Common.kakakoInit();
 	function openPopup(type, afterFn) {
 		if(type == 'alert') {
 			$('#btnPopupOk').hide();
