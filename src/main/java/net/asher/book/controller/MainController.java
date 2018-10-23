@@ -252,6 +252,7 @@ public class MainController {
 	@GetMapping("event/item/{suffix}")
 	public String getEventDetail(@PathVariable("suffix") String suffix) {
 		
+		
 		return "event/eventTemplate";
 	}
 }

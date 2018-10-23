@@ -8,7 +8,7 @@
 	<ul data-role="listview" data-inset="true">
 	<c:forEach var="event" items="${eventList}">
 		<li>
-			<a href="/event/item/${event.suffix}">
+			<a href="/admin/event/item/${event.suffix}">
         		<img style="width:100px; height:100px;" src="/event/${event.fileName}">
     			<h2>${event.title}</h2>
     			<p>${event.content}</p>
