@@ -248,4 +248,10 @@ public class MainController {
 		
 		return "accessError";
 	}
+	
+	@GetMapping("event/item/{suffix}")
+	public String getEventDetail(@PathVariable("suffix") String suffix) {
+		
+		return "event/eventTemplate";
+	}
 }

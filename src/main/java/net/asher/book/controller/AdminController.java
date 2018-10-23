@@ -226,7 +226,7 @@ public class AdminController {
 		
 		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
 		mm.addAttribute("footbar", "event");
-		return "admin/eventRegForm";
+		return "event/eventRegForm";
 		
 	}
 	
@@ -236,7 +236,7 @@ public class AdminController {
 		
 		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
 		mm.addAttribute("eventList", uploadService.getEventList());
-		return "admin/eventList";
+		return "event/eventList";
 		
 	}
 }
