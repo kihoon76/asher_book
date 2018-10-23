@@ -63,7 +63,7 @@ public class UploadController {
 				FileCopyUtils.copy(files[0].getBytes(), new File(UPLOAD_LOCATION + fileName));
 			}
 			else {
-				fileName = "eventNoImage.jpg";
+				fileName = "eventNoImage.png";
 			}
 			
 			Map<String, String> param = new HashMap<>();
@@ -97,7 +97,7 @@ public class UploadController {
 		
 		String nanoTime = String.valueOf(System.nanoTime());
 		
-		param.put("fileName", "eventNoImage.jpg");
+		param.put("fileName", "eventNoImage.png");
 		param.put("suffix", nanoTime);
 		
 		try {

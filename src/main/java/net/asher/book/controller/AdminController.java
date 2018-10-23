@@ -26,8 +26,10 @@ import com.google.gson.Gson;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
+import net.asher.book.domain.Event;
 import net.asher.book.domain.RentalHistory;
 import net.asher.book.service.BookService;
+import net.asher.book.service.UploadService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.RestClient;
 import net.asher.book.util.SessionUtil;
@@ -45,6 +47,9 @@ public class AdminController {
 	
 	@Resource(name="bookService")
 	BookService bookService;
+	
+	@Resource(name="uploadService")
+	UploadService uploadService;
 	
 	@Resource(name="userController")
 	UserController userController;
@@ -222,6 +227,16 @@ public class AdminController {
 		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
 		mm.addAttribute("footbar", "event");
 		return "admin/eventRegForm";
+		
+	}
+	
+	@GetMapping("event/list")
+	public String getEventList(ModelMap mm) {
+		String memberIdx = SessionUtil.getSessionUserIdx();
+		
+		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
+		mm.addAttribute("eventList", uploadService.getEventList());
+		return "admin/eventList";
 		
 	}
 }

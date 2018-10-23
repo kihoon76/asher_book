@@ -8,7 +8,8 @@
 <textarea id="eventContent" class="custom_class"></textarea>
 <button id="chooseFile">파일선택</button>
 <div class="hiddenfile">
-	<input type="file"  id="eventImage" data-clear-btn="false" name="image" accept="image/*" capture>
+	<input type="file"  id="eventImage" data-clear-btn="false" name="image" accept="image/*">
+<!-- 	<input type="file"  id="eventImage" data-clear-btn="false" name="image" accept="image/*" capture="camera"> -->
 </div>
 <div id="preview"></div>
 <ul id="info" data-role="listview" data-inset="true"></ul>

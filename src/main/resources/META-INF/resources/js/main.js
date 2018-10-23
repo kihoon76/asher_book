@@ -401,7 +401,7 @@ $(document)
 			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
-				//window.location.href = '/signin';
+				window.location.href = '/signin';
 			},
 		});
 	});
@@ -493,32 +493,35 @@ $(document)
 	.off('click', '#chooseFile')
 	.on('click', '#chooseFile', function(e) {
 		e.preventDefault();
-		$('input[type=file]').trigger('click');
+		//$('input[type=file]').trigger('click');
+		$('#eventImage').trigger('click');
+		
 	});
 	
 	$(document)
-	.off('change', '#eventRegForm input[type=file]')
-	.on('change', '#eventRegForm input[type=file]', function(e) {
-		var file = $("input[type=file]")[0].files[0];            
+	.off('change', '#eventImage')
+	.on('change', '#eventImage', function(e) {
+		var file = $('#eventImage')[0].files[0];            
 		$('#preview').empty();
 		displayAsImage3(file, 'preview');
 		
 		$info = $('#info');
 		$info.empty();
 		if (file && file.name) {
-			$info.append('<li>name:<span>' + file.name + '</span></li>');
+			$info.append('<li>파일명:<span>' + file.name + '</span></li>');
 		}
 		if (file && file.type) {
-			$info.append('<li>size:<span>' + file.type + ' bytes</span></li>');
+			$info.append('<li>파일타입:<span>' + file.type + ' </span></li>');
 		}
 		if (file && file.size) {
-			$info.append('<li>size:<span>' + file.size + ' bytes</span></li>');
+			$info.append('<li>파일크기:<span>' + file.size + ' bytes</span></li>');
 		}
 		if (file && file.lastModifiedDate) {
-			$info.append('<li>lastModifiedDate:<span>' + file.lastModifiedDate + ' bytes</span></li>');
+			$info.append('<li>마지막 수정일:<span>' + file.lastModifiedDate.toISOString().substring(0, 10) + ' </span></li>');
 		}
 		$info.listview('refresh');
 	});
+	
 	
 	
 	$(document)

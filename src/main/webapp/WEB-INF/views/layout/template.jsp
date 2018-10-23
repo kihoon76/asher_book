@@ -109,7 +109,7 @@
               <h3>알림관리</h3>
               <ul data-role="listview">
               	<li><a href="/admin/event/reg_form" class="ui-btn ui-btn-icon-right ui-icon-carat-r">이벤트등록</a></li>
-              	<li><a href="/admin/event/reg" class="ui-btn ui-btn-icon-right ui-icon-carat-r">이벤트보내기</a></li>
+              	<li><a href="/admin/event/list" class="ui-btn ui-btn-icon-right ui-icon-carat-r">이벤트목록</a></li>
               </ul>
         </div><!-- /collapsible -->
         </sec:authorize>

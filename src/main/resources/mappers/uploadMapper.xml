@@ -7,4 +7,9 @@
 		values (#{suffix}, #{eventTitle}, #{eventContent}, #{fileName})
 	</insert>
 	
+	<select id="selectEventList" resultType="Event">
+		select suffix, title, content, file_name as fileName, reg_date as regDate
+		  from event
+	</select>
+	
 </mapper>
