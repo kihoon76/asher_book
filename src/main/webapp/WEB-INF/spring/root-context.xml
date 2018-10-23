@@ -18,4 +18,5 @@
 	
 	<util:properties id="mailCfg" location="classpath:/config/mail.properties" />
 	<util:properties id="smsCfg" location="classpath:/config/sms.properties" />
+	<util:properties id="pathCfg" location="classpath:/config/path.properties" />
 </beans>

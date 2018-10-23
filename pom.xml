@@ -28,6 +28,7 @@
 		<jackson.databind-version>2.5.3</jackson.databind-version>
 		<sitemesh-version>3.0.1</sitemesh-version>
 		<javax.mail-version>1.4.7</javax.mail-version>
+		<common.fileupload-version>1.3.1</common.fileupload-version>
 		
 		<jquery-version>3.2.1</jquery-version>
 		<jquery.ui-version>1.12.0</jquery.ui-version>
@@ -126,6 +127,13 @@
 			<scope>runtime</scope>
 		</dependency>
 		
+		<!-- common fileupload -->
+		<dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+           	<version>${common.fileupload-version}</version>
+        </dependency>
+        
 		<!-- view template -->
 		<!-- sitemesh -->
 		<dependency>

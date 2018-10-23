@@ -18,6 +18,7 @@
 		<sec:intercept-url pattern="/forbidden/**" access="permitAll" />
 		<sec:intercept-url pattern="/book/rental_manage" access="hasRole('ROLE_ADMIN')"/>
 		<sec:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+		<sec:intercept-url pattern="/upload/**" access="hasRole('ROLE_ADMIN')"/>
 		<sec:intercept-url pattern="/**" access="hasRole('ROLE_MEMBER')"/>
 		<sec:form-login login-page="/signin/100"
 						username-parameter="id"

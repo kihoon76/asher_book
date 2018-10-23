@@ -390,6 +390,7 @@ $(document)
 		
 	});
 	
+	//로그아웃
 	$(document)
 	.off('click','#footerLogout')
 	.on('click', '#footerLogout', function() {
@@ -400,7 +401,7 @@ $(document)
 			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
-				window.location.href = '/signin';
+				//window.location.href = '/signin';
 			},
 		});
 	});
@@ -541,6 +542,117 @@ $(document)
 			reader.readAsDataURL(file);
 		}
 	}
+	
+	//이벤트 등록
+	$(document)
+	.off('click', '#btnRegEvent')
+	.on('click', '#btnRegEvent', function() {
+		var $eventTitle = $('#eventTitle'),
+			$eventContent = $('#eventContent');
+		
+		if($.trim($eventTitle.val()) == '') {
+			$eventTitle.focus();
+			return;
+		}
+		
+		if($.trim($eventContent.val()) == '') {
+			$eventContent.focus();
+			return;
+		}
+		
+		var $eventImage = $('#eventImage');
+		var $form = $('#eventRegForm');
+		var fileObj = $eventImage[0].files[0];
+		
+		if(fileObj) {
+			var formData = new FormData($form[0]);
+			formData.append('eventTitle', $eventTitle.val());
+			formData.append('eventContent', $eventContent.val());
+			formData.append('eventImage', fileObj);
+			
+			$.ajax({
+				url: '/upload/event/regWithPic',
+				processData: false,
+				contentType: false,
+				headers: {'CUSTOM': 'Y'},
+				beforeSend: function() {
+					$.mobile.loading('show', {
+					    theme: 'a'
+					});
+				},
+				type: 'POST',
+				data: formData,
+				success: function(data, textStatus, jqXHR) {
+					var json = $.parseJSON(jqXHR.responseText);
+					if(json.success) {
+						jqXHR.runFinal = function() {
+							makePopup('', '이벤트가 등록되었습니다.');
+							openPopup('alert', function() {
+								window.location.reload();
+							});
+						}
+					}
+					else {
+						jqXHR.errCode = json.errCode;
+					}
+				},
+				complete: function(jqXHR, textStatus) {
+				    $.mobile.loading('hide');
+				    
+				    if(jqXHR.errCode) {
+						var msg = '';
+						var fn = null;
+						
+						switch(jqXHR.errCode) {
+						case '100': 
+							msg = '세션만료됨';
+							fn = function() {
+								window.location.href = '/signin'
+							};
+							break;
+						default: 
+							msg = '오류가 발생했습니다.';
+							break;
+						}
+						
+						setTimeout(function() {
+							makeErrMsg(msg, fn);
+						}, 500);
+					}
+					else {
+						//성공 이후 final로 실행할 함수
+						if(jqXHR.runFinal) {
+							setTimeout(jqXHR.runFinal, 500);
+						}
+					}
+				}
+				
+			});
+		}
+		else {
+			Common.ajax({
+				url: '/upload/event/regWithNoPic',
+				method: 'POST',
+				dataType: 'json',
+				headers: {'CUSTOM': 'Y'},
+				contentType: 'application/json',
+				data: JSON.stringify({
+					eventTitle: $.trim($eventTitle.val()),
+					eventContent: $.trim($eventContent.val())
+				}),
+				success: function(data, textStatus, jqXHR) {
+					jqXHR.runFinal = function() {
+						makePopup('', '이벤트가 등록되었습니다.');
+						openPopup('alert', function() {
+							window.location.reload();
+						});
+					}
+				},
+			})
+		}
+		
+		console.log($eventImage[0].files[0]);
+	});
 });
 
 $(document).on('pageshow', function (event, ui) {

@@ -60,7 +60,7 @@
          		<li><a href="/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
          		<c:choose>
          		<c:when test="${'event' eq footbar}">
-         		<li><a href="/info" data-icon="action">이벤트등록</a></li>
+         		<li><a id="btnRegEvent" href="#" data-icon="action" data-ajax="false">이벤트등록</a></li>
          		</c:when>
          		</c:choose>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>

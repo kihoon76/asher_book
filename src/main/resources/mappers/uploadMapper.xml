@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.uploadMapper">
+	
+	<insert id="insertEvent" parameterType="map">
+		insert into event (suffix, title, content, file_name)
+		values (#{suffix}, #{eventTitle}, #{eventContent}, #{fileName})
+	</insert>
+	
+</mapper>
