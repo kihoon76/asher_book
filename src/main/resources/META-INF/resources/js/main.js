@@ -11,7 +11,7 @@ var Common = {
     	var contentCurrent = $('.ui-content').outerHeight() - $('.ui-content').height();
     	var content = screen - header - footer - contentCurrent;
     	
-    	return content - 32;
+    	return content - 32 - 32 - 32;
 	},
 	kakakoInit: function() {
 		try{
