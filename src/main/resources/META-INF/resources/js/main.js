@@ -477,6 +477,70 @@ $(document)
 			},
 		});
 	});
+	
+//	$(document)
+//	.off('touchmove', 'html')
+//	.on('touchmove', 'html', function (event) {
+//	    //only run code if the user has two fingers touching
+//	    if(event.originalEvent.touches.length === 2) {
+//	    	event.preventDefault();
+//	    	return false;
+//	    }
+//	});
+	
+	$(document)
+	.off('click', '#chooseFile')
+	.on('click', '#chooseFile', function(e) {
+		e.preventDefault();
+		$('input[type=file]').trigger('click');
+	});
+	
+	$(document)
+	.off('change', '#eventRegForm input[type=file]')
+	.on('change', '#eventRegForm input[type=file]', function(e) {
+		var file = $("input[type=file]")[0].files[0];            
+		$('#preview').empty();
+		displayAsImage3(file, 'preview');
+		
+		$info = $('#info');
+		$info.empty();
+		if (file && file.name) {
+			$info.append('<li>name:<span>' + file.name + '</span></li>');
+		}
+		if (file && file.type) {
+			$info.append('<li>size:<span>' + file.type + ' bytes</span></li>');
+		}
+		if (file && file.size) {
+			$info.append('<li>size:<span>' + file.size + ' bytes</span></li>');
+		}
+		if (file && file.lastModifiedDate) {
+			$info.append('<li>lastModifiedDate:<span>' + file.lastModifiedDate + ' bytes</span></li>');
+		}
+		$info.listview('refresh');
+	});
+	
+	
+	$(document)
+	.off('click', '#eventContent')
+	.on('click', '#eventContent', function() {
+		$(this).keyup();
+	});
+	
+	function displayAsImage3(file, containerid) {
+		if(typeof FileReader !== "undefined") {
+			var container = document.getElementById(containerid),
+				img = document.createElement("img"),
+				reader;
+			container.appendChild(img);
+			reader = new FileReader();
+			reader.onload = (function (theImg) {
+				return function (evt) {
+					theImg.src = evt.target.result;
+				};
+			}(img));
+			reader.readAsDataURL(file);
+		}
+	}
 });
 
 $(document).on('pageshow', function (event, ui) {

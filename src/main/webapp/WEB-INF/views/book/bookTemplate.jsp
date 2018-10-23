@@ -21,7 +21,6 @@
 		</a>
 	</span>
 	<script type="text/javascript">
-	 	//Kakao.init('a932718b73c047da4fd29bd762563cd4');
 	    // // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
 	    Kakao.Link.createDefaultButton({
 	      container: '#kakao-link-btn',

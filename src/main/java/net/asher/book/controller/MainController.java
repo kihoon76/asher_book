@@ -118,8 +118,9 @@ public class MainController {
 	
 	@GetMapping("info")
 	public String info(ModelMap mm) {
+		Account account = SessionUtil.getSessionAccount();
 		mm.addAttribute("footbar", "info");
-		
+		mm.addAttribute("bookList", bookService.getBookList(account.getIdx()));
 		
 		return "info";
 	}

@@ -12,7 +12,7 @@
 <html>
 <head>
 	<title>Home</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0, user-scalable=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0, user-scalable=0" />
 	<!-- 안드로이드 홈화면추가시 상단 주소창 제거 -->
 	<meta name="mobile-web-app-capable" content="yes">
 	<!-- ios홈화면추가시 상단 주소창 제거 -->
@@ -25,6 +25,8 @@
 	<link rel="stylesheet" href="/resources/css/default.css" />
 	<link rel="stylesheet" href="/resources/css/column.css" />
 	<link rel="stylesheet" href="/resources/css/info.css" />
+	<link rel="stylesheet" href="/resources/css/fileupload.css" />
+	
 	<script type="text/javascript" src="/resources/jquery/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="/resources/jqmobile/jquery.mobile-1.4.5.min.js"></script>
 	<script type="text/javascript" src="/resources/js/sockjs.min.js"></script>
@@ -50,11 +52,17 @@
     <div id="dvMain" role="main" class="ui-content" data-theme="a">
         <sitemesh:write property="page.main" />
     </div>
+    <!-- footer  -->
     <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
          <div data-role="navbar">
          	<ul>
          		<li><a href="/main" data-icon="home" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
          		<li><a href="/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
+         		<c:choose>
+         		<c:when test="${'event' eq footbar}">
+         		<li><a href="/info" data-icon="action">이벤트등록</a></li>
+         		</c:when>
+         		</c:choose>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
          	</ul>
          </div>
@@ -94,6 +102,14 @@
               <h3>sms관리</h3>
               <ul data-role="listview">
               	<li><a href="/admin/sms/remain" class="ui-btn ui-btn-icon-right ui-icon-carat-r">발송가능 건수</a></li>
+              </ul>
+        </div><!-- /collapsible -->
+        
+        <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b">
+              <h3>알림관리</h3>
+              <ul data-role="listview">
+              	<li><a href="/admin/event/reg_form" class="ui-btn ui-btn-icon-right ui-icon-carat-r">이벤트등록</a></li>
+              	<li><a href="/admin/event/reg" class="ui-btn ui-btn-icon-right ui-icon-carat-r">이벤트보내기</a></li>
               </ul>
         </div><!-- /collapsible -->
         </sec:authorize>

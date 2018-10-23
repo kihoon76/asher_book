@@ -214,4 +214,14 @@ public class AdminController {
 		
 		return userController.commonCancelApply(bookNum, memberIdx);
 	}
+	
+	@GetMapping("event/reg_form")
+	public String eventRegForm(ModelMap mm) {
+		String memberIdx = SessionUtil.getSessionUserIdx();
+		
+		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
+		mm.addAttribute("footbar", "event");
+		return "admin/eventRegForm";
+		
+	}
 }
