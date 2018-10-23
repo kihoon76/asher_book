@@ -607,12 +607,14 @@ $(document).on('pageshow', function (event, ui) {
     }
     else if($('#dvSiteInfo').get(0)) {
     	
-    	$('#dvSiteInfo').height(Common.getFullHeight());
+    	//$('#dvSiteInfo').height(Common.getFullHeight());
     	var swiper = new Swiper('.swiper-container', {
-    	      pagination: {
-    	        el: '.swiper-pagination',
-    	      },
-    	    });
+    		pagination: {
+    			el: '.swiper-pagination',
+    	    },
+    	});
+    	
+    	$('#dvSiteInfo').height(Common.getFullHeight());
     }
 });
 
