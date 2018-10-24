@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.service.UploadService;
+import net.asher.book.util.SessionUtil;
 
 @RequestMapping("/upload")
 @Controller
@@ -71,6 +72,7 @@ public class UploadController {
 			param.put("eventContent", eventContent);
 			param.put("fileName", fileName);
 			param.put("suffix", nanoTime);
+			param.put("writer", SessionUtil.getSessionUserIdx());
 			uploadService.regEvent(param);
 			
 			
@@ -99,6 +101,7 @@ public class UploadController {
 		
 		param.put("fileName", "eventNoImage.png");
 		param.put("suffix", nanoTime);
+		param.put("writer", SessionUtil.getSessionUserIdx());
 		
 		try {
 			uploadService.regEvent(param);

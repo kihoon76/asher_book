@@ -11,4 +11,6 @@ public interface UploadDao {
 
 	List<Event> selectEventList();
 
+	Event selectEvent(String suffix);
+
 }

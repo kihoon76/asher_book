@@ -21,18 +21,11 @@
 		</a>
 	</span>
 	<script type="text/javascript">
-	    // // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
-	    Kakao.Link.createDefaultButton({
-	      container: '#kakao-link-btn',
-	      objectType: 'feed',
-	      content: {
-	        title: '도서 <c:out value="${bookNum}" />.<c:out value="${bookInfo.bookName}" />',
-	        imageUrl: 'http://book.asherchurch.net:48080/resources/img/book<c:out value="${bookNum}" />.jpg',
-	        description: '도서를 읽으신 분과 말씀을 나누기 원합니다.',
-	        link: {
-	          mobileWebUrl: '',
-	        }
-	      },
+	    Common.createLinkKakao({
+	   		container: '#kakao-link-btn',
+	   		title: '도서 <c:out value="${bookNum}" />.<c:out value="${bookInfo.bookName}" />',
+	   		imageUrl: 'http://book.asherchurch.net:48080/resources/img/book<c:out value="${bookNum}" />.jpg',
+	   		description: '도서를 읽으신 분과 말씀을 나누기 원합니다.'
 	    });
 	</script>
 	</c:when>

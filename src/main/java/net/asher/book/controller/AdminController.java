@@ -248,6 +248,7 @@ public class AdminController {
 		String memberIdx = SessionUtil.getSessionUserIdx();
 		
 		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
+		mm.addAttribute("event", uploadService.getEventDetail(suffix));
 		
 		return "event/adminEventTemplate";
 	}

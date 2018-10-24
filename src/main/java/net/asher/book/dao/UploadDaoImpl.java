@@ -27,4 +27,9 @@ public class UploadDaoImpl implements UploadDao {
 		return mySqlSession.selectList(namespace + ".selectEventList");
 	}
 
+	@Override
+	public Event selectEvent(String suffix) {
+		return mySqlSession.selectOne(namespace + ".selectEvent", suffix);
+	}
+
 }

@@ -18,7 +18,22 @@ var Common = {
 			Kakao.init('a932718b73c047da4fd29bd762563cd4');
 		}
 		catch(e) {}
-	} 
+	},
+	createLinkKakao: function(cfg) {
+		// 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+		Kakao.Link.createDefaultButton({
+			container: cfg.container,
+		    objectType: 'feed',
+		    content: {
+		    	title: cfg.title,//'도서 <c:out value="${bookNum}" />.<c:out value="${bookInfo.bookName}" />',
+		        imageUrl: cfg.imageUrl, //'http://book.asherchurch.net:48080/resources/img/book<c:out value="${bookNum}" />.jpg',
+		        description: cfg.description,//'도서를 읽으신 분과 말씀을 나누기 원합니다.',
+		        link: {
+		          mobileWebUrl: cfg.mobileWebUrl || '',
+		        }
+		   },
+		});
+	}
 };
 
 $(document)

@@ -26,6 +26,10 @@ public class UploadService {
 		return uploadDao.selectEventList();
 	}
 
+	public Event getEventDetail(String suffix) {
+		return uploadDao.selectEvent(suffix);
+	}
+
 	
 
 }

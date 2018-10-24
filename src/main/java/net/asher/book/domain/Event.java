@@ -10,6 +10,8 @@ public class Event {
 	private String content;
 	private String fileName;
 	private String regDate;
+	private String writer;
+	
 	public String getSuffix() {
 		return suffix;
 	}
@@ -40,4 +42,11 @@ public class Event {
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+	
 }
