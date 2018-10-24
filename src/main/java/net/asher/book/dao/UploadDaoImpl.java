@@ -25,6 +25,7 @@ public class UploadDaoImpl implements UploadDao {
 
 	@Override
 	public List<Event> selectEventList(String search) {
+		System.err.println(search);
 		Map<String, String> m = new HashMap<>();
 		m.put("search", search);
 		return mySqlSession.selectList(namespace + ".selectEventList", m);

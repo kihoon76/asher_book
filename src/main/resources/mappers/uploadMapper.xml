@@ -12,7 +12,7 @@
 		  from event t1
 		  left outer join members t2 on t1.write_member_idx = t2.idx
 		  <if test="search != null">
-		 where title = '%' + #{search} + '%'
+		 where title like concat('%', #{search}, '%')
 		  </if>
 	</select>
 	
