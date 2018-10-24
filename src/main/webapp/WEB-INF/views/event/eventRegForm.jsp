@@ -3,7 +3,7 @@
 <content tag="main">
 <form method="post" id="eventRegForm" enctype="multipart/form-data" data-ajax="false">
 <label for="eventTitle">이벤트 제목 : <span class="required">*</span></label>
-<input type="text" name="eventTitle" id="eventTitle" placeholder="이벤트제목">
+<input type="text" id="eventTitle" placeholder="이벤트제목">
 <label for="eventContent">이벤트 내용 : <span class="required">*</span></label>
 <textarea id="eventContent" class="custom_class"></textarea>
 <button id="chooseFile">파일선택</button>

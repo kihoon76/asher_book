@@ -588,6 +588,7 @@ $(document)
 			formData.append('eventContent', $eventContent.val());
 			formData.append('eventImage', fileObj);
 			
+			console.log($eventTitle.val());
 			$.ajax({
 				url: '/upload/event/regWithPic',
 				processData: false,
