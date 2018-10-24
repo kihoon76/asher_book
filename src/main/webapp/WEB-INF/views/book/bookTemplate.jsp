@@ -12,8 +12,8 @@
 		</li>
 	</ul>
 	<div><a href="<c:out value='${bookInfo.bookLink}' />" target="_blank">상세정보</a></div>
-	<c:choose>
-	<c:when test="${not empty readMembers}">
+<%-- 	<c:choose> --%>
+<%-- 	<c:when test="${not empty readMembers}"> --%>
 	<span style="font-size:.8em;margin-top:5px; position:relative; top: -10px;">위 도서를 읽으신 분과 나누기</span>
 	<span>
 		<a id="kakao-link-btn" href="#" data-ajax="false">
@@ -28,11 +28,11 @@
 	   		description: '도서를 읽으신 분과 말씀을 나누기 원합니다.'
 	    });
 	</script>
-	</c:when>
-	<c:otherwise>
-	<div style="font-size:.8em;margin-top:5px;">위 도서를 읽으신 분 </div>
-	</c:otherwise>	
-	</c:choose>
+<%-- 	</c:when> --%>
+<%-- 	<c:otherwise> --%>
+<!-- 	<div style="font-size:.8em;margin-top:5px;">위 도서를 읽으신 분 </div> -->
+<%-- 	</c:otherwise>	 --%>
+<%-- 	</c:choose> --%>
 	<table>
 	<c:choose>
 	<c:when test="${not empty readMembers}">
