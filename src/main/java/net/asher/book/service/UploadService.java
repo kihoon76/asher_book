@@ -30,8 +30,8 @@ public class UploadService {
 		
 	}
 
-	public List<Event> getEventList() {
-		return uploadDao.selectEventList();
+	public List<Event> getEventList(String search) {
+		return uploadDao.selectEventList(search);
 	}
 
 	public Event getEventDetail(String suffix) {

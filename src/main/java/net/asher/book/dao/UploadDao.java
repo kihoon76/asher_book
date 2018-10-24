@@ -9,7 +9,7 @@ public interface UploadDao {
 
 	void insertEvent(Map<String, String> param);
 
-	List<Event> selectEventList();
+	List<Event> selectEventList(String search);
 
 	Event selectEvent(String suffix);
 

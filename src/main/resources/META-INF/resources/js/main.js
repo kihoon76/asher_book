@@ -699,6 +699,21 @@ $(document)
 	.on('click', '#footerPrevious', function() {
 		window.history.back();
 	});
+	
+	$(document)
+	.off('keyup', '#eventSearch')
+	.on('keyup', '#eventSearch', function(e) {
+		if(e.keyCode == 13) {
+			var v = $.trim($(this).val());
+			
+			if(v == '') {
+				$(this).focus();
+				return;
+			}
+			
+			window.location.href = '/admin/event/list?search=' + v;
+		}
+	});
 });
 
 $(document).on('pageshow', function (event, ui) {

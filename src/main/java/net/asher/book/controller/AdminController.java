@@ -232,11 +232,14 @@ public class AdminController {
 	}
 	
 	@GetMapping("event/list")
-	public String getEventList(ModelMap mm) {
+	public String getEventList(
+			@RequestParam(name="search", required=false) String search,
+			ModelMap mm) {
 		String memberIdx = SessionUtil.getSessionUserIdx();
 		
 		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
-		mm.addAttribute("eventList", uploadService.getEventList());
+		mm.addAttribute("eventList", uploadService.getEventList(search));
+		mm.addAttribute("search", search);
 		return "event/eventList";
 		
 	}

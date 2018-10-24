@@ -1,5 +1,6 @@
 package net.asher.book.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +24,10 @@ public class UploadDaoImpl implements UploadDao {
 	}
 
 	@Override
-	public List<Event> selectEventList() {
-		return mySqlSession.selectList(namespace + ".selectEventList");
+	public List<Event> selectEventList(String search) {
+		Map<String, String> m = new HashMap<>();
+		m.put("search", search);
+		return mySqlSession.selectList(namespace + ".selectEventList", m);
 	}
 
 	@Override

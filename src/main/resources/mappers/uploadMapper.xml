@@ -7,10 +7,13 @@
 		values (#{suffix}, #{eventTitle}, #{eventContent}, #{fileName}, #{writer}, #{fileSize})
 	</insert>
 	
-	<select id="selectEventList" resultType="Event">
+	<select id="selectEventList"  parameterType="map" resultType="Event">
 		select suffix, title, content, file_name as fileName, reg_date as regDate, t2.name as writer
 		  from event t1
 		  left outer join members t2 on t1.write_member_idx = t2.idx
+		  <if test="search != null">
+		 where title = '%' + #{search} + '%'
+		  </if>
 	</select>
 	
 	<select id="selectEvent" parameterType="string" resultType="Event">
