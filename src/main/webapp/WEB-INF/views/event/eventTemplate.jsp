@@ -15,7 +15,6 @@
 
 	
 	<link rel="stylesheet" href="/resources/jqmobile/jquery.mobile-1.4.5.min.css" />
-	<link rel="stylesheet" href="/resources/css/default.css" />
 	
 	<script type="text/javascript" src="/resources/jquery/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="/resources/jqmobile/jquery.mobile-1.4.5.min.js"></script>

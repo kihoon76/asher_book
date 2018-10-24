@@ -35,8 +35,6 @@
 	   		mobileWebUrl: 'http://book.asherchurch.net:48080/link/item/${event.suffix}',
 	   		description: '${sqContent}'
 	    });
-	    
-	    //5000000
 	</script>
 </div>
 
