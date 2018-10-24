@@ -53,15 +53,15 @@ public class UploadController {
 		
 		List<String> fileNames = new ArrayList<String>();
 		String fileName = null;
-		
+		long fileSize = 0;
 		try {
 			
 			String nanoTime = String.valueOf(System.nanoTime());
 			
 			if(files.length > 0) {
-				
 				fileName = "event" + nanoTime + "." + FilenameUtils.getExtension(files[0].getOriginalFilename());
 				FileCopyUtils.copy(files[0].getBytes(), new File(UPLOAD_LOCATION + fileName));
+				fileSize = files[0].getSize();
 			}
 			else {
 				fileName = "eventNoImage.png";
@@ -73,6 +73,7 @@ public class UploadController {
 			param.put("fileName", fileName);
 			param.put("suffix", nanoTime);
 			param.put("writer", SessionUtil.getSessionUserIdx());
+			param.put("fileSize", String.valueOf(fileSize));
 			uploadService.regEvent(param);
 			
 			
@@ -102,6 +103,7 @@ public class UploadController {
 		param.put("fileName", "eventNoImage.png");
 		param.put("suffix", nanoTime);
 		param.put("writer", SessionUtil.getSessionUserIdx());
+		param.put("fileSize", "0");
 		
 		try {
 			uploadService.regEvent(param);

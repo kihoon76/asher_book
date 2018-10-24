@@ -11,6 +11,7 @@ public class Event {
 	private String fileName;
 	private String regDate;
 	private String writer;
+	private String fileSize;
 	
 	public String getSuffix() {
 		return suffix;
@@ -48,5 +49,10 @@ public class Event {
 	public void setWriter(String writer) {
 		this.writer = writer;
 	}
-	
+	public String getFileSize() {
+		return fileSize;
+	}
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
 }

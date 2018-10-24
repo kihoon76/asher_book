@@ -3,8 +3,8 @@
 <mapper namespace="mappers.uploadMapper">
 	
 	<insert id="insertEvent" parameterType="map">
-		insert into event (suffix, title, content, file_name, write_member_idx)
-		values (#{suffix}, #{eventTitle}, #{eventContent}, #{fileName}, #{writer})
+		insert into event (suffix, title, content, file_name, write_member_idx, file_size)
+		values (#{suffix}, #{eventTitle}, #{eventContent}, #{fileName}, #{writer}, #{fileSize})
 	</insert>
 	
 	<select id="selectEventList" resultType="Event">
@@ -14,7 +14,7 @@
 	</select>
 	
 	<select id="selectEvent" parameterType="string" resultType="Event">
-		select suffix, title, content, file_name as fileName, reg_date as regDate, t2.name as writer
+		select suffix, title, content, file_name as fileName, reg_date as regDate, t2.name as writer, file_size as fileSize
 		  from event t1
 		  left outer join members t2 on t1.write_member_idx = t2.idx
 		 where suffix = #{suffix}
