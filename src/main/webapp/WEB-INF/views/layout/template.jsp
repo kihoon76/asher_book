@@ -62,6 +62,9 @@
          		<c:when test="${'event' eq footbar}">
          		<li><a id="btnRegEvent" href="#" data-icon="action" data-ajax="false">이벤트등록</a></li>
          		</c:when>
+         		<c:when test="${'Y' eq back}">
+         		<li><a id="footerPrevious" href="#" data-icon="back" data-ajax="false">이전</a></li>
+         		</c:when>
          		</c:choose>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
          	</ul>

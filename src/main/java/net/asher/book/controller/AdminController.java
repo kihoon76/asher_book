@@ -249,7 +249,7 @@ public class AdminController {
 		
 		mm.addAttribute("bookList", bookService.getBookList(memberIdx));
 		mm.addAttribute("event", uploadService.getEventDetail(suffix));
-		
+		mm.addAttribute("back", "Y");
 		return "event/adminEventTemplate";
 	}
 	

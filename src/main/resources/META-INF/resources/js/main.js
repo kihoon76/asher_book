@@ -693,6 +693,12 @@ $(document)
 			});
 		}
 	});
+	
+	$(document)
+	.off('click', '#footerPrevious')
+	.on('click', '#footerPrevious', function() {
+		window.history.back();
+	});
 });
 
 $(document).on('pageshow', function (event, ui) {
