@@ -35,6 +35,7 @@ import net.asher.book.domain.RentalHistory;
 import net.asher.book.domain.ReturnHistory;
 import net.asher.book.service.BookService;
 import net.asher.book.service.LogService;
+import net.asher.book.service.UploadService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.HttpHeaderUtil;
 import net.asher.book.util.MailUtil;
@@ -53,6 +54,9 @@ public class MainController {
 	
 	@Resource(name="logService")
 	LogService logService;
+	
+	@Resource(name="uploadService")
+	UploadService uploadService;
 	
 	@Resource(name="mailUtil")
 	MailUtil mailUtil;
@@ -250,9 +254,11 @@ public class MainController {
 	}
 	
 	@GetMapping("event/item/{suffix}")
-	public String getEventDetail(@PathVariable("suffix") String suffix) {
+	public String getEventDetail(
+			@PathVariable("suffix") String suffix,
+			ModelMap mm) {
 		
-		
+		mm.addAttribute("event", uploadService.getEventDetail(suffix));
 		return "event/eventTemplate";
 	}
 }

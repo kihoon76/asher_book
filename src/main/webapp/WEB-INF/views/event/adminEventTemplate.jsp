@@ -32,6 +32,7 @@
 	   		container: '#btnEventKakaoLink',
 	   		title: '${event.title}',
 	   		imageUrl: 'http://book.asherchurch.net:48080/event/${event.fileName}',
+	   		mobileWebUrl: 'http://book.asherchurch.net:48080/event/item/${event.suffix}',
 	   		description: '${sqContent}'
 	    });
 	    
