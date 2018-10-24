@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c"	uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 <content tag="main">
 <div id="dvEventList" style="width: 100%">
 <c:choose>
@@ -13,7 +14,8 @@
         		<img style="width:100px; height:100px;" src="/event/${event.fileName}">
     			<h2>${event.title}</h2>
     			<p>작성자: ${event.writer}</p>
-    			<p>${event.content}</p>
+    			<c:set value="${fn:replace(event.content, '<br/>', ' ')}" var="exBR" />
+    			<p>${exBR}</p>
         	</a>
     	</li>
 	</c:forEach>

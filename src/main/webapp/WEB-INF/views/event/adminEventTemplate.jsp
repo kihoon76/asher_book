@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c"	uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 <content tag="main">
 <div id="dvEventDetail" style="width: 100%">
 	<div class="article">
@@ -20,12 +21,18 @@
         	</a>
        	</p>
     </div>
+    <c:set var="singlequote" value="'"/>
+    <c:set var="singlequoteR" value="\\'"/>
+    <c:set var="backslash" value="\\"/>
+    <c:set var="backslashR" value="\\\\"/>
+    <c:set value="${fn:replace(event.content, backslash, backslashR)}" var="bsContent" />
+    <c:set value="${fn:replace(bsContent, singlequote, singlequoteR)}" var="sqContent" />
     <script type="text/javascript">
 	    Common.createLinkKakao({
 	   		container: '#btnEventKakaoLink',
 	   		title: '${event.title}',
 	   		imageUrl: 'http://book.asherchurch.net:48080/event/${event.fileName}',
-	   		description: '${event.content}'
+	   		description: '${sqContent}'
 	    });
 	    
 	    //5000000

@@ -69,7 +69,7 @@ public class UploadController {
 			
 			Map<String, String> param = new HashMap<>();
 			param.put("eventTitle", eventTitle);
-			param.put("eventContent", eventContent);
+			param.put("eventContent", eventContent.replaceAll("(\r\n|\n)", "<br/>"));
 			param.put("fileName", fileName);
 			param.put("suffix", nanoTime);
 			param.put("writer", SessionUtil.getSessionUserIdx());
@@ -100,6 +100,7 @@ public class UploadController {
 		
 		String nanoTime = String.valueOf(System.nanoTime());
 		
+		param.put("eventContent", param.get("eventContent").replaceAll("(\r\n|\n)", "<br/>"));
 		param.put("fileName", "eventNoImage.png");
 		param.put("suffix", nanoTime);
 		param.put("writer", SessionUtil.getSessionUserIdx());

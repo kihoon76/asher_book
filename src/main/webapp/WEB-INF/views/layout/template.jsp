@@ -106,7 +106,7 @@
         </div><!-- /collapsible -->
         
         <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b">
-              <h3>알림관리</h3>
+              <h3>이벤트관리</h3>
               <ul data-role="listview">
               	<li><a href="/admin/event/reg_form" class="ui-btn ui-btn-icon-right ui-icon-carat-r">이벤트등록</a></li>
               	<li><a href="/admin/event/list" class="ui-btn ui-btn-icon-right ui-icon-carat-r">이벤트목록</a></li>
