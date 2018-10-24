@@ -259,6 +259,7 @@ public class MainController {
 			ModelMap mm) {
 		
 		mm.addAttribute("event", uploadService.getEventDetail(suffix));
+		System.err.println("77777777777777777777777777777777777");
 		return "event/eventTemplate";
 	}
 }
