@@ -45,6 +45,7 @@ public class BookController {
 		mm.addAttribute("bookNum", bookNum);
 		mm.addAttribute("bookInfo", bookService.getBookDetail(bookNum));
 		mm.addAttribute("readMembers", bookService.getReadMemberList(bookNum));
+		mm.addAttribute("kakao", String.valueOf(System.nanoTime()));
 		return "book/bookTemplate";
 		
 	}
