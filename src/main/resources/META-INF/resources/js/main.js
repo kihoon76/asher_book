@@ -667,10 +667,31 @@ $(document)
 						});
 					}
 				},
-			})
+			});
 		}
-		
-		console.log($eventImage[0].files[0]);
+	});
+	
+	//이벤트 삭제
+	$(document)
+	.off('click', '#deleteEvent')
+	.on('click', '#deleteEvent', function() {
+		if(confirm('이벤트를 삭제하시겠습니까?')) {
+			var suffix = $(this).data('suffix');
+			
+			Common.ajax({
+				url: '/admin/event/delete',
+				method: 'POST',
+				dataType: 'json',
+				headers: {'CUSTOM': 'Y'},
+				data: {
+					suffix: suffix
+				},
+				success: function(data, textStatus, jqXHR) {
+					alert('이벤트가 삭제되었습니다');
+					window.history.back();
+				},
+			});
+		}
 	});
 });
 

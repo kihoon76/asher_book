@@ -13,4 +13,6 @@ public interface UploadDao {
 
 	Event selectEvent(String suffix);
 
+	void deleteEvent(String suffix);
+
 }

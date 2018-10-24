@@ -32,4 +32,10 @@ public class UploadDaoImpl implements UploadDao {
 		return mySqlSession.selectOne(namespace + ".selectEvent", suffix);
 	}
 
+	@Override
+	public void deleteEvent(String suffix) {
+		mySqlSession.update(namespace + ".deleteEvent", suffix);
+		
+	}
+
 }

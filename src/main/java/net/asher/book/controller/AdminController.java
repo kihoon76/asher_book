@@ -252,4 +252,23 @@ public class AdminController {
 		
 		return "event/adminEventTemplate";
 	}
+	
+	@PostMapping("event/delete")
+	@ResponseBody
+	public AjaxVO deleteEvent(@RequestParam("suffix") String suffix) {
+		
+		AjaxVO vo = new AjaxVO<>();
+		
+		try {
+			uploadService.removeEvent(suffix);
+			vo.setSuccess(true);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrCode("etc");
+		}
+		
+		
+		return vo;
+	}
 }

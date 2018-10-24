@@ -15,7 +15,7 @@
        	<p><small>카카오링크 이미지는 2MB이하만 전송됩니다.</small></p>
        	</c:if>
         <p>
-        	<a href="#" class="ui-btn ui-btn-inline ui-mini">삭제</a>
+        	<a id="deleteEvent" href="#" class="ui-btn ui-btn-inline ui-mini" data-ajax="false" data-suffix="${event.suffix}">삭제</a>
         	<a id="btnEventKakaoLink" href="#" class="ui-btn ui-btn-inline ui-mini" data-ajax="false">
         		<img src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png"/>
         	</a>
