@@ -34,4 +34,9 @@ public class BookDaoImpl implements BookDao {
 		return mySqlSession.selectList(namespace + ".selectReadMemberList", bookNum);
 	}
 
+	@Override
+	public List<Book> selectRentaledBookList() {
+		return mySqlSession.selectList(namespace + ".selectRentaledBookList");
+	}
+
 }

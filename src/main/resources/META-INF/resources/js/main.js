@@ -25,14 +25,19 @@ var Common = {
 			container: cfg.container,
 		    objectType: 'feed',
 		    content: {
-		    	title: cfg.title,//'도서 <c:out value="${bookNum}" />.<c:out value="${bookInfo.bookName}" />',
-		        imageUrl: cfg.imageUrl, //'http://book.asherchurch.net:48080/resources/img/book<c:out value="${bookNum}" />.jpg',
-		        description: cfg.description,//'도서를 읽으신 분과 말씀을 나누기 원합니다.',
+		    	title: cfg.title,
+		        imageUrl: cfg.imageUrl, 
+		        description: cfg.description,
 		        link: {
 		          mobileWebUrl: cfg.mobileWebUrl || '',
 		        }
 		   },
 		});
+	},
+	makeBookReser: function(jsonStr) {
+		if(jsonStr) {
+			
+		}
 	}
 };
 
@@ -40,6 +45,7 @@ $(document)
 .off('pageinit')
 .on('pageinit', function () {
 	$('body>[data-role="panel"]').panel();
+	$('#bookReservePopup').hide();
 	
 	Common.kakakoInit();
 	function openPopup(type, afterFn) {
@@ -183,6 +189,8 @@ $(document)
 		var $img = $this.find('img');
 		var possible = $img.data('possible');
 		var msg = '';
+		
+		$.scrollLock(true);
 		if('R' == possible) {
 			if('Y' == $img.data('mine')) {
 				msg = '[' + $img.data('name') + '] 대여신청을 취소하시겠습니까? ';
@@ -714,12 +722,47 @@ $(document)
 			window.location.href = '/admin/event/list?search=' + v;
 		}
 	});
+	
+	$(document)
+	.off('click dblclick', '#footerReservation')
+	.on('click dblclick', '#footerReservation', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		var $this = $(this);
+		
+		if(!$this.data('disabled')) {
+			$this.addClass('ui-disabled');
+			$this.data('disabled', true);
+			
+			$('#bookReservePopup').show();
+			$('#bookReservePopup').popup('open');
+			
+			$.scrollLock(true);
+		}
+	});
+	
+	//link button active remove
+	$(document)
+	.on('tap', '#footerReservation', function(e) {
+		console.log('tap');
+		$(this).removeClass('ui-btn-active');
+	});
+	
+//	//대여현황에서 예약 팝업이 떠있을경우 
+//	$(document).on('scrollstart',function(){
+//		if($('#bookReservePopup').is(':visible')) {
+//			$('#bookReservePopup').popup('close');
+//		}
+//		  //alert("Started scrolling!");
+//	});
 });
 
 $(document).on('pageshow', function (event, ui) {
     // Remove the previous page
 	//$(ui.prevPage).remove();
 	$('#popupDialog').popup({history: false});
+	$('#bookReservePopup').popup({history: false});
+	
     ///book/rental_history
     if($('#dvRentalHistory').get(0)) {
     	var myMemberIdx = $('#dvRentalHistory').data('memberIdx');
@@ -792,7 +835,7 @@ $(document).on('pageshow', function (event, ui) {
 });
 
 $(document).on('pageremove', function (event, ui) {
-	console.log('yy')
+	console.log('pageremove')
     if(Common.socket != null) {
     	 Common.socket.close();
     }
@@ -806,10 +849,19 @@ $(window).unload(function() {
 
 
 $(document).on('popupafterclose', "[data-role=popup]", function (e) {
-	if(Common.popupClose) {
-		Common.popupClose();
-		Common.popupClose = null;
+	if(e.target.id == 'popupDialog') {
+		if(Common.popupClose) {
+			Common.popupClose();
+			Common.popupClose = null;
+		}
 	}
+	else if(e.target.id == 'bookReservePopup') {
+		$('#footerReservation').removeClass('ui-disabled');
+		$('#footerReservation').data('disabled', false);
+	}
+	
+	$.scrollLock(false);
+	
 	
     console.log(e.target.id + " -> " + e.type);
 });

@@ -14,4 +14,6 @@ public interface BookDao {
 
 	List<Account> selectReadMemberList(String bookNum);
 
+	List<Book> selectRentaledBookList();
+
 }

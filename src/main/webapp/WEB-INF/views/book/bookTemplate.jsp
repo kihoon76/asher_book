@@ -16,14 +16,14 @@
 <%-- 	<c:when test="${not empty readMembers}"> --%>
 	<span style="font-size:.8em;margin-top:5px; position:relative; top: -10px;">위 도서를 읽으신 분과 나누기</span>
 	<span>
-		<a id="kakao-link-btn-<c:out value='${kakao}' />" href="#" data-ajax="false">
+		<a id="bookKakaoLink-<c:out value='${kakao}' />" href="#" data-ajax="false">
 			<img src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png"/>
 		</a>
 	</span>
 	<script type="text/javascript">
 		Common.kakakoInit();
 	    Common.createLinkKakao({
-	   		container: '#kakao-link-btn-<c:out value="${kakao}"/>',
+	   		container: '#bookKakaoLink-<c:out value="${kakao}"/>',
 	   		title: '도서 <c:out value="${bookNum}" />.<c:out value="${bookInfo.bookName}" />',
 	   		imageUrl: 'http://book.asherchurch.net:48080/resources/img/book<c:out value="${bookNum}" />.jpg',
 	   		description: '도서를 읽으신 분과 말씀을 나누기 원합니다.'

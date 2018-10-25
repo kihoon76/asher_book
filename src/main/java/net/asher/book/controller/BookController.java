@@ -55,8 +55,18 @@ public class BookController {
 		String memberIdx = SessionUtil.getSessionUserIdx();
 		
 		List<Book> list = getBookList(memberIdx);
+		List<Book> rentaledList = bookService.getRentaledBookList();
+		
+		String rentaledListStr = "";
+		
+		if(rentaledList != null || rentaledList.size() > 0) {
+			rentaledListStr = new Gson().toJson(rentaledList);
+		}
+		
 		mm.addAttribute("bookList", list);
 		mm.addAttribute("memberIdx", memberIdx);
+		mm.addAttribute("footbar", "reservation");
+		mm.addAttribute("rentaledListStr", rentaledListStr);
 		return "book/rentalHistory";
 	}
 	

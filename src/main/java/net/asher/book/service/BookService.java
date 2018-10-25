@@ -28,4 +28,8 @@ public class BookService {
 	public List<Account> getReadMemberList(String bookNum) {
 		return bookDao.selectReadMemberList(bookNum);
 	}
+
+	public List<Book> getRentaledBookList() {
+		return bookDao.selectRentaledBookList();
+	}
 }

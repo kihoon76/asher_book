@@ -29,12 +29,14 @@
 	
 	<script type="text/javascript" src="/resources/jquery/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="/resources/jqmobile/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="/resources/js/fastclick.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.scrollLock.js"></script>
 	<script type="text/javascript" src="/resources/js/sockjs.min.js"></script>
 	<script type="text/javascript" src="/resources/swiper-4.4.1/js/swiper.min.js"></script>
 	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 </head>
-<body>
+<body onload="initFastButtons();">
 <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width: 400px;" data-transition="none">
 	<div id="popupHeader" data-role="header" data-theme="a"></div>
 	<div role="main" class="ui-content">
@@ -44,6 +46,30 @@
 		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupCancel"></a>
 	</div>
 </div>
+
+<div id="bookReservePopup" data-role="popup" data-theme="a" class="ui-corner-all" style="display:none;  max-width: 400px;">
+	<div  data-role="header" data-theme="a"></div>
+	<div role="main" class="ui-content">
+		<form>
+    		<div style="padding:10px 20px;" class="ui-field-contain" >
+    			<label for="selRentedBook">대여도서</label>
+    			<select id="selRentedBook" data-mini="true"></select>
+    			<button class="ui-btn ui-btn-b ui-mini" data-rel="back" style="margin-top: 10px;">예약하기</button>
+    			<button class="ui-btn ui-btn-b ui-mini" data-rel="back" style="margin-top: 10px;">돌아가기</button>
+    			<div style="margin:10px 0 5px 0;">예약하신 분</div>
+    			<ol data-role="listview" data-inset="true">
+<!-- 					<li>The Godfather</li> -->
+<!-- 					<li>Inception</li> -->
+<!-- 					<li>The Good, the Bad and the Ugly </li> -->
+<!-- 					<li>Pulp Fiction</li> -->
+<!-- 					<li>Schindler's List</li> -->
+				</ol>
+    		</div>
+    	</form>
+	</div>
+</div>
+
+<span id="fastclick">
 <div data-role="page" id="pg1" data-dom-cache="false">
     <div data-role="header" data-position="fixed"  data-tap-toggle="false" data-theme="a">
     	<h1></h1>
@@ -64,6 +90,9 @@
          		</c:when>
          		<c:when test="${'Y' eq back}">
          		<li><a id="footerPrevious" href="#" data-icon="back" data-ajax="false">이전</a></li>
+         		</c:when>
+         		<c:when test="${'reservation' eq footbar}">
+         		<li><a id="footerReservation" href="#" data-icon="star" data-ajax="false" data-role="none">예약하기</a></li>
          		</c:when>
          		</c:choose>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
@@ -121,6 +150,7 @@
 	
 	
 </div>
+</span> <!-- end fastclick -->
 <!-- $(":mobile-pagecontainer").pagecontainer("change", "#page", { options }); -->
 </body>
 </html>

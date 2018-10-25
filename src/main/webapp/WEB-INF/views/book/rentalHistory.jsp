@@ -6,6 +6,7 @@
 <div id="dvRentalHistory" style="width: 100%" data-member-idx="<c:out value='${memberIdx}' />">
 	<%
 		List<Book> list = (List<Book>)request.getAttribute("bookList");
+		String rentaledListStr = (String)request.getAttribute("rentaledListStr");
 		int listCnt = list.size();
 		if(listCnt > 0) {
 				
@@ -82,5 +83,8 @@
 	<%
 		}
 	%>
+	<script type="text/javascript">
+		Common.makeBookReser(<%=rentaledListStr%>);
+	</script>
 </div>
 </content>

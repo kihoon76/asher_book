@@ -37,4 +37,10 @@
 		 order by t2.name asc
 	</select>
 	
+	<select id="selectRentaledBookList" resultType="Book">
+		select num as bookNum, name as bookName
+		  from books t1
+		 inner join rental_history t2 on t1.num = t2.book_num
+		 where t2.status = 'A'
+	</select>
 </mapper>
