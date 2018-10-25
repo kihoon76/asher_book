@@ -47,23 +47,21 @@
 	</div>
 </div>
 
-<div id="bookReservePopup" data-role="popup" data-theme="a" class="ui-corner-all" style="display:none;  max-width: 400px;">
+<div id="bookReservePopup" data-role="popup" data-theme="a" class="ui-corner-all" data-dismissible="false" data-transition="slideup" style="display:none;  max-width: 400px;">
 	<div  data-role="header" data-theme="a"></div>
 	<div role="main" class="ui-content">
 		<form>
     		<div style="padding:10px 20px;" class="ui-field-contain" >
     			<label for="selRentedBook">대여도서</label>
     			<select id="selRentedBook" data-mini="true"></select>
-    			<button class="ui-btn ui-btn-b ui-mini" data-rel="back" style="margin-top: 10px;">예약하기</button>
-    			<button class="ui-btn ui-btn-b ui-mini" data-rel="back" style="margin-top: 10px;">돌아가기</button>
-    			<div style="margin:10px 0 5px 0;">예약하신 분</div>
-    			<ol data-role="listview" data-inset="true">
-<!-- 					<li>The Godfather</li> -->
-<!-- 					<li>Inception</li> -->
-<!-- 					<li>The Good, the Bad and the Ugly </li> -->
-<!-- 					<li>Pulp Fiction</li> -->
-<!-- 					<li>Schindler's List</li> -->
-				</ol>
+    			<div style="margin:10px 0 5px 0;">예약하신 분  (<span>3</span>)</div>
+ 				<select id="selReservation">
+ 					<option value="-1">예약하신분이 없습니다.</option>
+ 				</select>
+ 				<div style="height: 10px;"></div>
+    			<a href="#" data-rel="back" style="width:70px;" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">예약하기</a>
+    			<a href="#" data-rel="back" style="width:70px;" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">닫기</a>
+    			
     		</div>
     	</form>
 	</div>
@@ -82,7 +80,7 @@
     <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
          <div data-role="navbar">
          	<ul>
-         		<li><a id="footerHome" href="/main" data-icon="home" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
+         		<li><a id="footerHome" href="#" data-icon="home" data-ajax="false" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
          		<li><a href="/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
          		<c:choose>
          		<c:when test="${'event' eq footbar}">

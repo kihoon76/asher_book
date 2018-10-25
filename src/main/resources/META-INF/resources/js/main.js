@@ -42,6 +42,7 @@ var Common = {
 				var $selRentedBook = $('#selRentedBook');
 				var optionArr = [];
 				
+				optionArr.push('<option value="-1">== 대여예약하실 도서를 선택하세요 ==</option>');
 				for(var i=0; i<len; i++) {
 					optionArr.push('<option value="' + json[i].bookNum + '">' +  json[i].bookName + '</option>');
 				}
@@ -762,17 +763,11 @@ $(document)
 	});
 	
 	$(document)
-	.on('tap', '#footerHome', function(e) {
-		window.reload();
+	.off('click', '#footerHome')
+	.on('click', '#footerHome', function(e) {
+		window.location.href = '/main';
 	});
 	
-//	//대여현황에서 예약 팝업이 떠있을경우 
-//	$(document).on('scrollstart',function(){
-//		if($('#bookReservePopup').is(':visible')) {
-//			$('#bookReservePopup').popup('close');
-//		}
-//		  //alert("Started scrolling!");
-//	});
 });
 
 $(document).on('pageshow', function (event, ui) {
