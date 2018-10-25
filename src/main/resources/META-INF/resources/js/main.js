@@ -34,9 +34,22 @@ var Common = {
 		   },
 		});
 	},
-	makeBookReser: function(jsonStr) {
-		if(jsonStr) {
+	makeBookReser: function(json) {
+		if(json) {
+			var len = json.length;
 			
+			if(len > 0) {
+				var $selRentedBook = $('#selRentedBook');
+				var optionArr = [];
+				
+				for(var i=0; i<len; i++) {
+					optionArr.push('<option value="' + json[i].bookNum + '">' +  json[i].bookName + '</option>');
+				}
+				
+				$selRentedBook.html(optionArr.join(''));
+				
+			}
+		
 		}
 	}
 };
@@ -743,9 +756,14 @@ $(document)
 	
 	//link button active remove
 	$(document)
-	.on('tap', '#footerReservation', function(e) {
+	.on('tap', '#footerReservation,#btnRegEvent', function(e) {
 		console.log('tap');
 		$(this).removeClass('ui-btn-active');
+	});
+	
+	$(document)
+	.on('tap', '#footerHome', function(e) {
+		window.reload();
 	});
 	
 //	//대여현황에서 예약 팝업이 떠있을경우 
@@ -865,6 +883,8 @@ $(document).on('popupafterclose', "[data-role=popup]", function (e) {
 	
     console.log(e.target.id + " -> " + e.type);
 });
+
+
 
 //$(document).on("panelbeforeopen", "div[data-role='panel']", function(e,ui) {
 //    $.mobile.activeClickedLink = null;

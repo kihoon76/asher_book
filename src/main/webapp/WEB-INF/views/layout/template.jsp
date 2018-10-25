@@ -82,7 +82,7 @@
     <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
          <div data-role="navbar">
          	<ul>
-         		<li><a href="/main" data-icon="home" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
+         		<li><a id="footerHome" href="/main" data-icon="home" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
          		<li><a href="/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
          		<c:choose>
          		<c:when test="${'event' eq footbar}">
