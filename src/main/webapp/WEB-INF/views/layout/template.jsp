@@ -47,7 +47,7 @@
 	</div>
 </div>
 
-<div id="bookReservePopup" data-role="popup" data-theme="a" class="ui-corner-all" data-dismissible="false" data-transition="slideup" style="display:none;  max-width: 400px;">
+<div id="bookReservePopup" data-role="popup" data-theme="a" class="ui-corner-all" data-dismissible="false"  style="display:none;  max-width: 400px;">
 	<div  data-role="header" data-theme="a"></div>
 	<div role="main" class="ui-content">
 		<form>
@@ -67,7 +67,6 @@
 	</div>
 </div>
 
-<span id="fastclick">
 <div data-role="page" id="pg1" data-dom-cache="false">
     <div data-role="header" data-position="fixed"  data-tap-toggle="false" data-theme="a">
     	<h1></h1>
@@ -77,6 +76,7 @@
         <sitemesh:write property="page.main" />
     </div>
     <!-- footer  -->
+    <span id="fastclick"><!-- start fastclick -->
     <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
          <div data-role="navbar">
          	<ul>
@@ -97,6 +97,7 @@
          	</ul>
          </div>
     </div>
+    </span> <!-- end fastclick -->
     
     <!-- leftpanel3  -->
 	<div data-role="panel" id="leftpanel1" data-position="left" data-display="reveal" data-theme="c">
@@ -148,7 +149,7 @@
 	
 	
 </div>
-</span> <!-- end fastclick -->
+<!-- </span> end fastclick -->
 <!-- $(":mobile-pagecontainer").pagecontainer("change", "#page", { options }); -->
 </body>
 </html>
