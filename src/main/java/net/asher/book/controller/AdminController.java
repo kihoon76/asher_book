@@ -32,6 +32,7 @@ import net.asher.book.domain.Event;
 import net.asher.book.domain.LogSend;
 import net.asher.book.domain.RentalHistory;
 import net.asher.book.service.BookService;
+import net.asher.book.service.LogService;
 import net.asher.book.service.UploadService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.RestClient;
@@ -68,6 +69,9 @@ public class AdminController {
 	
 	@Value("#{smsCfg['sender']}")
 	String smsSender;
+	
+	@Resource(name="logService")
+	LogService logService;
 
 	@PostMapping("accept/rental/apply")
 	@ResponseBody
@@ -118,40 +122,41 @@ public class AdminController {
 				webMsg.put("memberName", info.get("memberName"));
 				webMsg.put("type", "R");
 				
-//				asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
+				asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
 //				
-//				StringBuilder sb = new StringBuilder();
-//				sb.append("receiver=" + account.getPhone().replaceAll("-", ""));
-//				sb.append("&destination=" + account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
-//				sb.append("&msg=대여하신 책 " + map.get("bookNum") + "." + map.get("bookName") + "반납일자는 " + map.get("returnDate") + "입니다.");
-//				sb.append("&title=아셀교회");
-//				sb.append("&testmode_yn=N");
+				StringBuilder sb = new StringBuilder();
+				sb.append("receiver=" + info.get("phone").replaceAll("-", ""));
+				sb.append("&destination=" + info.get("phone").replaceAll("-", "") + "|" + info.get("memberName"));
+				sb.append("&msg=예약하신 책[ " + info.get("bookNum") + "." + info.get("bookName") + "]이 반납되어 대여신청 상태로 변경되었습니다. ");
+				sb.append("&title=아셀교회(반납도서)");
+				sb.append("&testmode_yn=N");
 //				
-//				String rcr = rc.post("/send/", sb.toString());
-//				Map<String, String> rcm = new Gson().fromJson(rcr, Map.class);
-//				
-//				LogSend log2 = new LogSend();
-//				log2.setTargetIdx(map.get("memberIdx"));
-//				log2.setTxMsg(sb.toString());
-//				log2.setRxMsg(rcr);
-//				log2.setType("S");
-//				
-//				if("1".equals(rcm.get("result_code"))) {
-//					log2.setIsErr("N");
-//					log2.setMsgId(rcm.get("msg_id"));
-//				}
-//				else {
-//					log2.setIsErr("Y");
-//					log2.setMsgId("");
-//				}
-//				
-//				List<LogSend> logList = new ArrayList<>();
-//				logList.add(log);
-//				logList.add(log2);
-//				
-//				Map<String, Object> dbParam = new HashMap<>();
-//				dbParam.put("list",  logList);
-//				logService.writeLog(dbParam);
+				RestClient rc = new RestClient(smsKey, smsUserId, smsSender);
+				
+				String rcr = rc.post("/send/", sb.toString());
+				Map<String, String> rcm = new Gson().fromJson(rcr, Map.class);
+				
+				LogSend log = new LogSend();
+				log.setTargetIdx(info.get("memberIdx"));
+				log.setTxMsg(sb.toString());
+				log.setRxMsg(rcr);
+				log.setType("S");
+				
+				if("1".equals(rcm.get("result_code"))) {
+					log.setIsErr("N");
+					log.setMsgId(rcm.get("msg_id"));
+				}
+				else {
+					log.setIsErr("Y");
+					log.setMsgId("");
+				}
+				
+				List<LogSend> logList = new ArrayList<>();
+				logList.add(log);
+				
+				Map<String, Object> dbParam = new HashMap<>();
+				dbParam.put("list",  logList);
+				logService.writeLog(dbParam);
 			}
 			catch(Exception e) {
 				//예약건 처리 오류시 반납건 처리는 수행

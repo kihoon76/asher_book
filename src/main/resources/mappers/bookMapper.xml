@@ -60,9 +60,10 @@
 	<!-- 대여중이 아니면서 예약대기자 -->
 	<!-- 대여중이면 신청할 수 없다. -->
 	<select id="selectPureReservation" parameterType="string" resultType="map">
-		select concat(book_num, '') as bookNum, concat(member_idx, '') as memberIdx, t2.name as memberName
+		select concat(book_num, '') as bookNum, t3.name as bookName, concat(member_idx, '') as memberIdx, t2.name as memberName, t2.phone, t2.email
 		  from reservation t1
 		 inner join members t2 on t1.member_idx = t2.idx
+		 inner join books t3 on t1.book_num = t3.num
 		 where t1.book_num = #{bookNum}
 		   and t1.member_idx not in (
 		   	select member_idx from rental_history where status = 'A'

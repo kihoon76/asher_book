@@ -14,9 +14,6 @@ import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -37,7 +34,6 @@ import net.asher.book.service.BookService;
 import net.asher.book.service.LogService;
 import net.asher.book.service.UploadService;
 import net.asher.book.service.UserService;
-import net.asher.book.util.HttpHeaderUtil;
 import net.asher.book.util.MailUtil;
 import net.asher.book.util.RestClient;
 import net.asher.book.util.SessionUtil;
