@@ -478,7 +478,7 @@ $(document)
 			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
-				//window.location.href = '/signin';
+				window.location.href = '/signin';
 			},
 		});
 	});
@@ -908,11 +908,11 @@ $(document).on('pageshow', function (event, ui) {
     			if(data.type == 'R') {
     				//대여신청
     				if(data.memberIdx == myMemberIdx) {
-    					$(selector).addClass('apply_mine');
+    					$(selector).removeClass('apply').addClass('apply_mine');
     					$(selector + 'Image').data('mine', 'Y');
     				}
     				else {
-    					$(selector).addClass('apply');
+    					$(selector).removeClass('apply_mine').addClass('apply');
     					$(selector + 'Image').data('mine', 'N');
     				}
     				
@@ -931,14 +931,14 @@ $(document).on('pageshow', function (event, ui) {
     				$(selector + 'Image').data('rentalMan', data.memberName);
     			}
     			else if(data.type == 'T') { //반납
-    				$(selector).removeClass('norental');
+    				$(selector).removeClass('apply_mine apply norental');
     				$(selector).text('가능');
     				$(selector + 'Man').html('&nbsp;');
     				$(selector + 'Image').data('possible', 'Y');
     				$(selector + 'Image').data('rentalMan', null);
     			}
     			else if(data.type == 'D') {//대여신청 취소
-    				$(selector).removeClass('apply_mine apply');
+    				$(selector).removeClass('apply_mine apply norental');
     				$(selector).text('가능');
     				$(selector + 'Man').html('&nbsp;');
     				$(selector + 'Image').data('possible', 'Y');

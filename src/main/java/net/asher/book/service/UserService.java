@@ -1,10 +1,12 @@
 package net.asher.book.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -132,9 +134,10 @@ public class UserService {
 		
 		if(map != null) {
 			int r = userDao.deleteReservation(map); //예약 테이블에서 삭제
-			if(r == 1) throw new RuntimeException();
+			if(r != 1) throw new RuntimeException();
 			
 			r = userDao.insertApplyRental(map);
+		
 			if(r == 1) return map;
 			
 			throw new RuntimeException();
