@@ -37,10 +37,37 @@
 		 order by t2.name asc
 	</select>
 	
-	<select id="selectRentaledBookList" resultType="Book">
+	<select id="selectRentaledBookList" parameterType="string" resultType="Book">
 		select num as bookNum, name as bookName
 		  from books t1
 		 inner join rental_history t2 on t1.num = t2.book_num
 		 where t2.status = 'A'
+		   and t2.member_idx != #{memberIdx}
+	</select>
+	
+	<select id="selectRentaledBook" parameterType="string" resultType="int">
+		select count(book_num)
+		  from rental_history
+		 where status = 'A'
+		   and book_num = #{bookNum}
+	</select>
+	
+	<insert id="insertReservation" parameterType="map">
+		insert into reservation (book_num, member_idx)
+		values (#{bookNum}, #{memberIdx})
+	</insert>
+	
+	<!-- 대여중이 아니면서 예약대기자 -->
+	<!-- 대여중이면 신청할 수 없다. -->
+	<select id="selectPureReservation" parameterType="string" resultType="map">
+		select concat(book_num, '') as bookNum, concat(member_idx, '') as memberIdx, t2.name as memberName
+		  from reservation t1
+		 inner join members t2 on t1.member_idx = t2.idx
+		 where t1.book_num = #{bookNum}
+		   and t1.member_idx not in (
+		   	select member_idx from rental_history where status = 'A'
+		   )
+		 order by t1.reservation_date asc
+		 limit 1
 	</select>
 </mapper>

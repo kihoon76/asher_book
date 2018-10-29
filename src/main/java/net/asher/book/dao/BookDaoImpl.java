@@ -1,6 +1,7 @@
 package net.asher.book.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -35,8 +36,24 @@ public class BookDaoImpl implements BookDao {
 	}
 
 	@Override
-	public List<Book> selectRentaledBookList() {
-		return mySqlSession.selectList(namespace + ".selectRentaledBookList");
+	public List<Book> selectRentaledBookList(String memberIdx) {
+		return mySqlSession.selectList(namespace + ".selectRentaledBookList", memberIdx);
+	}
+
+	@Override
+	public int selectRentaledBook(String bookNum) {
+		return mySqlSession.selectOne(namespace + ".selectRentaledBook", bookNum);
+	}
+
+	@Override
+	public int insertReservation(Map<String, String> param) {
+		return mySqlSession.insert(namespace + ".insertReservation", param);
+		
+	}
+
+	@Override
+	public Map<String, String> selectPureReservation(String bookNum) {
+		return mySqlSession.selectOne(namespace + ".selectPureReservation", bookNum);
 	}
 
 }

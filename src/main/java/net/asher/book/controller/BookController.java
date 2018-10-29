@@ -2,6 +2,7 @@ package net.asher.book.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
@@ -55,7 +58,7 @@ public class BookController {
 		String memberIdx = SessionUtil.getSessionUserIdx();
 		
 		List<Book> list = getBookList(memberIdx);
-		List<Book> rentaledList = bookService.getRentaledBookList();
+		List<Book> rentaledList = bookService.getRentaledBookList(memberIdx);
 		
 		String rentaledListStr = "";
 		
@@ -68,6 +71,27 @@ public class BookController {
 		mm.addAttribute("footbar", "reservation");
 		mm.addAttribute("rentaledListStr", rentaledListStr);
 		return "book/rentalHistory";
+	}
+	
+	@GetMapping("reserve/booklist")
+	@ResponseBody
+	public AjaxVO<Book> getRentaledBookList() {
+		String memberIdx = SessionUtil.getSessionUserIdx();
+		
+		AjaxVO<Book> vo = new AjaxVO<>();
+		
+		try {
+			List<Book> rentaledList = bookService.getRentaledBookList(memberIdx);
+			vo.setSuccess(true);
+			vo.setDatas(rentaledList);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+			vo.setErrCode("etc");
+		}
+	
+		return vo;
 	}
 	
 	@GetMapping("rental_manage")
@@ -103,6 +127,67 @@ public class BookController {
 		}
 		//mm.addAttribute("bookList", list);
 		return "book/rentalManage";
+	}
+	
+	@PostMapping("reserve/members")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getReserveMembers(@RequestParam("reserveBookNum") String reserveBookNum) {
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		
+		try {
+			List<Map<String, String>> members = userService.getReserveMembers(reserveBookNum);
+			
+			vo.setSuccess(true);
+			vo.setDatas(members);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrCode("etc");
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@PostMapping("reserve")
+	@ResponseBody
+	public AjaxVO<Map<String, String>>reserveBook(@RequestParam("reserveBookNum") String reserveBookNum) {
+		
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		
+		try {
+			boolean r = bookService.isRentaledBook(reserveBookNum);
+			if(r) {
+				Map<String, String> param = new HashMap<>();
+				param.put("memberIdx", SessionUtil.getSessionUserIdx());
+				param.put("bookNum", reserveBookNum);
+				
+				boolean isReg = userService.isAlreadyReservation(param);
+				if(isReg) {
+					vo.setSuccess(false);
+					vo.setErrCode("606");
+				}
+				else {
+					List<Map<String, String>> list = bookService.regReservation(param);
+					vo.setSuccess(true);
+					vo.setDatas(list);
+				}
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrCode("605");
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrCode("etc");
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		
+		return vo;
 	}
 	
 	private List<Book> getBookList(String memberIdx) {

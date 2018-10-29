@@ -1,6 +1,7 @@
 package net.asher.book.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.google.gson.Gson;
 import net.asher.book.domain.Account;
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.Event;
+import net.asher.book.domain.LogSend;
 import net.asher.book.domain.RentalHistory;
 import net.asher.book.service.BookService;
 import net.asher.book.service.UploadService;
@@ -101,13 +103,64 @@ public class AdminController {
 		
 		try {
 			userService.returnRental(param);
-			
-			//성공하면 websocket으로 결과 보낸다.
-			Map<String, String> webMsg = new HashMap<>();
-			webMsg.put("bookNum", param.get("bookNum"));
-			webMsg.put("type", "T");
-			asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
 			vo.setSuccess(true);
+			try {
+				//예약된 도서인지 확인
+				Map<String, String> info = userService.applyRentalByReservation(param);
+				if(info == null) {
+					throw new Exception();
+				}
+				
+				//예약건 처리 완료
+				Map<String, String> webMsg = new HashMap<>();
+				webMsg.put("bookNum", param.get("bookNum"));
+				webMsg.put("memberIdx", info.get("memberIdx"));
+				webMsg.put("memberName", info.get("memberName"));
+				webMsg.put("type", "R");
+				
+//				asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
+//				
+//				StringBuilder sb = new StringBuilder();
+//				sb.append("receiver=" + account.getPhone().replaceAll("-", ""));
+//				sb.append("&destination=" + account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
+//				sb.append("&msg=대여하신 책 " + map.get("bookNum") + "." + map.get("bookName") + "반납일자는 " + map.get("returnDate") + "입니다.");
+//				sb.append("&title=아셀교회");
+//				sb.append("&testmode_yn=N");
+//				
+//				String rcr = rc.post("/send/", sb.toString());
+//				Map<String, String> rcm = new Gson().fromJson(rcr, Map.class);
+//				
+//				LogSend log2 = new LogSend();
+//				log2.setTargetIdx(map.get("memberIdx"));
+//				log2.setTxMsg(sb.toString());
+//				log2.setRxMsg(rcr);
+//				log2.setType("S");
+//				
+//				if("1".equals(rcm.get("result_code"))) {
+//					log2.setIsErr("N");
+//					log2.setMsgId(rcm.get("msg_id"));
+//				}
+//				else {
+//					log2.setIsErr("Y");
+//					log2.setMsgId("");
+//				}
+//				
+//				List<LogSend> logList = new ArrayList<>();
+//				logList.add(log);
+//				logList.add(log2);
+//				
+//				Map<String, Object> dbParam = new HashMap<>();
+//				dbParam.put("list",  logList);
+//				logService.writeLog(dbParam);
+			}
+			catch(Exception e) {
+				//예약건 처리 오류시 반납건 처리는 수행
+				Map<String, String> webMsg = new HashMap<>();
+				webMsg.put("bookNum", param.get("bookNum"));
+				webMsg.put("type", "T");
+				asherWebSocketHandler.sendDatabaseMsg(new Gson().toJson(webMsg));
+				
+			}
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);

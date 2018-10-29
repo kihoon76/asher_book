@@ -70,6 +70,9 @@ public class MainController {
 	@Value("#{smsCfg['sender']}")
 	String smsSender;
 	
+	@Value("#{pathCfg['contextRoot']}")
+	String contextPath;
+	
 	@GetMapping("signin/{errCode}")
 	public String signinForm(@PathVariable(name="errCode", required=false) String errCode, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
@@ -134,9 +137,16 @@ public class MainController {
 		return "signin";
 	}
 	
+	/*
+	 * Using @Scheduled annotation would in turn make Spring container understand that the method underneath this annotation would run as a job.
+	 * Remember that the methods annotated with @Scheduled should not have parameters passed to them.
+	 * They should not return any values too.
+	 * If you want the external objects to be used within your @Scheduled methods, you should inject them into the DemoService class using autowiring rather than passing them as parameters to the @Scheduled methods.
+	 * */
+	
+	//@Scheduled(cron="0 0/1 * * * *")
 	@Scheduled(cron="0 0 9 * * *") //매일  오전 9시
-	public void checkRentalExpire(HttpServletRequest request) {
-		//schedule.viewDatabaseConnection();
+	public void checkRentalExpire() {
 		
 		try {
 			
@@ -156,7 +166,7 @@ public class MainController {
 						
 						@Override
 						public void run() {
-							Email email = new Email(HttpHeaderUtil.getUrlRoot(request));
+							Email email = new Email(contextPath);
 							String msg = "<p>[" + map.get("memberName")+ "]님이 대여하신 책 <span style=\"color:#ff0000; font-weight:bolder;\">" + map.get("bookNum") + "." + map.get("bookName") + "</span> 의 반납일자는 " + map.get("returnDate") + "입니다.</p>";
 							Account account = new Account();
 							account.setIdx(map.get("memberIdx"));
@@ -190,7 +200,7 @@ public class MainController {
 							StringBuilder sb = new StringBuilder();
 							sb.append("receiver=" + account.getPhone().replaceAll("-", ""));
 							sb.append("&destination=" + account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
-							sb.append("&msg=대여하신 책 " + map.get("bookNum") + "." + map.get("bookName") + "반납일자는 " + map.get("returnDate") + "입니다.");
+							sb.append("&msg=대여하신 책[" + map.get("bookNum") + "." + map.get("bookName") + "]의 반납일자는 " + map.get("returnDate") + "입니다.");
 							sb.append("&title=아셀교회");
 							sb.append("&testmode_yn=N");
 							
@@ -224,18 +234,6 @@ public class MainController {
 					
 					excutorService.execute(new R(list.get(r)));
 					
-					/*RestClient rc = new RestClient(smsKey, smsUserId, smsSender);
-					Map<String, String> map = new HashMap<String, String>();
-					
-					StringBuilder sb = new StringBuilder();
-					sb.append("receiver=" + account.getPhone().replaceAll("-", ""));
-					sb.append("&destination=" + account.getPhone().replaceAll("-", "") + "|" + account.getUserName());
-					sb.append("&msg=test");
-					sb.append("&title=test");
-					sb.append("&testmode_yn=Y");
-					
-					String rr = rc.post("/send/", sb.toString());
-					System.out.println(rr);*/
 				}
 				
 				excutorService.shutdown();

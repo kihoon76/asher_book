@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.asher.book.dao.BookDao;
 import net.asher.book.dao.UserDao;
 import net.asher.book.domain.Account;
 import net.asher.book.domain.RentalHistory;
@@ -20,6 +21,9 @@ public class UserService {
 
 	@Resource(name="userDao")
 	UserDao userDao;
+	
+	@Resource(name="bookDao")
+	BookDao bookDao;
 	
 	public Account getUserInfo(String username) {
 		return userDao.selectUserInfo(username);
@@ -93,6 +97,10 @@ public class UserService {
 		
 		return false;
 	}
+	
+	public List<Map<String, String>> getReserveMembers(String reserveBookNum) {
+		return userDao.selectReserveMembers(reserveBookNum);
+	}
 
 	public void extendReturn(String bookNum) {
 		userDao.updateReturnDate(bookNum);
@@ -109,6 +117,31 @@ public class UserService {
 
 	public List<Account> getUserList() {
 		return userDao.selectUserList();
+	}
+
+	public boolean isAlreadyReservation(Map<String, String> param) {
+		return 1 == userDao.selectMyReservation(param);
+	}
+
+	@Transactional(isolation=Isolation.DEFAULT, 
+			   propagation=Propagation.REQUIRED, 
+			   rollbackFor=Exception.class,
+			   timeout=10)//timeout 초단위
+	public Map<String, String> applyRentalByReservation(Map<String, String> param/*대여반납자 정보*/) {
+		Map<String, String> map = bookDao.selectPureReservation(param.get("bookNum"));
+		
+		if(map != null) {
+			int r = userDao.deleteReservation(map); //예약 테이블에서 삭제
+			if(r == 1) throw new RuntimeException();
+			
+			r = userDao.insertApplyRental(map);
+			if(r == 1) return map;
+			
+			throw new RuntimeException();
+		}
+		
+		return null;
+		
 	}
 
 }

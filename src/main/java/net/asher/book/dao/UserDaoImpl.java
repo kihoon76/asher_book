@@ -102,4 +102,26 @@ public class UserDaoImpl implements UserDao {
 	public List<Account> selectUserList() {
 		return mySqlSession.selectList(namespace + ".selectUserList");
 	}
+
+	@Override
+	public List<Map<String, String>> selectReserveMembers(String reserveBookNum) {
+		return mySqlSession.selectList(namespace + ".selectReserveMembers", reserveBookNum);
+	}
+
+	@Override
+	public int selectMyReservation(Map<String, String> param) {
+		return mySqlSession.selectOne(namespace + ".selectMyReservation", param);
+	}
+
+	@Override
+	public Map<String, String> applyRentalByReservation(Map<String, String> param) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int deleteReservation(Map<String, String> map) {
+		return mySqlSession.delete(namespace + ".deleteReservation", map);
+		
+	}
 }

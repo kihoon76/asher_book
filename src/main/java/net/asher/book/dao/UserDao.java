@@ -39,4 +39,12 @@ public interface UserDao {
 
 	List<Account> selectUserList();
 
+	List<Map<String, String>> selectReserveMembers(String reserveBookNum);
+
+	int selectMyReservation(Map<String, String> param);
+
+	Map<String, String> applyRentalByReservation(Map<String, String> param);
+
+	int deleteReservation(Map<String, String> map);
+
 }

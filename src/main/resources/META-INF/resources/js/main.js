@@ -1,6 +1,7 @@
 var Common = { 
 	socket: null,
 	popupClose: function() {},
+	useCacheReserPop: true,
 	getFullHeight: function() {
 		var screen = $.mobile.getScreenHeight();
     	var header = $(".ui-header").hasClass("ui-header-fixed") ? $(".ui-header").outerHeight()  - 1 : $(".ui-header").outerHeight();
@@ -35,11 +36,11 @@ var Common = {
 		});
 	},
 	makeBookReser: function(json) {
+		var $selRentedBook = $('#selRentedBook');
 		if(json) {
 			var len = json.length;
 			
 			if(len > 0) {
-				var $selRentedBook = $('#selRentedBook');
 				var optionArr = [];
 				
 				optionArr.push('<option value="-1">== 대여예약하실 도서를 선택하세요 ==</option>');
@@ -50,9 +51,33 @@ var Common = {
 				$selRentedBook.html(optionArr.join(''));
 				
 			}
-		
+			else {
+				$selRentedBook.html('<option value="-1">== 대여중인 도서가 없습니다. ==</option>');
+			}
 		}
-	}
+	},
+	makeReserMembers: function(json) {
+		var $selReservation = $('#selReservation');
+		var $spBookReserCount = $('#spBookReserCount');
+		
+		if(json) {
+			var len = json.length;
+			
+			if(len > 0) {
+				var arr = [];
+				for(var i=0; i<len; i++) {
+					arr.push('<option value="' +  json[i].idx+ '">' + (i+1) + '.' + json[i].name + '(' + json[i].id + ')</option>')
+				}
+				
+				$selReservation.html(arr.join(''));
+				$spBookReserCount.text(len);
+			}
+			else {
+				$selReservation.html('<option value="-1">예약하신분이 없습니다.</option>');
+				$spBookReserCount.text('0');
+			}
+		}
+	},
 };
 
 $(document)
@@ -136,7 +161,8 @@ $(document)
 			},
 			complete: function(jqXHR, textStatus) {
 			    $.mobile.loading('hide');
-				closePopup();
+			    
+			    if(!cfg.isSystem) closePopup();
 			    
 				if(jqXHR.errCode) {
 					var msg = '';
@@ -164,14 +190,27 @@ $(document)
 					case '604': 
 						msg = '사용자 등록에 실패했습니다.';
 						break;
+					case '605': 
+						msg = '도서가 대여중이 아닙니다.';
+						break;
+					case '606': 
+						msg = '이미 예약한 도서입니다 ';
+						break;
 					default: 
 						msg = '오류가 발생했습니다.';
 						break;
 					}
 					
-					setTimeout(function() {
-						makeErrMsg(msg, fn);
-					}, 500);
+					//alert창 사용
+					if(cfg.isSystem) {
+						alert(msg);
+						if(fn) fn();
+					}
+					else {
+						setTimeout(function() {
+							makeErrMsg(msg, fn);
+						}, 500);
+					}
 				}
 				else {
 					//성공 이후 final로 실행할 함수
@@ -182,12 +221,13 @@ $(document)
 				
 			},
 			success: function(data, textStatus, jqXHR) {
-				if(data.success) {
-					cfg.success(data, textStatus, jqXHR); 
+				var json = $.parseJSON(jqXHR.responseText);
+				if(json.success) {
+					cfg.success(json, textStatus, jqXHR); 
 				}
 				else {
-					jqXHR.errCode = data.errCode;
-					jqXHR.data = data.datas;
+					jqXHR.errCode = json.errCode;
+					jqXHR.data = json.datas;
 				}
 			},
 			error: function(jqXHR, textStatus, err) {
@@ -438,7 +478,7 @@ $(document)
 			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
-				window.location.href = '/signin';
+				//window.location.href = '/signin';
 			},
 		});
 	});
@@ -748,10 +788,29 @@ $(document)
 			$this.addClass('ui-disabled');
 			$this.data('disabled', true);
 			
-			$('#bookReservePopup').show();
-			$('#bookReservePopup').popup('open');
-			
-			$.scrollLock(true);
+			if(Common.useCacheReserPop) {
+				$('#bookReservePopup').show();
+				$('#bookReservePopup').popup('open', {transition: 'pop'});
+				$.scrollLock(true);
+			}
+			else {
+				Common.ajax({
+					isSystem: true,
+					url: 'reserve/booklist',
+					method: 'GET',
+					dataType: 'json',
+					headers: {'CUSTOM': 'Y'},
+					success: function(data, textStatus, jqXHR) {
+						Common.makeBookReser(data.datas);
+						Common.makeReserMembers([]);
+						Common.useCacheReserPop = true;
+						
+						$('#bookReservePopup').show();
+						$('#bookReservePopup').popup('open', {transition: 'pop'});
+						$.scrollLock(true);
+					},
+				});
+			}
 		}
 	});
 	
@@ -767,6 +826,62 @@ $(document)
 	.on('click', '#footerHome', function(e) {
 		window.location.href = '/main';
 	});
+	
+	//책예약
+	$(document)
+	.off('click', '#btnBookReservation')
+	.on('click', '#btnBookReservation', function() {
+		var $selRentedBook = $('#selRentedBook');
+		
+		if($selRentedBook.val() == '-1') {
+			alert('예약하실 도서를 선택하세요.');
+			return;
+		}
+		
+		Common.ajax({
+			isSystem: true,
+			url: '/book/reserve',
+			type: 'POST',
+			headers: {'CUSTOM': 'Y'},
+			data: {
+				reserveBookNum: $selRentedBook.val()
+			},
+			success: function(data, textStatus, jqXHR) {
+				Common.makeReserMembers(data.datas);
+				alert('예약되었습니다.');
+				
+			},
+		});
+	});
+	
+	$(document)
+	.off('change', '#selRentedBook')
+	.on('change', '#selRentedBook', function() {
+		var $this = $(this);
+		
+		if($this.val() == '-1') {
+			Common.makeReserMembers([]);
+		}
+		else {
+			Common.ajax({
+				isSystem: true,
+				url: '/book/reserve/members',
+				type: 'POST',
+				headers: {'CUSTOM': 'Y'},
+				data: {
+					reserveBookNum: $this.val()
+				},
+				success: function(data, textStatus, jqXHR) {
+					
+					var ds = data.datas;
+					Common.makeReserMembers(ds);
+					
+				},
+			});
+			
+		}
+	});
+	
 	
 });
 
@@ -829,8 +944,12 @@ $(document).on('pageshow', function (event, ui) {
     				$(selector + 'Image').data('possible', 'Y');
     				$(selector + 'Image').data('rentalMan', null);
     			}
+    			
+    			Common.useCacheReserPop = false;
     		}
-    		catch(e) {}
+    		catch(e) {
+    			console.log(e)
+    		}
 			
 		}
     }

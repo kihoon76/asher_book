@@ -47,19 +47,21 @@
 	</div>
 </div>
 
-<div id="bookReservePopup" data-role="popup" data-theme="a" class="ui-corner-all" data-dismissible="false"  style="display:none;  max-width: 400px;">
-	<div  data-role="header" data-theme="a"></div>
+<div id="bookReservePopup" 
+	 data-role="popup"
+	 data-theme="b"
+	 data-overlay-theme="b" class="ui-corner-all" data-dismissible="false"  style="display:none;  max-width: 400px;">
 	<div role="main" class="ui-content">
 		<form>
-    		<div style="padding:10px 20px;" class="ui-field-contain" >
+    		<div style="padding:10px 20px;" class="ui-field-contain">
     			<label for="selRentedBook">대여도서</label>
-    			<select id="selRentedBook" data-mini="true"></select>
-    			<div style="margin:10px 0 5px 0;">예약하신 분  (<span>3</span>)</div>
+    			<select id="selRentedBook" name="selRentedBook" data-theme="b"></select>
+    			<div style="margin:10px 0 5px 0;">예약하신 분  (<span id="spBookReserCount" style="color:yellow;">0</span>)</div>
  				<select id="selReservation">
  					<option value="-1">예약하신분이 없습니다.</option>
  				</select>
  				<div style="height: 10px;"></div>
-    			<a href="#" data-rel="back" style="width:70px;" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">예약하기</a>
+    			<a href="#" id="btnBookReservation" style="width:70px;" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">예약하기</a>
     			<a href="#" data-rel="back" style="width:70px;" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">닫기</a>
     			
     		</div>
@@ -90,7 +92,7 @@
          		<li><a id="footerPrevious" href="#" data-icon="back" data-ajax="false">이전</a></li>
          		</c:when>
          		<c:when test="${'reservation' eq footbar}">
-         		<li><a id="footerReservation" href="#" data-icon="star" data-ajax="false" data-role="none">예약하기</a></li>
+         		<li><a id="footerReservation" href="#" data-rel="popup" data-icon="star" data-ajax="false">예약하기</a></li>
          		</c:when>
          		</c:choose>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
