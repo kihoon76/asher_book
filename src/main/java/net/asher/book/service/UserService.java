@@ -16,7 +16,9 @@ import net.asher.book.dao.BookDao;
 import net.asher.book.dao.UserDao;
 import net.asher.book.domain.Account;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.Reservation;
 import net.asher.book.domain.ReturnHistory;
+import net.asher.book.exceptions.NotMyReservation;
 
 @Service("userService")
 public class UserService {
@@ -145,6 +147,20 @@ public class UserService {
 		
 		return null;
 		
+	}
+
+	public List<Reservation> getMyReservations(String idx) {
+		return userDao.selectMyReservations(idx);
+	}
+
+	public List<Map<String, String>> removeMyReservation(Map<String, String> m) {
+		int r = userDao.deleteReservation(m);
+		
+		if(r == 1) {
+			return userDao.selectReserveMembers(m.get("bookNum"));
+		}
+		
+		throw new NotMyReservation("");
 	}
 
 }

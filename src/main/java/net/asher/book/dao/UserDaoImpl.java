@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.Reservation;
 import net.asher.book.domain.ReturnHistory;
 
 @Repository("userDao")
@@ -123,5 +124,10 @@ public class UserDaoImpl implements UserDao {
 	public int deleteReservation(Map<String, String> map) {
 		return mySqlSession.delete(namespace + ".deleteReservation", map);
 		
+	}
+
+	@Override
+	public List<Reservation> selectMyReservations(String memberIdx) {
+		return mySqlSession.selectList(namespace + ".selectMyReservations", memberIdx);
 	}
 }

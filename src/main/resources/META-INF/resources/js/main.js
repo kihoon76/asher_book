@@ -196,6 +196,9 @@ $(document)
 					case '606': 
 						msg = '이미 예약한 도서입니다 ';
 						break;
+					case '607': 
+						msg = '내가 예약한 도서가 아닙니다.';
+						break;
 					default: 
 						msg = '오류가 발생했습니다.';
 						break;
@@ -824,6 +827,9 @@ $(document)
 	$(document)
 	.off('click', '#footerHome')
 	.on('click', '#footerHome', function(e) {
+		$.mobile.loading('show', {
+		    theme: 'a'
+		});
 		window.location.href = '/main';
 	});
 	
@@ -852,6 +858,43 @@ $(document)
 				
 			},
 		});
+	});
+	
+	//책예약 취소
+	$(document)
+	.off('click', '#btnCancelReservation')
+	.on('click', '#btnCancelReservation', function() {
+		var myMemberIdx = $('#dvRentalHistory').data('memberIdx');
+		var $selRentedBook = $('#selRentedBook');
+		
+		if($selRentedBook.val() == '-1') {
+			alert('예약취소하실 도서를 선택하세요');
+			return;
+		}
+		
+		var exists = $('#selReservation option[value="' + myMemberIdx + '"]').length !== 0;
+		
+		if(!exists) {
+			alert('내가 예약한 도서가 아닙니다.');
+			return;
+		}
+		
+		Common.ajax({
+			isSystem: true,
+			url: '/user/reserve/cancel',
+			type: 'POST',
+			headers: {'CUSTOM': 'Y'},
+			data: {
+				reserveBookNum: $selRentedBook.val()
+			},
+			success: function(data, textStatus, jqXHR) {
+				alert('예약취소 되었습니다.')
+				var ds = data.datas;
+				Common.makeReserMembers(ds);
+				
+			},
+		});
+		
 	});
 	
 	$(document)

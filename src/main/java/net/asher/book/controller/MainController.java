@@ -29,6 +29,7 @@ import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.Email;
 import net.asher.book.domain.LogSend;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.Reservation;
 import net.asher.book.domain.ReturnHistory;
 import net.asher.book.service.BookService;
 import net.asher.book.service.LogService;
@@ -105,6 +106,7 @@ public class MainController {
 		
 		List<RentalHistory> myRentalList = userService.getMyNotReturedBooks(account.getIdx());
 		List<ReturnHistory> myRentalHistoryList = userService.getMyRentalHistories(account.getIdx());
+		List<Reservation> myReservationList = userService.getMyReservations(account.getIdx());
 		
 		
 		if(myRentalList != null && myRentalList.size() > 0) {
@@ -113,6 +115,10 @@ public class MainController {
 		
 		if(myRentalHistoryList != null && myRentalHistoryList.size() > 0) {
 			mm.addAttribute("myRentalHistoryList", myRentalHistoryList);
+		}
+		
+		if(myReservationList != null && myReservationList.size() > 0) {
+			mm.addAttribute("myReservationList", myReservationList);
 		}
 		
 		//checkRentalExpire(request);

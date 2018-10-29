@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.asher.book.domain.Account;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.domain.Reservation;
 import net.asher.book.domain.ReturnHistory;
 
 public interface UserDao {
@@ -46,5 +47,7 @@ public interface UserDao {
 	Map<String, String> applyRentalByReservation(Map<String, String> param);
 
 	int deleteReservation(Map<String, String> map);
+
+	List<Reservation> selectMyReservations(String idx);
 
 }

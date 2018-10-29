@@ -197,4 +197,27 @@
 	<delete id="deleteReservation" parameterType="map">
 		delete from reservation where book_num = #{bookNum} and member_idx = #{memberIdx}
 	</delete>
+	
+	<select id="selectMyReservations" parameterType="string" resultType="Reservation">
+		select * 
+		  from (
+				select TB1.book_num as bookNum,
+				   	   TB1.member_idx as memberIdx,
+				   	   TB1.name as bookName,
+				   	   TB1.order_num as orderNum,
+				   	   count(*) as total
+				  from (
+						select t1.book_num, t1.member_idx, t3.name, count(*) as order_num
+						  from reservation t1
+						 inner join books t3 on t1.book_num = t3.num
+						 inner join reservation t2 on t1.book_num = t2.book_num 
+						   and t1.reservation_date >= t2.reservation_date
+						 group by t1.book_num, t1.member_idx, t3.name
+				  ) TB1
+				 inner join reservation TB2
+				    on TB1.book_num = TB2.book_num
+				 group by TB1.book_num, TB1.member_idx, TB1.order_num, TB1.name
+			) TBL
+		 where memberIdx = #{memberIdx}
+	</select>
 </mapper>

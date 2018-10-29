@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 import net.asher.book.domain.AjaxVO;
 import net.asher.book.domain.LogSend;
 import net.asher.book.domain.RentalHistory;
+import net.asher.book.exceptions.NotMyReservation;
+import net.asher.book.service.BookService;
 import net.asher.book.service.LogService;
 import net.asher.book.service.UserService;
 import net.asher.book.util.RestClient;
@@ -216,6 +218,34 @@ public class UserController {
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@PostMapping("reserve/cancel")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> cancelReservation(@RequestParam("reserveBookNum") String reserveBookNum) {
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		
+		Map<String, String> m = new HashMap<>();
+		m.put("memberIdx", SessionUtil.getSessionUserIdx());
+		m.put("bookNum", reserveBookNum);
+		
+		try {
+			List<Map<String, String>> list = userService.removeMyReservation(m);
+			vo.setSuccess(true);
+			vo.setDatas(list);
+		}
+		catch(NotMyReservation e) {
+			vo.setSuccess(false);
+			vo.setErrCode("607");
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrCode("etc");
 			vo.setErrMsg(e.getMessage());
 		}
 		

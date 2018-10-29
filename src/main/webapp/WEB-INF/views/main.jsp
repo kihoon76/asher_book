@@ -27,6 +27,28 @@
 		</c:otherwise>
 		</c:choose>
 	</table>
+	<div style="padding-top: 5px;">나의 예약도서 </div>
+	<table>
+		<tr>
+			<td>도서명</td>
+			<td>예약순위(나/전체)</td>
+		</tr>
+		<c:choose>
+		<c:when test="${not empty myReservationList}">
+		<c:forEach var="reservation" items="${myReservationList}">
+		<tr>
+			<td>${reservation.bookNum}.${reservation.bookName}</td>
+			<td><span style="color:red;">${reservation.orderNum}</span>/${reservation.total}</td>
+		</tr>
+		</c:forEach>
+		</c:when>
+		<c:otherwise>
+		<tr>
+			<td colspan="2" style="text-align: center;">예약 도서가 없습니다.</td>
+		</tr>
+		</c:otherwise>
+		</c:choose>
+	</table>
 	<div style="padding-top: 5px;"> 대여내역 </div>
 	<table>
 		<tr>
