@@ -32,6 +32,7 @@
 		<tr>
 			<td>도서명</td>
 			<td>예약순위(나/전체)</td>
+			<td>취소</td>
 		</tr>
 		<c:choose>
 		<c:when test="${not empty myReservationList}">
@@ -39,12 +40,19 @@
 		<tr>
 			<td>${reservation.bookNum}.${reservation.bookName}</td>
 			<td><span style="color:red;">${reservation.orderNum}</span>/${reservation.total}</td>
+			<td><a class="DEL-RESERVE" href="#" 
+				   data-role="button"
+				   data-icon="delete"
+				   data-iconpos="notext"
+				   data-book-num="${reservation.bookNum}">
+				 </a>
+			</td>
 		</tr>
 		</c:forEach>
 		</c:when>
 		<c:otherwise>
 		<tr>
-			<td colspan="2" style="text-align: center;">예약 도서가 없습니다.</td>
+			<td colspan="3" style="text-align: center;">예약 도서가 없습니다.</td>
 		</tr>
 		</c:otherwise>
 		</c:choose>

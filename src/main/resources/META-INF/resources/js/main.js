@@ -121,6 +121,12 @@ $(document)
 			$('#btnPopupOk').data('category', 'apply_cancel').text('신청취소');
 			$('#btnPopupCancel').text('닫기');
 		}
+		else if(type == 'cancel_reservation') {
+			$('#btnPopupEtc').hide();
+			$('#btnPopupOk').data('category', 'cancel_reservation').text('예약취소');
+			$('#btnPopupCancel').text('닫기');
+			$('#btnPopupOk').show();
+		}
 
 		Common.popupClose = afterFn;
 		$('#popupDialog').popup('open');
@@ -407,7 +413,27 @@ $(document)
 				},
 			});
 			break;
+		case 'cancel_reservation' : //예약취소
+			Common.ajax({
+				url: '/user/reserve/cancel',
+				type: 'POST',
+				headers: {'CUSTOM': 'Y'},
+				data: {
+					reserveBookNum: $dvPopupContent.data('reserveBookNum')
+				},
+				success: function(data, textStatus, jqXHR) {
+					jqXHR.runFinal = function() {
+						makePopup('', '예약취소되었습니다.');
+						openPopup('alert', function() {
+							window.location.reload();
+						});
+					}
+					
+				},
+			});
+			break;
 		}
+		
 	});
 	
 	$(document)
@@ -860,42 +886,56 @@ $(document)
 		});
 	});
 	
-	//책예약 취소
+	
 	$(document)
-	.off('click', '#btnCancelReservation')
-	.on('click', '#btnCancelReservation', function() {
-		var myMemberIdx = $('#dvRentalHistory').data('memberIdx');
-		var $selRentedBook = $('#selRentedBook');
+	.off('click', '.DEL-RESERVE')
+	.on('click', '.DEL-RESERVE', function() {
+		var $this = $(this);
 		
-		if($selRentedBook.val() == '-1') {
-			alert('예약취소하실 도서를 선택하세요');
-			return;
-		}
+		makePopup('', '대여예약을 취소하시겠습니까?', [{key: 'reserveBookNum', value: $this.data('bookNum')}]);
+		openPopup('cancel_reservation');
+		          		
 		
-		var exists = $('#selReservation option[value="' + myMemberIdx + '"]').length !== 0;
-		
-		if(!exists) {
-			alert('내가 예약한 도서가 아닙니다.');
-			return;
-		}
-		
-		Common.ajax({
-			isSystem: true,
-			url: '/user/reserve/cancel',
-			type: 'POST',
-			headers: {'CUSTOM': 'Y'},
-			data: {
-				reserveBookNum: $selRentedBook.val()
-			},
-			success: function(data, textStatus, jqXHR) {
-				alert('예약취소 되었습니다.')
-				var ds = data.datas;
-				Common.makeReserMembers(ds);
-				
-			},
-		});
 		
 	});
+	
+	
+	//책예약 취소
+//	$(document)
+//	.off('click', '#btnCancelReservation')
+//	.on('click', '#btnCancelReservation', function() {
+//		var myMemberIdx = $('#dvRentalHistory').data('memberIdx');
+//		var $selRentedBook = $('#selRentedBook');
+//		
+//		if($selRentedBook.val() == '-1') {
+//			alert('예약취소하실 도서를 선택하세요');
+//			return;
+//		}
+//		
+//		var exists = $('#selReservation option[value="' + myMemberIdx + '"]').length !== 0;
+//		
+//		if(!exists) {
+//			alert('내가 예약한 도서가 아닙니다.');
+//			return;
+//		}
+//		
+//		Common.ajax({
+//			isSystem: true,
+//			url: '/user/reserve/cancel',
+//			type: 'POST',
+//			headers: {'CUSTOM': 'Y'},
+//			data: {
+//				reserveBookNum: $selRentedBook.val()
+//			},
+//			success: function(data, textStatus, jqXHR) {
+//				alert('예약취소 되었습니다.')
+//				var ds = data.datas;
+//				Common.makeReserMembers(ds);
+//				
+//			},
+//		});
+//		
+//	});
 	
 	$(document)
 	.off('change', '#selRentedBook')

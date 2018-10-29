@@ -61,9 +61,9 @@
  					<option value="-1">예약하신분이 없습니다.</option>
  				</select>
  				<div style="height: 10px;"></div>
-    			<a href="#" id="btnBookReservation"  class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">예약</a>
-    			<a href="#" id="btnCancelReservation"  class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">취소</a>
-    			<a href="#" data-rel="back" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">닫기</a>
+    			<a href="#" id="btnBookReservation"  style="width:70px;" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">예약</a>
+<!--     			<a href="#" id="btnCancelReservation"  class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">취소</a> -->
+    			<a href="#" data-rel="back" style="width:70px;" class="ui-btn ui-shadow ui-btn-inline ui-btn-b" data-mini="true">닫기</a>
     			
     		</div>
     	</form>
