@@ -425,6 +425,9 @@ $(document)
 					jqXHR.runFinal = function() {
 						makePopup('', '예약취소되었습니다.');
 						openPopup('alert', function() {
+							$.mobile.loading('show', {
+							    theme: 'a'
+							});
 							window.location.reload();
 						});
 					}
