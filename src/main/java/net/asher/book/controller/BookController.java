@@ -190,6 +190,17 @@ public class BookController {
 		return vo;
 	}
 	
+	@GetMapping("statistics/read")
+	public String statisticsReading(ModelMap mm) {
+		String memberIdx = SessionUtil.getSessionUserIdx();
+		
+		List<Map<String, Object>> list = bookService.getStatisticsReadBook();//new ArrayList<>();
+		mm.addAttribute("bookList", getBookList(memberIdx));
+		mm.addAttribute("readBookList", new Gson().toJson(list));
+		return "statistics/read";
+		
+	}
+	
 	private List<Book> getBookList(String memberIdx) {
 		
 		return bookService.getBookList(memberIdx);

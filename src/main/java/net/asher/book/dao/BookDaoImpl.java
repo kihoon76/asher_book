@@ -56,4 +56,9 @@ public class BookDaoImpl implements BookDao {
 		return mySqlSession.selectOne(namespace + ".selectPureReservation", bookNum);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectStatisticsReadBook() {
+		return mySqlSession.selectList(namespace + ".selectStatisticsReadBook");
+	}
+
 }

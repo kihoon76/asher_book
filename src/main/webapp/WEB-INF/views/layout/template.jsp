@@ -29,6 +29,7 @@
 	
 	<script type="text/javascript" src="/resources/jquery/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="/resources/jqmobile/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.canvasjs.min.js"></script>
 	<script type="text/javascript" src="/resources/js/fastclick.js"></script>
 	<script type="text/javascript" src="/resources/js/jquery.scrollLock.js"></script>
 	<script type="text/javascript" src="/resources/js/sockjs.min.js"></script>
@@ -108,6 +109,7 @@
         	<li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
         	<li data-role="list-divider">Menu</li>
         	<li><a href="/book/rental_history">대여현황</a></li>
+        	<li><a href="/book/statistics/read">도서통계</a></li>
         	<sec:authorize access="hasRole('ROLE_ADMIN')">
         	<li><a href="/book/rental_manage">대여관리</a></li>
         	</sec:authorize>

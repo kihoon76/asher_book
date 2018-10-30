@@ -53,4 +53,8 @@ public class BookService {
 		throw new Exception();
 	}
 
+	public List<Map<String, Object>> getStatisticsReadBook() {
+		return bookDao.selectStatisticsReadBook();
+	}
+
 }

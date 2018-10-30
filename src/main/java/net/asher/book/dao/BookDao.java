@@ -23,5 +23,7 @@ public interface BookDao {
 
 	Map<String, String> selectPureReservation(String string);
 
+	List<Map<String, Object>> selectStatisticsReadBook();
+
 
 }

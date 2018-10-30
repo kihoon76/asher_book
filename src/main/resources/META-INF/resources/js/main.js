@@ -78,6 +78,36 @@ var Common = {
 			}
 		}
 	},
+	renderChart: function(container, cfg) {
+		
+		var $container = $('#' + container);
+ 		$container.css('height', this.getFullHeight() + 'px').css('width', '100%');
+ 		
+		var chart = new CanvasJS.Chart(container, {
+			animationEnabled: true,
+			title: {
+				text: cfg.title || '',
+				fontSize: 20
+			},
+			data: [{
+				type: 'doughnut',
+				innerRadius: '40%',
+				showInLegend: false,
+				indexLabel: '{label}:{y}명',
+				toolTipContent: '{label}: <b>{y}</b> 명',
+				indexLabelPlacement: 'inside',
+				indexLabelFormatter: function (e) {
+					if(e.dataPoint.y == 0) return '';
+					
+		            return e.dataPoint.label + '(' + e.dataPoint.y + '명)';  
+		        },  
+				dataPoints: cfg.dataPoints || []
+			}],
+			
+		});
+		
+		chart.render();
+	}
 };
 
 $(document)
@@ -1049,6 +1079,14 @@ $(document).on('pageshow', function (event, ui) {
     	});
     	
     	$('#dvSiteInfo').height(Common.getFullHeight());
+    }
+    else if($('#dvStatistics').get(0)) {
+    	var dataPoints = $('#dvStatisticsChart').data('points');
+    	
+    	Common.renderChart('dvStatisticsChart', {
+    		title: '도서읽은 현황',
+    		dataPoints: dataPoints
+    	});
     }
 });
 

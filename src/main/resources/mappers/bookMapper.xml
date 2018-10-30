@@ -71,4 +71,14 @@
 		 order by t1.reservation_date asc
 		 limit 1
 	</select>
+	
+	<select id="selectStatisticsReadBook" resultType="map">
+		select concat(num, '.',  name) as label, ifnull(readCnt, 0) as y 
+		  from books t1
+		  left outer join (
+		  	select book_num, count(*) as readCnt
+		  	  from return_history
+		  	 group by book_num
+		  ) t2 on t1.num = t2.book_num
+	</select>
 </mapper>
