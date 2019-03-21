@@ -283,7 +283,7 @@ $(document)
 		var possible = $img.data('possible');
 		var msg = '';
 		
-		$.scrollLock(true);
+	
 		if('R' == possible) {
 			if('Y' == $img.data('mine')) {
 				msg = '[' + $img.data('name') + '] 대여신청을 취소하시겠습니까? ';
@@ -305,6 +305,8 @@ $(document)
 			makePopup('', + $img.data('num') + '.' + '[' + $img.data('name') + ']를 대여신청 하시겠습니까?', [{key: 'bookNum', value: $img.data('num')}]);
 			openPopup('rental_apply');
 		}
+
+		$.scrollLock(true);
 		
 		
 	});
